@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter1/Mootaz/HomePage.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -23,7 +24,7 @@ class AppState {
 }
 
 AppState reducer(AppState prev, dynamic action) {
-  if (action is FetchTimeAction) {
+  if (true) {
     return AppState(action.location, action.time);
   } else {
     return prev;
@@ -36,16 +37,7 @@ class MyApp extends StatelessWidget {
       Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: MaterialApp(
-
-      initialRoute: '/',
-      routes: {
-        '/': (context) => data(),
-        '/details': (context) => DetailsPage(),
-
-        },
-      ),
-    );
+      child: Material(child: homePage(),));
   }
 }
   
