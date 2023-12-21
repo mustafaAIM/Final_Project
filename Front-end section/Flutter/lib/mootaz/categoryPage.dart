@@ -165,36 +165,7 @@ class _categoryPageState extends State<categoryPage> {
               ),
             )
     ]),
-     bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors.blue, // Change this line
-          ),
-          child: BottomNavigationBar(
-            // onTap: _onItemTapped,
-            onTap: (value) {
-              setState(() {
-                currentIndex = value;
-              });
-            },
-            currentIndex: currentIndex,
-            selectedItemColor: Colors.white,
-            // selectedFontSize: 20,
-            unselectedItemColor: Colors.black,
-            selectedLabelStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart), label: 'Category'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt_long), label: 'notifications'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.bookmark), label: 'BookMark'),
-            ],
-          
-          ),
-        ),
+    
     );
   }
 }

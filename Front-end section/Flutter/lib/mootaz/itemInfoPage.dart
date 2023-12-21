@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 import 'package:flutter1/Mootaz/boxApp.dart';
+import 'package:flutter1/Mootaz/postBottomBar.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class itemInfoPage extends StatefulWidget {
@@ -32,6 +33,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
             preferredSize: Size.fromHeight(60),
             child: boxApp(),
           ),
+          bottomNavigationBar: postBottomBar(),
         ),
       );
   }
