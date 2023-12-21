@@ -5,9 +5,8 @@ import 'package:flutter1/Mootaz/cartPage.dart';
 import 'package:flutter1/Mootaz/categoryPage.dart';
 import 'package:flutter1/Mootaz/favorite.dart';
 import 'package:flutter1/Mootaz/itemInfoPage.dart';
-import 'package:flutter1/Mootaz/warehousePage.dart';
+import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
-import 'package:flutter1/yazan/orders.dart';
 import 'package:flutter1/yazan/reports.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -23,27 +22,24 @@ void main() {
 }
 
 class AppState {
-  final String _location;
-  final String _time;
+  final int _currentIndex;
 
-  String get location => _location;
-  String get time => _time;
+  int get currentIndex => _currentIndex;
 
-  AppState(this._location, this._time);
+  AppState(this._currentIndex);
 
-  AppState.initialState()
-      : _location = "",
-        _time = "00:00";
+  AppState.initialState() : _currentIndex = 0;
 }
 
-class FetchTimeAction {
-  final String location = "";
-  final String time = "";
+class NavClickAction {
+  final int currentIndex;
+
+  NavClickAction(this.currentIndex);
 }
 
 AppState reducer(AppState prev, dynamic action) {
-  if (true) {
-    return AppState(action.location, action.time);
+  if (action is NavClickAction) {
+    return AppState(action.currentIndex);
   } else {
     return prev;
   }
@@ -58,7 +54,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => bottomNav(),
+          '/': (context) => home(),
           '/item': (context) => itemInfoPage(),
           '/categoryPage': (context) => categoryPage(),
           '/homePage': (context) => homePage(),
@@ -66,9 +62,9 @@ class MyApp extends StatelessWidget {
           '/reportsPage': (context) => reportsPage(),
           '/ProfilePage': (context) => ProfilePage(),
           '/favoritePage': (context) => favoritePage(),
-          '/orderDetails':(context) => orderDetailsPage(),
-          '/login':(context) => Loginpage(),
-          '/register':(context) => Registerpage(),
+          '/orderDetails': (context) => orderDetailsPage(),
+          '/login': (context) => Loginpage(),
+          '/register': (context) => Registerpage(),
         },
       ),
     );
