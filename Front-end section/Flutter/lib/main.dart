@@ -10,6 +10,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:flutter1/yazan/login.dart';
 import 'package:flutter1/yazan/Register.dart';
+import 'package:flutter1/yazan/profile.dart';
 
 void main() {
   runApp(MaterialApp(
