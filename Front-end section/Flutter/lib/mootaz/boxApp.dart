@@ -16,9 +16,7 @@ class _boxAppState extends State<boxApp> {
  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //  bottomNavigationBar: bottomNav(),
-      body: Padding(
+    return Padding(
         padding: EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +64,6 @@ class _boxAppState extends State<boxApp> {
             )
           ],
         ),
-        ),
-    );
+         );
   }
 }

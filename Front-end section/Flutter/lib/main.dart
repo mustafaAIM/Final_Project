@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter1/Mootaz/HomePage.dart';
+import 'package:flutter1/Mootaz/bottomNav.dart';
+import 'package:flutter1/Mootaz/cartPage.dart';
+import 'package:flutter1/Mootaz/categoryPage.dart';
+import 'package:flutter1/Mootaz/favorite.dart';
+import 'package:flutter1/Mootaz/itemInfoPage.dart';
+import 'package:flutter1/Mootaz/warehousePage.dart';
+import 'package:flutter1/yazan/orders.dart';
+import 'package:flutter1/yazan/reports.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -48,9 +57,15 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => home(),
-          '/login': (context) => Loginpage(),
-          '/register': (context) => Registerpage(),
+          '/': (context) => bottomNav(),
+          '/item': (context) => itemInfoPage(),
+          '/categoryPage': (context) => categoryPage(),
+          '/homePage': (context) => homePage(),
+          '/cartPage': (context) => cartPage(),
+          '/orderPage': (context) => orderPage(),
+          '/reportsPage': (context) => reportsPage(),
+          '/ProfilePage': (context) => ProfilePage(),
+          '/favoritePage': (context) => favoritePage(),
         },
       ),
     );
