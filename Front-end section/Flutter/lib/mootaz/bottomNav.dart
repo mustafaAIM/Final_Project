@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/cartPage.dart';
 import 'package:flutter1/Mootaz/homePage.dart';
+import 'package:flutter1/mootaz/warehousePage.dart';
 import 'package:flutter1/yazan/orders.dart';
 import 'package:flutter1/yazan/reports.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -16,7 +17,7 @@ class bottomNav extends StatefulWidget {
 
 class _bottomNavState extends State<bottomNav> {
   List pages = [
-    homePage(),
+    warehousePage(),
     cartPage(),
     OrdersPage(),
     reportsPage()

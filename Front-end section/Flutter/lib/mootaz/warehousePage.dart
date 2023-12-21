@@ -21,7 +21,7 @@ class _warehousePageState extends State<warehousePage> {
         children: [
           Container(
                   padding:
-                      EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                      EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 7),
                   decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 56, 161, 241),
                   ),
@@ -57,7 +57,7 @@ class _warehousePageState extends State<warehousePage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(30),
+                  padding: EdgeInsets.all(10),
                  height: 2000,
                   child: ListView.builder(
                     itemCount: 20,
@@ -66,7 +66,7 @@ class _warehousePageState extends State<warehousePage> {
                         onTap: () {
                             Navigator.pushNamed(
                         context,
-                        '/',
+                        '/homePage',
                       );
                         },
                         child: Container(
@@ -117,25 +117,7 @@ class _warehousePageState extends State<warehousePage> {
                 )
         ],
       ),
-      bottomNavigationBar: GNav(
-            backgroundColor: Colors.blue,
-            color: Colors.black,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade500,
-            gap: 8,
-            padding: EdgeInsets.all(16),
-            onTabChange: (index) {
-              if (index == 0) Navigator.pushReplacementNamed(context, "/homePage");
-              if (index == 1) Navigator.pushReplacementNamed(context, "/cartPage");
-              if (index == 2) Navigator.pushReplacementNamed(context, "/orderPage");
-              if (index == 3) Navigator.pushReplacementNamed(context, "/reportsPage");
-            },
-            tabs: const [
-              GButton(icon: Icons.home_outlined,text: 'Home',),
-              GButton(icon: Icons.shopping_cart_outlined,text: 'Cart',),
-              GButton(icon: Icons.receipt_long_sharp,text: 'Orders',),
-              GButton(icon: Icons.space_dashboard_outlined,text: 'Reports',)
-            ])
+      
     );
   }
 }

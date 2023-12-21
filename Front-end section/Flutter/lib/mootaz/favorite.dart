@@ -51,19 +51,23 @@ class _favoritePageState extends State<favoritePage> {
                   },
                   child: Card(
                     child: Column(
-                      children: [
+                       children: [
+                        
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey,
+                            color: Colors.grey[300],
+                                  
                           ),
-                          padding: EdgeInsets.all(20),
                           width: 120,
                           height: 100,
-                          child: Image.asset(
-                            "images/product2.jpg",
-                            height: 130,
-                            fit: BoxFit.fill,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              "images/product2.jpg",
+                              fit: BoxFit.fill,
+                              
+                            ),
                           ),
                         ),
                         SizedBox(
