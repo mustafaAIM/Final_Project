@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter1/Mootaz/HomePage.dart';
+import 'package:flutter1/Mootaz/cartPage.dart';
+import 'package:flutter1/Mootaz/categoryPage.dart';
+import 'package:flutter1/Mootaz/itemInfoPage.dart';
+import 'package:flutter1/Mootaz/warehousePage.dart';
+import 'package:flutter1/yazan/orders.dart';
+import 'package:flutter1/yazan/reports.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -33,7 +40,7 @@ class FetchTimeAction {
 }
 
 AppState reducer(AppState prev, dynamic action) {
-  if (action is FetchTimeAction) {
+  if (true) {
     return AppState(action.location, action.time);
   } else {
     return prev;
@@ -47,8 +54,13 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        initialRoute: '/orders',
+        initialRoute: '/',
         routes: {
+          '/': (context) => itemInfoPage(),
+          '/categoryPage': (context) => categoryPage(),
+          '/homePage': (context) => homePage(),
+          '/cartPage': (context) => cartPage(),
+          '/reportsPage': (context) => reportsPage(),
           '/': (context) => Loginpage(),
           '/register': (context) => Registerpage(),
           '/profile': (context) => ProfilePage(),
