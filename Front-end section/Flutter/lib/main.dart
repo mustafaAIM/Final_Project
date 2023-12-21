@@ -3,6 +3,8 @@ import 'package:flutter1/Mootaz/HomePage.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:flutter1/yazan/login.dart';
+import 'package:flutter1/yazan/Register.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,8 +21,14 @@ class AppState {
 
   AppState(this._location, this._time);
 
-  AppState.initialState() : _location = "", _time = "00:00";
+  AppState.initialState()
+      : _location = "",
+        _time = "00:00";
+}
 
+class FetchTimeAction {
+  final String location = "";
+  final String time = "";
 }
 
 AppState reducer(AppState prev, dynamic action) {
@@ -30,15 +38,20 @@ AppState reducer(AppState prev, dynamic action) {
     return prev;
   }
 }
+
 class MyApp extends StatelessWidget {
   final store = Store(reducer,
-      initialState: AppState.initialState(),
-      middleware: [thunkMiddleware]);
-      Widget build(BuildContext context) {
+      initialState: AppState.initialState(), middleware: [thunkMiddleware]);
+  Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: Material(child: homePage(),));
+      child: MaterialApp(
+        initialRoute: '/register',
+        routes: {
+          '/': (context) => Loginpage(),
+          '/register': (context) => Registerpage(),
+        },
+      ),
+    );
   }
 }
-  
-
