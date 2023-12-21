@@ -179,7 +179,7 @@ class _LoginpageState extends State<Loginpage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(
+                      Navigator.pushReplacementNamed(
                         context,
                         '/register',
                       );

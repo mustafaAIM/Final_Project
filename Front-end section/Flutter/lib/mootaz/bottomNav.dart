@@ -11,31 +11,31 @@ class bottomNav extends StatefulWidget {
 }
 
 class _bottomNavState extends State<bottomNav> {
- 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: GNav(
-        selectedIndex: 3,
-            backgroundColor: Colors.blue,
-            color: Colors.black,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade500,
-            gap: 8,
-            padding: EdgeInsets.all(16),
-            onTabChange: (index) {
-              
-              if (index == 0) Navigator.pushReplacementNamed(context, "/homePage");
-              if (index == 1) Navigator.pushReplacementNamed(context, "/cartPage");
-              if (index == 2) Navigator.pushReplacementNamed(context, "/orderPage");
-              if (index == 3) Navigator.pushReplacementNamed(context, "/reportsPage");
-            },
-            tabs: const [
-              GButton(icon: Icons.home_outlined,text: 'Home',),
-              GButton(icon: Icons.shopping_cart_outlined,text: 'Cart',),
-              GButton(icon: Icons.receipt_long_sharp,text: 'Orders',),
-              GButton(icon: Icons.space_dashboard_outlined,text: 'Reports',)
-            ]),
+    return GNav(
+      backgroundColor: Colors.blue,
+      color: Colors.white,
+      activeColor: Colors.black,
+      padding: EdgeInsets.all(16),
+      onTabChange: (index) {
+      
+      },
+      tabs: [
+        GButton(
+          icon: Icons.home,
+        ),
+        GButton(
+          icon: Icons.shopping_cart_outlined,
+        ),
+        GButton(
+          icon: Icons.receipt_long_sharp,
+        ),
+        GButton(
+          icon: Icons.space_dashboard_outlined,
+        ),
+      ],
     );
   }
 }

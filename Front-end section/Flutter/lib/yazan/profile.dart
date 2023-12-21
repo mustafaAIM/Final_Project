@@ -141,10 +141,13 @@ class _ProfilePageState extends State<ProfilePage> {
             iconSize: 25,
             padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
             onTabChange: (index) {
-              if (index == 0) Navigator.pushReplacementNamed(context, "/home");
-              if (index == 1) Navigator.pushReplacementNamed(context, "/cart");
-              if (index == 2) Navigator.pushReplacementNamed(context, "/orders");
-              if (index == 3) Navigator.pushReplacementNamed(context, "/reports");
+              if (index == 0)   Navigator.pushReplacementNamed(
+                                context,
+                                '/login',
+                              );
+              // if (index == 1) Navigator.pushReplacementNamed(context, "/cartPage");
+              // if (index == 2) Navigator.pushReplacementNamed(context, "/orderPage");
+              // if (index == 3) Navigator.pushReplacementNamed(context, "/reportsPage");
             },
             tabs: [
               GButton(icon: Icons.home_outlined),

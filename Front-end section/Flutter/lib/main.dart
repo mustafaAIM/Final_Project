@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter1/Mootaz/HomePage.dart';
-import 'package:flutter1/Mootaz/cartPage.dart';
-import 'package:flutter1/Mootaz/categoryPage.dart';
-import 'package:flutter1/Mootaz/itemInfoPage.dart';
-import 'package:flutter1/Mootaz/warehousePage.dart';
-import 'package:flutter1/yazan/orders.dart';
-import 'package:flutter1/yazan/reports.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:flutter1/home.dart';
 import 'package:flutter1/yazan/login.dart';
 import 'package:flutter1/yazan/Register.dart';
-import 'package:flutter1/yazan/profile.dart';
-import 'package:flutter1/yazan/orders.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -56,15 +48,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => itemInfoPage(),
-          '/categoryPage': (context) => categoryPage(),
-          '/homePage': (context) => homePage(),
-          '/cartPage': (context) => cartPage(),
-          '/reportsPage': (context) => reportsPage(),
-          '/': (context) => Loginpage(),
+          '/': (context) => home(),
+          '/login': (context) => Loginpage(),
           '/register': (context) => Registerpage(),
-          '/profile': (context) => ProfilePage(),
-          '/orders': (context) => OrdersPage(),
         },
       ),
     );

@@ -259,9 +259,9 @@ class _RegisterpageState extends State<Registerpage> {
                               style: TextStyle(color: Colors.blue[800]),
                             ),
                             onTap: () => {
-                              Navigator.pushNamed(
+                              Navigator.pushReplacementNamed(
                                 context,
-                                '/',
+                                '/login',
                               )
                             },
                           )),

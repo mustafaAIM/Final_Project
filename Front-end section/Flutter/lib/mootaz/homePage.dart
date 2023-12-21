@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
-import 'package:flutter1/Mootaz/cartPage.dart';
-import 'package:flutter1/yazan/orderDetailsPage.dart';
-import 'package:flutter1/yazan/reports.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class homePage extends StatefulWidget {
   const homePage({
@@ -261,7 +257,7 @@ class _homePageState extends State<homePage> {
             )
           ],
         ),
-         bottomNavigationBar: bottomNav(),
+         bottomNavigationBar: const bottomNav(),
 
         );
   }

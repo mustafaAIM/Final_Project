@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter1/mootaz/bottomNav.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
@@ -157,6 +158,8 @@ class _MyWidgetState extends State<OrdersPage> {
                 })
             : const Center(
                 child: Text('No orders to display'),
-              ));
+              ),
+              bottomNavigationBar: bottomNav(),
+              );
   }
 }
