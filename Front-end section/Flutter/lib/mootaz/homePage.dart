@@ -131,7 +131,7 @@ class _homePageState extends State<homePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Catogary",
+                Text("Category",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 24,
@@ -166,13 +166,18 @@ class _homePageState extends State<homePage> {
               itemCount: catNameAndImage.length,
               itemBuilder: (context, index) {
                 return Container(
-                  // margin: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(right: 10),
                   padding: EdgeInsets.all(10),
                   width: 175,
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                        color: Colors.black,
+                        width: 1.2,
+                      ),
                   ),
+                  
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -217,6 +222,7 @@ class _homePageState extends State<homePage> {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return InkWell(
+                  
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -225,19 +231,24 @@ class _homePageState extends State<homePage> {
                   },
                   child: Card(
                     child: Column(
+                      
                       children: [
+                        
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey,
+                            color: Colors.grey[300],
+                                  
                           ),
-                          padding: EdgeInsets.all(20),
                           width: 120,
                           height: 100,
-                          child: Image.asset(
-                            "images/product2.jpg",
-                            height: 130,
-                            fit: BoxFit.fill,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              "images/product2.jpg",
+                              fit: BoxFit.fill,
+                              
+                            ),
                           ),
                         ),
                         SizedBox(

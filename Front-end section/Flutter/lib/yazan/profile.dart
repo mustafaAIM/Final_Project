@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
           // Banner image
           Image.asset(
             'images/banner.jpg',
-            height: 100,
+            height: 130,
             width: double
                 .infinity, // This will make the image take the full width of the screen
             fit: BoxFit.fill,
@@ -134,26 +134,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           )
         ]),
-        bottomNavigationBar: GNav(
-            backgroundColor: Colors.blue,
-            color: Colors.white,
-            activeColor: Colors.black,
-            iconSize: 25,
-            padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
-            onTabChange: (index) {
-              if (index == 0)   Navigator.pushReplacementNamed(
-                                context,
-                                '/login',
-                              );
-              // if (index == 1) Navigator.pushReplacementNamed(context, "/cartPage");
-              // if (index == 2) Navigator.pushReplacementNamed(context, "/orderPage");
-              // if (index == 3) Navigator.pushReplacementNamed(context, "/reportsPage");
-            },
-            tabs: [
-              GButton(icon: Icons.home_outlined),
-              GButton(icon: Icons.shopping_cart_outlined),
-              GButton(icon: Icons.receipt_long_sharp),
-              GButton(icon: Icons.space_dashboard_outlined)
-            ]));
+      );
   }
 }

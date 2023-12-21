@@ -90,7 +90,7 @@ class _cartPageState extends State<cartPage> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [Icon(Icons.exit_to_app,color: Colors.redAccent,)],
+                            children: [Icon(Icons.close,color: Colors.redAccent,)],
                           ),
                           SizedBox(height: 4,),
                           Text("Product Name",

@@ -25,7 +25,7 @@ class _boxAppState extends State<boxApp> {
               onTap: () {
                 Navigator.pushNamed(
                         context,
-                        '/homePage',
+                        '/',
                       );
               },
               child: Container(

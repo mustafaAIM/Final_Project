@@ -17,7 +17,6 @@ class _reportsPageState extends State<reportsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: bottomNav(),
       body: Text("reports"),
     );
   }

@@ -66,7 +66,7 @@ class _warehousePageState extends State<warehousePage> {
                         onTap: () {
                             Navigator.pushNamed(
                         context,
-                        '/homePage',
+                        '/',
                       );
                         },
                         child: Container(

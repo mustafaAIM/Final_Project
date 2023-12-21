@@ -134,11 +134,20 @@ class _categoryPageState extends State<categoryPage> {
                     child:  Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
+                        boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3), //color of shadow
+                          spreadRadius: 5, //spread radius
+                          blurRadius: 7, // blur radius
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
                         borderRadius: BorderRadius.circular(20),
-                        color: const Color.fromARGB(255, 218, 218, 218),
+                        color:  Colors.white,
                         border: Border.all(
                           color: Colors.black,
-                          width: 2
+                          width: 1,
+                          
                           )
                       ),
                       child: Column(
