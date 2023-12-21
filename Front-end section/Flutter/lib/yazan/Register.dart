@@ -15,13 +15,11 @@ class _RegisterpageState extends State<Registerpage> {
   String dropdownValue = 'Damascus';
   String? gender;
   @override
-  
   Widget build(BuildContext context) {
-    return SafeArea(
-      
-        child: Scaffold(
-            body: SingleChildScrollView(
-                child: Container(
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Container(
+      padding: EdgeInsets.only(top: 25),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
@@ -147,8 +145,7 @@ class _RegisterpageState extends State<Registerpage> {
                         value: dropdownValue,
                         isExpanded: true,
                         icon: Padding(
-                          padding: EdgeInsets.only(
-                              right: 10), 
+                          padding: EdgeInsets.only(right: 10),
                           child: Icon(Icons.arrow_downward),
                         ),
                         iconSize: 24,
@@ -158,7 +155,7 @@ class _RegisterpageState extends State<Registerpage> {
                             fontWeight: FontWeight.w600,
                             color: Color.fromARGB(255, 75, 75, 75)),
                         underline: Container(
-                          height: 2,
+                          height: 1,
                           color: Color.fromARGB(255, 18, 40, 233),
                         ),
                         onChanged: (String? newValue) => {
@@ -188,40 +185,38 @@ class _RegisterpageState extends State<Registerpage> {
                           );
                         }).toList(),
                       )),
-                      ListTileTheme(
-                  horizontalTitleGap: 2, 
-                  child: Row(
-                    
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        
-                        child: RadioListTile<String>(
-                          contentPadding: EdgeInsets.only(left: 30),
-                          title: Text("Male"),
-                          value: "Male",
-                          groupValue: gender,
-                          onChanged: (value) {
-                            setState(() {
-                              gender = value;
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: RadioListTile<String>(
-                          title: Text("Female"),
-                          value: "Female",
-                          groupValue: gender,
-                          onChanged: (value) {
-                            setState(() {
-                              gender = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  )),
+                  ListTileTheme(
+                      horizontalTitleGap: 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: RadioListTile<String>(
+                              contentPadding: EdgeInsets.only(left: 30),
+                              title: Text("Male"),
+                              value: "Male",
+                              groupValue: gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: Text("Female"),
+                              value: "Female",
+                              groupValue: gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      )),
                   SizedBox(
                     height: 20,
                   ),
@@ -241,7 +236,7 @@ class _RegisterpageState extends State<Registerpage> {
                       child: Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Text(
-                            'LOGIN',
+                            'REGISTER',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -254,26 +249,28 @@ class _RegisterpageState extends State<Registerpage> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [  
-                       Text("Already have an account?"),
-                       Padding(padding: EdgeInsets.only(left: 10),
-                   child:
-                  GestureDetector(
-                    child: Text("login",style: TextStyle(color: Colors.blue[800]),),
-                    onTap: () => {
-                      Navigator.pushNamed(
-                        context,
-                        '/',
-                      )
-                    },
-                  )),
+                    children: [
+                      Text("Already have an account?"),
+                      Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: GestureDetector(
+                            child: Text(
+                              "login",
+                              style: TextStyle(color: Colors.blue[800]),
+                            ),
+                            onTap: () => {
+                              Navigator.pushNamed(
+                                context,
+                                '/',
+                              )
+                            },
+                          )),
                     ],
                   )
-                ]
-              ),
+                ]),
           )
         ],
       ),
-    ))));
+    )));
   }
 }

@@ -22,10 +22,10 @@ class _LoginpageState extends State<Loginpage> {
   bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: SingleChildScrollView(
-                child: Container(
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Container(
+      padding: EdgeInsets.only(top: 25),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
@@ -211,6 +211,6 @@ class _LoginpageState extends State<Loginpage> {
           )
         ],
       ),
-    ))));
+    )));
   }
 }

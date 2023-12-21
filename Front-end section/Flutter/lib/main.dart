@@ -5,6 +5,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:flutter1/yazan/login.dart';
 import 'package:flutter1/yazan/Register.dart';
 import 'package:flutter1/yazan/profile.dart';
+import 'package:flutter1/yazan/orders.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -46,10 +47,12 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        initialRoute: '/register',
+        initialRoute: '/orders',
         routes: {
           '/': (context) => Loginpage(),
-          '/register': (context) => ProfilePage(),
+          '/register': (context) => Registerpage(),
+          '/profile': (context) => ProfilePage(),
+          '/orders': (context) => OrdersPage(),
         },
       ),
     );
