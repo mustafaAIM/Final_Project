@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ApplicationAuth\LogoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ApplicationAuth\RegisterationController;
+use App\Http\Controllers\ApplicationAuth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+//Application Routes 
+
+
+Route::post('register-pharmacist',[RegisterationController::class,'register']);
+Route::post('login-pharmacist',[LoginController::class,'login'])->name('login');
+
+
+
+Route::middleware('auth:api')->group( function () {
+    Route::post('logout',[LogoutController::class,'logout']);
 });
