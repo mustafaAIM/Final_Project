@@ -12,4 +12,9 @@ class Warehouse extends Model
       'name',
       'user_id'
   ];
+
+    public function medicines(){
+        return $this->belongsToMany(Medicine::class, 'warehouse_medicines', 'warehouse_id', 'medicine_id')
+                    ->withPivot('price','quantity', 'expirydate');
+    }
 }

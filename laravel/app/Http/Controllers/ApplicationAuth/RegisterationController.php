@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ApplicationAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterationController extends Controller
@@ -22,8 +23,7 @@ class RegisterationController extends Controller
           if ($validator->fails()) {
               return response()->json(['errors' => $validator->errors()], 422);
           }
-  
-          $user = User::create([
+            $user = User::create([
               'username' => $request->username,
               'phone' => $request->phone,
               'password' => bcrypt($request->password),
@@ -31,6 +31,15 @@ class RegisterationController extends Controller
               'gender' => $request->gender,
               'type' => $request->type,
           ]);
+          //test 
+          if($request->input('type')==="Warehouse Owner"){
+              Warehouse::create([
+                  "name" => $request->input('name'),
+                  "user_id"=> $user->id
+              ]);
+          }
+
+        
   
           $token = $user->createToken('MyApp')->accessToken;
   
