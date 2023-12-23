@@ -8,6 +8,14 @@ use App\Http\Controllers\ApplicationAuth\LoginController;
 use App\Http\Controllers\ApplicationControlleres\MedicinesByCategoryController;
 use App\Http\Controllers\ApplicationControlleres\SearchMedicineController;
 use App\Http\Controllers\ApplicationControlleres\WarehouseMedicinesController;
+/*
+|--------------------------------------------------------------------------
+| Web Controllers
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\WebAuth\WebRegisterationController;
+use App\Http\Controllers\WebAuth\WebLoginController;
+use App\Http\Controllers\WebAuth\WebLogoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +29,7 @@ use App\Http\Controllers\ApplicationControlleres\WarehouseMedicinesController;
 */
 
 
-//Application Routes 
+//Application Routes
 
 
 Route::middleware('auth:api')->group( function () {
@@ -37,3 +45,11 @@ Route::post('login-pharmacist',[LoginController::class,'login'])->name('login');
 
 
 
+// Web Routes
+Route::post('register-warehouse' , [WebRegisterationController::class ,'register']);
+Route::post('login-warehouse' , [WebLoginController::class ,'login']);
+
+
+Route::middleware('auth:api')->group( function () {
+    Route::post('logout-warehouse',[WebLogoutController::class,'logout']);
+});
