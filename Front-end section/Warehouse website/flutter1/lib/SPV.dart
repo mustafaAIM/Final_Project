@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/dashboard.dart';
+import 'package:flutter1/orders.dart';
 
 class SPV extends StatefulWidget {
   const SPV({super.key});
@@ -18,7 +19,7 @@ class _SPVState extends State<SPV> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width*85/100,
         color: const Color.fromARGB(255, 227, 222, 222),
-        child: dashboard(),
+        child: ordersPage(),
       ),
     );
   }
