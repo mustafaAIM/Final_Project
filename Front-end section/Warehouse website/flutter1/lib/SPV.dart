@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/CreateProducts.dart';
-import 'package:flutter1/Dashboard.dart';
 import 'package:flutter1/Profile.dart';
+import 'package:flutter1/dashboard.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter1/orders.dart';
 import 'package:flutter1/reports.dart';
@@ -18,7 +18,7 @@ class SPV extends StatefulWidget {
 
 class _SPVState extends State<SPV> {
   List pages = [
-    dashboardPage(),
+    dashboard(),
     searchProductPage(),
     ordersPage(),
     reportsPage(),
