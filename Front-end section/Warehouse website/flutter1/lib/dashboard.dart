@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter1/chart.dart';
+import 'package:flutter1/chart2.dart';
 
 class dashboard extends StatefulWidget {
   const dashboard({super.key});
@@ -12,9 +15,7 @@ class _dashboardState extends State<dashboard> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      
-      mainAxisAlignment: MainAxisAlignment.end,
-      children:[           
+            children:[           
            Row(
             
             children: [
@@ -44,10 +45,60 @@ class _dashboardState extends State<dashboard> {
             onTap: () {}),
       ]
       ),
-      SizedBox(height: 100,),
-      Expanded(child: SimpleTimeSeriesChart.withSampleData()),
-      ],
-    );
+      SizedBox(height: 60,),
+      Expanded
+      (child: Row(
+        children: 
+        [
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, 6), color: Colors.grey, blurRadius: 12)
+            ],
+            borderRadius: BorderRadius.circular(8)),
+                child:  Column(
+                  children: [
+                    Text("Sales:",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600
+                    )),
+                     Expanded(child: SimpleTimeSeriesChart.withSampleData()),
+                  ],
+                ),     
+                )
+              ),
+           Container(
+              width: 400,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, 6), color: Colors.grey, blurRadius: 12)
+            ],
+            borderRadius: BorderRadius.circular(8)),
+                child:  Column(
+                  children: [
+                    Text("Products Sales Percentages:",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600
+                    )),
+                    Expanded(child: chart()),
+                  ],
+                ),   
+                )
+            ])),
+        ]);
+        
+      
   }
 }
 
