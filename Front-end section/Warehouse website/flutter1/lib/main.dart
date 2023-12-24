@@ -14,11 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'hello',
-        style: TextStyle(color: Colors.black, fontSize: 30),
-      ),
+    return Scaffold(
+      body: home()
     );
   }
 }
