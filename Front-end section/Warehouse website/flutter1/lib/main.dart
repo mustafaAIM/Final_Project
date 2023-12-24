@@ -7,9 +7,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 
 void main() {
-  runApp(MaterialApp(
-    home: MyApp(),
-  ));
+  runApp( MyApp());
 }
 
 class AppState {
@@ -19,7 +17,7 @@ class AppState {
 
   AppState(this._currentIndex);
 
-  AppState.initialState() : _currentIndex = 0;
+  AppState.initialState() : _currentIndex = 5;
 }
 
 class NavClickAction {
@@ -43,6 +41,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
+            debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
            '/': (context) => home(),
