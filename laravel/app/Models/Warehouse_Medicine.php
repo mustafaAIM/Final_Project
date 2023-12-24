@@ -9,10 +9,10 @@ class Warehouse_Medicine extends Model
 {
     use HasFactory;
     protected $fillable = [
-      'medicine_id',
-      'warehouse_id',
-      'price',
-      'quantity',
-      'expirydate',
-  ];
+        'medicine_id',
+        'warehouse_id',
+        'price',
+        'quantity',
+        'expirydate',
+    ];
 }

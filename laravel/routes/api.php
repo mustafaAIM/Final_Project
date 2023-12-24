@@ -16,6 +16,7 @@ use App\Http\Controllers\ApplicationControlleres\WarehouseMedicinesController;
 use App\Http\Controllers\WebAuth\WebRegisterationController;
 use App\Http\Controllers\WebAuth\WebLoginController;
 use App\Http\Controllers\WebAuth\WebLogoutController;
+use App\Http\Controllers\WebControllers\CreateMedicineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,7 @@ Route::post('login-pharmacist',[LoginController::class,'login'])->name('login');
 // Web Routes
 Route::post('register-warehouse' , [WebRegisterationController::class ,'register']);
 Route::post('login-warehouse' , [WebLoginController::class ,'login']);
-
+Route::post('create-medicine',[CreateMedicineController::class, 'create']);
 
 Route::middleware('auth:api')->group( function () {
     Route::post('logout-warehouse',[WebLogoutController::class,'logout']);

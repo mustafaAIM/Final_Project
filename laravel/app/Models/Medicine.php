@@ -10,12 +10,12 @@ class Medicine extends Model
     use HasFactory;
 
     protected $fillable = [
-      'scientific_name',
-      'trading_name',
-      'manufacturer_company',
-      'category_id',
-      ];
-     public function warehouses(){
+        'scientific_name',
+        'trading_name',
+        'manufacturer_company',
+        'category_id',
+        ];
+    public function warehouses(){
         return $this->belongsToMany(Warehouse::class, 'warehouse_medicine', 'medicine_id', 'warehouse_id')
                     ->withPivot('price','quantity', 'expiry_date');
     }

@@ -19,7 +19,7 @@ class WebRegisterationController extends Controller
             'city' => 'required|string|max:255',
             'gender' => 'required|string|in:male,female',
             'type' => 'required|string|max:255|in:pharmacist,Warehouse Owner',
-            'warehousename' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -38,7 +38,7 @@ class WebRegisterationController extends Controller
 
 
         $warehouse = Warehouse::create([
-            'name' => $request->warehousename,
+            'name' => $request->name,
             'user_id' => $user->id,
         ]);
 

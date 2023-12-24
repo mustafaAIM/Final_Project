@@ -31,6 +31,6 @@ class WebLoginController extends Controller
         }
         else {
             return response()->json(['error' => 'Invalid phone or password'], 401);
+            }
         }
-    }
 }
