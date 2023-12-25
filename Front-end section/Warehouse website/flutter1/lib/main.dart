@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/CreateProducts.dart';
+import 'package:flutter1/Register.dart';
 import 'package:flutter1/home.dart';
+import 'package:flutter1/login.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 
 void main() {
-  runApp(MaterialApp(
-    home: MyApp(),
-  ));
+  runApp( MyApp());
 }
 
 class AppState {
@@ -19,7 +19,7 @@ class AppState {
 
   AppState(this._currentIndex);
 
-  AppState.initialState() : _currentIndex = 0;
+  AppState.initialState() : _currentIndex = 6;
 }
 
 class NavClickAction {
@@ -43,9 +43,13 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        initialRoute: '/',
+            debugShowCheckedModeBanner: false,
+        initialRoute: '/login',
         routes: {
            '/': (context) => home(),
+          '/createProducts': (context) => createProductPage(),
+          '/login':(context) => Loginpage(),
+          '/register':(context) => Registerpage(),
         },
       ),
     );
