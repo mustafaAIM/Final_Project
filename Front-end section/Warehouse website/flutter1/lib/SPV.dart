@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/CreateProducts.dart';
 import 'package:flutter1/Profile.dart';
+import 'package:flutter1/Register.dart';
 import 'package:flutter1/dashboard.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter1/orders.dart';
 import 'package:flutter1/searchProduct.dart';
 import 'package:flutter1/showProduct.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter1/login.dart';
 
 class SPV extends StatefulWidget {
   const SPV({super.key});
@@ -22,7 +24,9 @@ class _SPVState extends State<SPV> {
     ordersPage(),
     profilePage(),
     createProductPage(),
-    showProductPage()
+    showProductPage(),
+    Loginpage(),
+    Registerpage
   ];
 
   @override
@@ -32,7 +36,7 @@ class _SPVState extends State<SPV> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width * 85 / 100,
-          color:  Colors.white,
+          color: Colors.white,
           padding: EdgeInsets.only(bottom: 20),
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
@@ -41,14 +45,22 @@ class _SPVState extends State<SPV> {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.fromLTRB(0,20,20,0),
+                        padding: EdgeInsets.fromLTRB(0, 20, 20, 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
-                            SizedBox(width: 20,),
-                            CircleAvatar(backgroundImage: AssetImage('images/avatar.png'),),
-                            SizedBox(width: 10,),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.notifications)),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            CircleAvatar(
+                              backgroundImage: AssetImage('images/avatar.png'),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -60,11 +72,11 @@ class _SPVState extends State<SPV> {
                         ),
                       ),
                       Divider(
-                    color: Colors.black,
-                    height: 50,
-                    thickness: 1,
-                  ),
-                      Expanded(child: pages[state.currentIndex]),
+                        color: Colors.black,
+                        height: 50,
+                        thickness: 1,
+                      ),
+                     Expanded(child: pages[state.currentIndex]),
                     ],
                   ),
                 );
