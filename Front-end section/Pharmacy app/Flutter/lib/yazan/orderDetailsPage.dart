@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class orderDetailsPage extends StatefulWidget {
   const orderDetailsPage({
@@ -21,7 +22,13 @@ class _orderDetailsPageState extends State<orderDetailsPage> {
     List productDetails = ModalRoute.of(context)!.settings.arguments as List;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Order: #${productDetails[0]["id"]}'),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LocaleText('order'),
+              Text(': #${productDetails[0]["id"]}'),
+            ],
+          ),
           backgroundColor: Colors.blue,
           centerTitle: true,
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 30),
@@ -83,9 +90,9 @@ class _orderDetailsPageState extends State<orderDetailsPage> {
                   ),
                   Column(children: [
                     productDetails[0]["status"] == "Delivered"
-                        ? Text("Delivered date",
+                        ? LocaleText("delivered",
                             style: TextStyle(fontWeight: FontWeight.w600))
-                        : Text("Expected delivery",
+                        : LocaleText("expected",
                             style: TextStyle(fontWeight: FontWeight.w600)),
                     Text("${productDetails[0]["delivery date"]}")
                   ])
@@ -133,7 +140,7 @@ class _orderDetailsPageState extends State<orderDetailsPage> {
                   
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total',
+                    LocaleText('total',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600

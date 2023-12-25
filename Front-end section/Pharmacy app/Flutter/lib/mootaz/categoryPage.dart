@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class categoryPage extends StatefulWidget {
   const categoryPage({
@@ -100,8 +101,8 @@ class _categoryPageState extends State<categoryPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          Text(
-          "All Category",
+          LocaleText(
+          "all",
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.bold,

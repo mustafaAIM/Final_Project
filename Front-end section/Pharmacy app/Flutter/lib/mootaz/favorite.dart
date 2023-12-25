@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 class favoritePage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _favoritePageState extends State<favoritePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites',style: TextStyle(
+        title: LocaleText('Favorites',style: TextStyle(
           fontSize: 35,
           fontWeight: FontWeight.bold
         ),),

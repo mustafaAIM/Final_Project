@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class homePage extends StatefulWidget {
   const homePage({
@@ -56,10 +57,8 @@ class _homePageState extends State<homePage> {
                                 icon: Icon(Icons.star,
                                     color: Colors.yellow, size: 35),
                                 onPressed: () => {
-                                   Navigator.pushNamed(
-                                       context,
-                                        '/favoritePage',
-                                              )
+                                  Navigator.pushNamed(context, '/favoritePage')
+                                      
                                 },
                               ),
                               IconButton(
@@ -87,7 +86,7 @@ class _homePageState extends State<homePage> {
                         child: TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            hintText: 'Search',
+                            hintText: "search",
                             prefixIcon: Icon(
                               Icons.search,
                               color: Colors.black.withOpacity(0.4),
@@ -131,7 +130,7 @@ class _homePageState extends State<homePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Category",
+                LocaleText("category",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 24,
@@ -144,8 +143,8 @@ class _homePageState extends State<homePage> {
                       '/categoryPage',
                     );
                   },
-                  child: Text(
-                    "See More",
+                  child: LocaleText(
+                    "see",
                     style: TextStyle(
                         color: Colors.blue[400],
                         fontSize: 16,
@@ -203,8 +202,8 @@ class _homePageState extends State<homePage> {
           ),
           Container(
             padding: EdgeInsets.only(left: 25),
-            child: Text(
-              "Recommend for you",
+            child: LocaleText(
+              "recommend",
               style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,

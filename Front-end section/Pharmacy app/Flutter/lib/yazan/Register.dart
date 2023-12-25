@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Registerpage extends StatefulWidget {
@@ -52,15 +53,15 @@ class _RegisterpageState extends State<Registerpage> {
                   SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    "Lets create your account!",
+                  LocaleText(
+                    "lets",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    'Please fill in the form bellow.',
+                  LocaleText(
+                    'please',
                     style: TextStyle(fontSize: 15),
                   ),
                   SizedBox(
@@ -193,7 +194,7 @@ class _RegisterpageState extends State<Registerpage> {
                           Expanded(
                             child: RadioListTile<String>(
                               contentPadding: EdgeInsets.only(left: 30),
-                              title: Text("Male"),
+                              title: LocaleText("male"),
                               value: "Male",
                               groupValue: gender,
                               onChanged: (value) {
@@ -205,7 +206,7 @@ class _RegisterpageState extends State<Registerpage> {
                           ),
                           Expanded(
                             child: RadioListTile<String>(
-                              title: Text("Female"),
+                              title: LocaleText("female"),
                               value: "Female",
                               groupValue: gender,
                               onChanged: (value) {
@@ -235,8 +236,8 @@ class _RegisterpageState extends State<Registerpage> {
                               ])),
                       child: Padding(
                           padding: EdgeInsets.all(12.0),
-                          child: Text(
-                            'REGISTER',
+                          child: LocaleText(
+                            'register',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -250,11 +251,11 @@ class _RegisterpageState extends State<Registerpage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Already have an account?"),
+                      LocaleText("already"),
                       Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: GestureDetector(
-                            child: Text(
+                            child: LocaleText(
                               "login",
                               style: TextStyle(color: Colors.blue[800]),
                             ),
