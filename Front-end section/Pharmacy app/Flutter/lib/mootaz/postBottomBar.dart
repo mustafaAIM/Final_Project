@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class postBottomBar extends StatefulWidget {
@@ -14,6 +15,7 @@ class postBottomBar extends StatefulWidget {
 class _postBottomBarState extends State<postBottomBar> {
 
   int selectedIndex = 0;
+  String dropdownValue = '2020-1-2. Q: 20';
  
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,14 @@ class _postBottomBarState extends State<postBottomBar> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Scientific name: Panadol",
-                  style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      LocaleText("scientific",
+                      style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                      ,Text(" : Panadol",
+                      style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   Text("200\$",
                   style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold,color: Colors.amberAccent),)
@@ -41,32 +49,71 @@ class _postBottomBarState extends State<postBottomBar> {
               ),
               SizedBox(height: 10,),
              Row(children: [
-               Text("Comercial name: ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+               LocaleText("comercial",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+               ,Text(":",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
               
              ],)
              ,SizedBox(height: 10,),
              Row(children: [
-               Text("Category: ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+               LocaleText("category",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+               ,Text(": ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
               
              ],)
              ,SizedBox(height: 10,),
               Row(children: [
-                Text("Manufacturing Company: ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                LocaleText("manufacturing",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                ,Text(": ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
               
               ],)
               ,SizedBox(height: 10,),
               Row(children: [
-                Text("Available quantity: ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                LocaleText("available",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                ,Text(": ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
               
               ],)
               ,SizedBox(height: 10,),
               Row(children: [
-                Text("Earliest expiration date: ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
-              
+                LocaleText("earliest",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                ,Text(": ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                , Container(
+                  width: 210,
+                  child: DropdownButton<String>(
+                          value: dropdownValue,
+                          isExpanded: true,
+                          icon: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(Icons.arrow_downward),
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                          underline: SizedBox(),
+                          onChanged: (String? newValue) => {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            })
+                          },
+                          items: <String>[
+                            "2020-1-2. Q: 20",
+                            "2010-3-30. Q: 20",
+                            "2010-4-3. Q: 20",
+                            "2010-6-1. Q: 20",
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                )
               ],)
               ,SizedBox(height: 10,),
               Row(children: [
-                Text("warehouse: ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                LocaleText("warehouse",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                ,Text(": ",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
 
               ],),
               SizedBox(height: 25,),
@@ -75,7 +122,7 @@ class _postBottomBarState extends State<postBottomBar> {
                 child: MaterialButton(onPressed: () {
                 
               },
-              child: Text("ADD TO CART",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+              child: LocaleText("add",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
               color: const Color.fromARGB(255, 3, 58, 103),
               textColor: Colors.white,
               height: 60,

@@ -16,6 +16,7 @@ class _profilePageState extends State<profilePage> {
     'English',
     'Arabic',
   ];
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

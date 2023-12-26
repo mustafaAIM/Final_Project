@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
@@ -58,15 +59,15 @@ class _LoginpageState extends State<Loginpage> {
                   SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    "Hello",
+                  LocaleText(
+                    "welcome",
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    'please login to your account',
+                  LocaleText(
+                    'your',
                     style: TextStyle(fontSize: 15),
                   ),
                   SizedBox(
@@ -127,8 +128,8 @@ class _LoginpageState extends State<Loginpage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "Forgot Password?",
+                        LocaleText(
+                          "forgot",
                           style: TextStyle(
                               color: Color.fromARGB(255, 18, 40, 233),
                               fontWeight: FontWeight.w600),
@@ -140,6 +141,9 @@ class _LoginpageState extends State<Loginpage> {
                     height: 20,
                   ),
                   GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/home');
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       width: 250,
@@ -154,8 +158,8 @@ class _LoginpageState extends State<Loginpage> {
                               ])),
                       child: Padding(
                           padding: EdgeInsets.all(12.0),
-                          child: Text(
-                            'LOGIN',
+                          child: LocaleText(
+                            'login1',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -170,8 +174,8 @@ class _LoginpageState extends State<Loginpage> {
                     indent: 20,
                     endIndent: 20,
                   ),
-                  Text(
-                    "No account?",
+                  LocaleText(
+                    "na",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
@@ -198,8 +202,8 @@ class _LoginpageState extends State<Loginpage> {
                               ])),
                       child: Padding(
                           padding: EdgeInsets.all(12.0),
-                          child: Text(
-                            'REGISTER',
+                          child: LocaleText(
+                            'register',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,

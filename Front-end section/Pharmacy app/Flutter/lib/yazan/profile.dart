@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // ignore_for_file: prefer_const_constructors
 
 class ProfilePage extends StatefulWidget {
@@ -11,13 +13,28 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool isNotificationsEnabled = false;
+  int selectIndex = 0;
+  List<String> localCodes = [
+    "en",
+    "ar",
+  ];
 
+  Future<void> initializePreferences() async {
+    var prefs = await SharedPreferences.getInstance();
+    // Do any necessary initialization with SharedPreferences here.
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializePreferences();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 242, 242, 242),
         appBar: AppBar(
-          title: Text('Profile'),
+          title: LocaleText('Profile'),
           centerTitle: true,
           backgroundColor: Colors.blue[800],
           elevation: 0,
@@ -25,7 +42,10 @@ class _ProfilePageState extends State<ProfilePage> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             color: Colors.white, // Change the color to blue
-            onPressed: () => Navigator.of(context).pop(),
+            // onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.pushNamed(context, '/homePage');
+            },
           ),
         ),
         body: Column(children: [
@@ -68,24 +88,44 @@ class _ProfilePageState extends State<ProfilePage> {
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Account number: #1234567890',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    Row(
+                      children: [
+                        LocaleText(
+                          'account',
+                          style:
+                              TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        ),
+                        Text(": #1234567890",style:
+                              TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        )
+                      ],
                     ),
-                    Text('Phone number: 123-456-7890',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w400)),
-                    Text('Date created: 2023-12-20',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w400)),
+                    Row(
+                      children: [
+                        LocaleText('phone',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400)),
+                                Text(": 123-456-7890",style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        LocaleText('date',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400)),
+                        Text(': 2023-12-20',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400)),
+                      ],
+                    ),
                     // Notifications toggle switch
                   ],
                 ),
                 SwitchListTile(
                   contentPadding: EdgeInsets.only(bottom: 30),
                   activeColor: Colors.blue,
-                  title: Text('Notifications'),
+                  title: LocaleText('Notifications'),
                   value: isNotificationsEnabled,
                   onChanged: (value) {
                     setState(() {
@@ -99,8 +139,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // TODO: Navigate to edit profile screen
-                    },
+                      if (selectIndex == 0) {
+                setState(() {
+                  selectIndex = 1;
+                });
+                Locales.change(context, localCodes[selectIndex]);
+              } else {
+                setState(() {
+                  selectIndex = 0;
+                  });
+                Locales.change(context, localCodes[selectIndex]);
+              }
+              
+                // Locales.change(context, localCodes[0]);
+                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 12, 53, 106),
                         padding:
@@ -127,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       // TODO: Logout the user
                     },
                     child:
-                        Text('Logout', style: TextStyle(color: Colors.white)),
+                        LocaleText('Logout', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

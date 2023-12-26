@@ -15,6 +15,116 @@ class searchProductPage extends StatefulWidget {
 
 class _searchProductPageState extends State<searchProductPage> {
 
+  List products = [
+    {
+      "Commercial Name": "Panadol",
+      "scientific Name": "Panadol",
+      "Quantity": 220,
+      "Price": 120,
+      "Expiration date": "2020-2-2"
+    },
+    {
+      "Commercial Name": "profin",
+      "scientific Name": "profin",
+      "Quantity": 250,
+      "Price": 300,
+      "Expiration date": "2020-3-5"
+    },
+    {
+      "Commercial Name": "Panadol",
+      "scientific Name": "Panadol",
+      "Quantity": 220,
+      "Price": 120,
+      "Expiration date": "2020-2-2"
+    },
+    {
+      "Commercial Name": "profin",
+      "scientific Name": "profin",
+      "Quantity": 250,
+      "Price": 300,
+      "Expiration date": "2020-3-5"
+    },
+    {
+      "Commercial Name": "Panadol",
+      "scientific Name": "Panadol",
+      "Quantity": 220,
+      "Price": 120,
+      "Expiration date": "2020-2-2"
+    },
+    {
+      "Commercial Name": "profin",
+      "scientific Name": "profin",
+      "Quantity": 250,
+      "Price": 300,
+      "Expiration date": "2020-3-5"
+    },
+    {
+      "Commercial Name": "Panadol",
+      "scientific Name": "Panadol",
+      "Quantity": 220,
+      "Price": 120,
+      "Expiration date": "2020-2-2"
+    },
+    {
+      "Commercial Name": "profin",
+      "scientific Name": "profin",
+      "Quantity": 250,
+      "Price": 300,
+      "Expiration date": "2020-3-5"
+    },
+    {
+      "Commercial Name": "Panadol",
+      "scientific Name": "Panadol",
+      "Quantity": 220,
+      "Price": 120,
+      "Expiration date": "2020-2-2"
+    },
+    {
+      "Commercial Name": "profin",
+      "scientific Name": "profin",
+      "Quantity": 250,
+      "Price": 300,
+      "Expiration date": "2020-3-5"
+    },
+    {
+      "Commercial Name": "Panadol",
+      "scientific Name": "Panadol",
+      "Quantity": 220,
+      "Price": 120,
+      "Expiration date": "2020-2-2"
+    },
+    {
+      "Commercial Name": "profin",
+      "scientific Name": "profin",
+      "Quantity": 250,
+      "Price": 300,
+      "Expiration date": "2020-3-5"
+    },
+  ];
+  List findProducts = [];
+  @override
+  void initState() {
+    findProducts = products;
+    super.initState();
+  }
+
+  void runSearchProduct(String enterdeKey) {
+    List results = [];
+    if (enterdeKey.isEmpty) {
+      results = products;
+    } else {
+      results = products
+          .where((element) => element["Commercial Name"]
+              .toLowerCase()
+              .contains(enterdeKey..toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      findProducts = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +152,8 @@ class _searchProductPageState extends State<searchProductPage> {
                         height: 35,
                         child: Expanded(
                           child: TextField(
-                            style: TextStyle(color: Colors.white),
+                            onChanged: (value) => runSearchProduct(value),
+                            style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(6),
                               suffixIcon: Icon(Icons.search),
@@ -69,7 +180,7 @@ class _searchProductPageState extends State<searchProductPage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12)),
                             child: Text(
-                              "Add Products",
+                              "Import Products",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
@@ -202,23 +313,26 @@ class _searchProductPageState extends State<searchProductPage> {
                         topRight: Radius.circular(12))),
                 headingTextStyle:
                     TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                rows: List<DataRow>.generate(20, (index) {
+                rows: List<DataRow>.generate(findProducts.length, (index) {
                   if (index.isEven) {
                     return DataRow(
                         onLongPress: () {
                           StoreProvider.of<AppState>(context)
                               .dispatch(NavClickAction(5));
                         },
+                        
                         color: MaterialStatePropertyAll(
                             Color.fromARGB(255, 217, 217, 217)),
                         cells: [
                           DataCell(
-                            Text('Panadol'),
+                            Text('${findProducts[index]["Commercial Name"]}'),
                           ),
-                          DataCell(Text('Panadol')),
-                          DataCell(Text('50')),
-                          DataCell(Text('200\$')),
-                          DataCell(Text(("2022\\20\\20")))
+                          DataCell(Text(
+                              '${findProducts[index]["scientific Name"]}')),
+                          DataCell(Text('${findProducts[index]["Quantity"]}')),
+                          DataCell(Text('${findProducts[index]["Price"]}\$')),
+                          DataCell(
+                              Text("${findProducts[index]["Expiration date"]}"))
                         ]);
                   } else {
                     return DataRow(
@@ -228,12 +342,14 @@ class _searchProductPageState extends State<searchProductPage> {
                         },
                         cells: [
                           DataCell(
-                            Text('Brofin'),
+                            Text('${findProducts[index]["Commercial Name"]}'),
                           ),
-                          DataCell(Text('Brofin extra')),
-                          DataCell(Text('30')),
-                          DataCell(Text('300\$')),
-                          DataCell(Text(("2020\\19\\4")))
+                          DataCell(Text(
+                              '${findProducts[index]["scientific Name"]}')),
+                          DataCell(Text('${findProducts[index]["Quantity"]}')),
+                          DataCell(Text('${findProducts[index]["Price"]}\$')),
+                          DataCell(
+                              Text("${findProducts[index]["Expiration date"]}"))
                         ]);
                   }
                 })),

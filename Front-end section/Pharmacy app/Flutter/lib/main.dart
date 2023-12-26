@@ -8,6 +8,7 @@ import 'package:flutter1/Mootaz/itemInfoPage.dart';
 import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
 import 'package:flutter1/yazan/reports.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -15,10 +16,11 @@ import 'package:flutter1/yazan/login.dart';
 import 'package:flutter1/yazan/Register.dart';
 import 'package:flutter1/yazan/profile.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: MyApp(),
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Locales.init(['en', 'ar']); // get last saved language
+  // remove await if you want to get app default language
+  runApp(MyApp());
 }
 
 class AppState {
@@ -51,10 +53,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: MaterialApp(
+      child: LocaleBuilder(
+      builder: (locale) => MaterialApp(
+        localizationsDelegates: Locales.delegates,
+        supportedLocales: Locales.supportedLocales,
+        locale: locale,
         initialRoute: '/',
         routes: {
-          '/': (context) => home(),
+          '/': (context) => Loginpage(),
+          '/home': (context) => home(),
           '/item': (context) => itemInfoPage(),
           '/categoryPage': (context) => categoryPage(),
           '/homePage': (context) => homePage(),
@@ -66,7 +73,9 @@ class MyApp extends StatelessWidget {
           '/login': (context) => Loginpage(),
           '/register': (context) => Registerpage(),
         },
+        
       ),
+    )
     );
   }
 }

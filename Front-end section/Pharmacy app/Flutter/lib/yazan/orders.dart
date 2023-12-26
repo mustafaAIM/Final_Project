@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/mootaz/bottomNav.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
@@ -175,8 +176,8 @@ class _MyWidgetState extends State<OrdersPage> {
                               ),
                               Column(
                                 children: [
-                                  Text(
-                                    "Order",
+                                  LocaleText(
+                                    "order",
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -193,10 +194,10 @@ class _MyWidgetState extends State<OrdersPage> {
                             Column(
                               children: [
                                 orders[index]["status"] == "Delivered"
-                                    ? Text("Delivered date",
+                                    ? LocaleText("delivered",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600))
-                                    : Text("Expected delivery",
+                                    : LocaleText("expected",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600)),
                                 Text("${orders[index]["delivery date"]}")
@@ -210,7 +211,7 @@ class _MyWidgetState extends State<OrdersPage> {
                 );
               })
           : const Center(
-              child: Text('No orders to display'),
+              child: LocaleText('no'),
             ),
     );
   }
