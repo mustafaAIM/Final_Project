@@ -119,7 +119,6 @@ class _cartPageState extends State<cartPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  text
                                   Text("200",style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
