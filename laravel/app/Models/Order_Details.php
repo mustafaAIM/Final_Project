@@ -15,4 +15,8 @@ class Order_Details extends Model
       'price',
       'expiry date',
   ];
+
+
+
+  
 }

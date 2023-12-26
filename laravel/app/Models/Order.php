@@ -13,7 +13,11 @@ class Order extends Model
       'warehouse_id',
       'status',
       'paid',
-      'creation date',
-      'estimated date'
+      'total',
+      'estimated_date'
     ];
+    public function ordered_medicines(){
+      return $this->belongsToMany(Medicine::class, 'order__details', 'order_id', 'medicine_id')
+                  ->withPivot('price','quantity', 'expirydate');
+  }
 }

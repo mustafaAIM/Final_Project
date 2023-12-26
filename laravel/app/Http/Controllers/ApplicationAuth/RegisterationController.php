@@ -20,10 +20,11 @@ class RegisterationController extends Controller
               'type' => 'required|string|max:255|in:pharmacist,Warehouse Owner',
           ]);
   
-          if ($validator->fails()) {
+          if($validator->fails()) {
               return response()->json(['errors' => $validator->errors()], 422);
           }
-            $user = User::create([
+          
+          $user = User::create([
               'username' => $request->username,
               'phone' => $request->phone,
               'password' => bcrypt($request->password),
@@ -31,6 +32,7 @@ class RegisterationController extends Controller
               'gender' => $request->gender,
               'type' => $request->type,
           ]);
+            
           //test 
           if($request->input('type')==="Warehouse Owner"){
               Warehouse::create([
@@ -39,10 +41,7 @@ class RegisterationController extends Controller
               ]);
           }
 
-        
-  
           $token = $user->createToken('MyApp')->accessToken;
-  
           return response()->json(['token' => $token], 200);
 
     }

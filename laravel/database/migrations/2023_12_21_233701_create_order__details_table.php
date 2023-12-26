@@ -17,7 +17,7 @@ return new class extends Migration
         $table->unsignedBigInteger('medicine_id');
         $table->integer('quantity');
         $table->double('price');
-        $table->date('expiry date');
+        $table->date('expirydate');
         $table->timestamps();
         $table->foreign('order_id')->references('id')->on('orders');
         $table->foreign('medicine_id')->references('id')->on('medicines');
