@@ -37,5 +37,10 @@
     "na":"No account?",
     "get":"GET STARTED",
     "team":"TEAM",
-    "thank":"Thank you for logging in. We hope you have an enjoyable experience with our application"
+    "thank":"Thank you for logging in. We hope you have an enjoyable experience with our application",
+    "first":"First date",
+    "second":"Second date",
+    "request":"Request report",
+    "next":"Next page",
+    "previous":"Previous page"
 }

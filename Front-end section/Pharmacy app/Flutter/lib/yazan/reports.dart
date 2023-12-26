@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 
@@ -118,7 +119,7 @@ class _reportsPageState extends State<reportsPage> {
                                 children: [
                                   ElevatedButton(
                                     onPressed: () => _selectFirstDate(context),
-                                    child: const Text('First date'),
+                                    child: const LocaleText('first'),
                                   ),
                                   const SizedBox(
                                     height: 20.0,
@@ -134,7 +135,7 @@ class _reportsPageState extends State<reportsPage> {
                                 children: [
                                   ElevatedButton(
                                     onPressed: () => _selectSecondDate(context),
-                                    child: const Text('Second date'),
+                                    child: const LocaleText('second'),
                                   ),
                                   const SizedBox(
                                     height: 20.0,
@@ -152,7 +153,7 @@ class _reportsPageState extends State<reportsPage> {
                                 });
                               },
                               style: ButtonStyle(),
-                              child: Text('Request report'))
+                              child: LocaleText('request'))
                         ],
                       ),
                     ),
@@ -166,7 +167,7 @@ class _reportsPageState extends State<reportsPage> {
                         firstpage = !firstpage;
                       });
                     }, child: firstpage ? 
-                    Text("Next page"): Text("Previous page")),
+                    LocaleText("next"): LocaleText("previous")),
                     firstpage ? Container(
                         padding: EdgeInsets.all(15),
                         child: GridView.builder(
@@ -265,8 +266,8 @@ class _reportsPageState extends State<reportsPage> {
                                     ),
                                     Column(
                                       children: [
-                                        Text(
-                                          "Order",
+                                        LocaleText(
+                                          "order",
                                           style:
                                               TextStyle(fontWeight: FontWeight.w600),
                                         ),
@@ -283,10 +284,10 @@ class _reportsPageState extends State<reportsPage> {
                                   Column(
                                     children: [
                                       orders[index]["status"] == "Delivered"
-                                          ? Text("Delivered date",
+                                          ? LocaleText("delivered",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600))
-                                          : Text("Expected delivery",
+                                          : LocaleText("expected",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600)),
                                       Text("${orders[index]["delivery date"]}")
