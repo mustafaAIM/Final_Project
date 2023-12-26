@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/cartPage.dart';
 import 'package:flutter1/main.dart';
+import 'package:flutter1/mootaz/homePage.dart';
 import 'package:flutter1/mootaz/warehousePage.dart';
 import 'package:flutter1/yazan/orders.dart';
 import 'package:flutter1/yazan/reports.dart';
@@ -15,7 +16,7 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  List pages = [warehousePage(), cartPage(), OrdersPage(), reportsPage()];
+  List pages = [warehousePage(), cartPage(), OrdersPage(), reportsPage(),homePage()];
 
   @override
   Widget build(BuildContext context) {

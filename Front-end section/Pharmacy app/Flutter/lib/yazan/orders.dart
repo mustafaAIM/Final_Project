@@ -29,6 +29,30 @@ class _MyWidgetState extends State<OrdersPage> {
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
+    {
+      'id': 123,
+      'status': "Being prepared",
+      'Creation date': "Jan 19 2022",
+      'delivery date': "Jan 23, 2020"
+    },
+    {
+      'id': 123,
+      'status': "Being prepared",
+      'Creation date': "Jan 19 2022",
+      'delivery date': "Jan 23, 2020"
+    },
+    {
+      'id': 123,
+      'status': "Being prepared",
+      'Creation date': "Jan 19 2022",
+      'delivery date': "Jan 23, 2020"
+    },
+    {
+      'id': 123,
+      'status': "Being prepared",
+      'Creation date': "Jan 19 2022",
+      'delivery date': "Jan 23, 2020"
+    },
   ];
   Map<String, Color> colorMap = {
     'Delivered': Colors.purple,

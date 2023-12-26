@@ -21,7 +21,7 @@ class AppState {
 
   AppState(this._currentIndex);
 
-  AppState.initialState() : _currentIndex = 6;
+  AppState.initialState() : _currentIndex = 4;
 }
 
 class NavClickAction {

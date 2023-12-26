@@ -14,6 +14,7 @@ class searchProductPage extends StatefulWidget {
 }
 
 class _searchProductPageState extends State<searchProductPage> {
+
   List products = [
     {
       "Commercial Name": "Panadol",
@@ -201,7 +202,69 @@ class _searchProductPageState extends State<searchProductPage> {
                               ],
                             ),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      child: Container(
+                                        padding: EdgeInsets.all(0),
+                                        width: 600,
+                                        child: AlertDialog(
+                                          content: Container(
+                                            width: double.maxFinite,
+                                            child: GridView.count(
+                                              crossAxisCount: 3,
+                                              children:
+                                                  List.generate(22, (index) {
+                                                return Center(
+                                                  child: InkWell(
+                                                  hoverColor: Color.fromARGB(255, 238, 232, 244),
+                                                    onHover: null,
+                                                    onTap: () {
+                                                      print("esafsaf");
+                                                    },
+                                                    child: Container(
+                                                      margin:
+                                                          EdgeInsets.fromLTRB(
+                                                              20, 0, 0, 20),
+                                                      padding:
+                                                          EdgeInsets.all(20),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                                offset: Offset(
+                                                                    0, 6),
+                                                                color:
+                                                                    Colors.grey,
+                                                                blurRadius: 12)
+                                                          ],
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.black,
+                                                              width: 2)),
+                                                      child: Text(
+                                                        'Category ${index + 1}',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline5,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                               color: Colors.black,
                               icon: Icon(Icons.filter_alt),
                             ),
@@ -216,31 +279,6 @@ class _searchProductPageState extends State<searchProductPage> {
           ),
           SizedBox(
             height: 20,
-          ),
-          Container(
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(right: 20),
-                  padding: EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(137, 227, 222, 222),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Row(
-                    children: [
-                      Text("Category"),
-                      IconButton(onPressed: () {}, icon: Icon(Icons.close))
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          SizedBox(
-            height: 10,
           ),
           Expanded(
             child: DataTable2(
@@ -282,6 +320,7 @@ class _searchProductPageState extends State<searchProductPage> {
                           StoreProvider.of<AppState>(context)
                               .dispatch(NavClickAction(5));
                         },
+                        
                         color: MaterialStatePropertyAll(
                             Color.fromARGB(255, 217, 217, 217)),
                         cells: [

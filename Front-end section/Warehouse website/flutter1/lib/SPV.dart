@@ -25,8 +25,6 @@ class _SPVState extends State<SPV> {
     profilePage(),
     createProductPage(),
     showProductPage(),
-    Loginpage(),
-    Registerpage
   ];
 
   @override
