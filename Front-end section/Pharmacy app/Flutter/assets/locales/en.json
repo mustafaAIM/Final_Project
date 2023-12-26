@@ -1,5 +1,6 @@
 {
     "welcome": "welcome",
+    "welcom": "Welcome back!",
     "profile":"Profile",
     "account":"Account number",
     "phone":"Phone number",
@@ -33,5 +34,8 @@
     "login1":"LOGIN",
     "forgot":"Forgot Password?",
     "your":"please login to your account",
-    "na":"No account?"
+    "na":"No account?",
+    "get":"GET STARTED",
+    "team":"TEAM",
+    "thank":"Thank you for logging in. We hope you have an enjoyable experience with our application"
 }

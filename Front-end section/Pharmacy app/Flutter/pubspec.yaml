@@ -67,6 +67,7 @@ flutter:
   assets:
     - images/
     - assets/locales/
+    - images/photowe.png
     
     
 

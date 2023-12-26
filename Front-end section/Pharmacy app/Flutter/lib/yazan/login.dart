@@ -142,7 +142,7 @@ class _LoginpageState extends State<Loginpage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/welcome');
                     },
                     child: Container(
                       alignment: Alignment.center,

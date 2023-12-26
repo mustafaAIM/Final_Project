@@ -5,6 +5,8 @@ import 'package:flutter1/Mootaz/cartPage.dart';
 import 'package:flutter1/Mootaz/categoryPage.dart';
 import 'package:flutter1/Mootaz/favorite.dart';
 import 'package:flutter1/Mootaz/itemInfoPage.dart';
+import 'package:flutter1/mootaz/splashScreen.dart';
+import 'package:flutter1/mootaz/welcome.dart';
 import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
 import 'package:flutter1/yazan/reports.dart';
@@ -52,30 +54,29 @@ class MyApp extends StatelessWidget {
       initialState: AppState.initialState(), middleware: [thunkMiddleware]);
   Widget build(BuildContext context) {
     return StoreProvider(
-      store: store,
-      child: LocaleBuilder(
-      builder: (locale) => MaterialApp(
-        localizationsDelegates: Locales.delegates,
-        supportedLocales: Locales.supportedLocales,
-        locale: locale,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => Loginpage(),
-          '/home': (context) => home(),
-          '/item': (context) => itemInfoPage(),
-          '/categoryPage': (context) => categoryPage(),
-          '/homePage': (context) => homePage(),
-          '/cartPage': (context) => cartPage(),
-          '/reportsPage': (context) => reportsPage(),
-          '/ProfilePage': (context) => ProfilePage(),
-          '/favoritePage': (context) => favoritePage(),
-          '/orderDetails': (context) => orderDetailsPage(),
-          '/login': (context) => Loginpage(),
-          '/register': (context) => Registerpage(),
-        },
-        
-      ),
-    )
-    );
+        store: store,
+        child: LocaleBuilder(
+          builder: (locale) => MaterialApp(
+            localizationsDelegates: Locales.delegates,
+            supportedLocales: Locales.supportedLocales,
+            locale: locale,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => splashPage(),
+              '/welcome': (context) => welcomePage(),
+              '/home': (context) => home(),
+              '/item': (context) => itemInfoPage(),
+              '/categoryPage': (context) => categoryPage(),
+              '/homePage': (context) => homePage(),
+              '/cartPage': (context) => cartPage(),
+              '/reportsPage': (context) => reportsPage(),
+              '/ProfilePage': (context) => ProfilePage(),
+              '/favoritePage': (context) => favoritePage(),
+              '/orderDetails': (context) => orderDetailsPage(),
+              '/login': (context) => Loginpage(),
+              '/register': (context) => Registerpage(),
+            },
+          ),
+        ));
   }
 }
