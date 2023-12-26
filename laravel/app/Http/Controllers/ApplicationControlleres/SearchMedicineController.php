@@ -9,27 +9,31 @@ use App\Models\Category;
 class SearchMedicineController extends Controller
 {
   public function searchMedicines($id,$query) {
-          $warehouse = Warehouse::findOrFail($id);
+    $warehouse = Warehouse::findOrFail($id);
 
-          $medicine = $warehouse->medicines()->where('scientific_name', 'LIKE', "%$query%")
-                              ->orWhere('trading_name', 'LIKE', "%$query%")
-                              ->get(['medicines.id',   'scientific_name','trading_name','category_id']);
-                              
-          if(count($medicine)==0){
-              return response()->json([
-              'not found'
-            ],404);
-          }
+    $medicine = $warehouse->medicines()->where('scientific_name', 'LIKE', "%$query%")
+                        ->orWhere('trading_name', 'LIKE', "%$query%")
+                        ->first(['medicines.id',   'scientific_name','trading_name','category_id']);
 
-          $medicine = $medicine->map(function ($item) {
-              $category = Category::findOrFail($item->category_id);
-              $item->category = $category->category;
-              unset($item->category_id);
-              return $item;
-          });
+    if(!$medicine){
+        return response()->json([
+        'not found'
+        ],404);
+    }
 
-          return response()->json([
-                  'medicines' => $medicine
-          ],200);
+    $category = Category::findOrFail($medicine->category_id);
+    $medicine->category = $category->category;
+    unset($medicine->category_id);
+    $medicine->price = $medicine->pivot->price; // Add a price field to the medicine
+
+    return response()->json([
+        'medicine' => [
+            'id' => $medicine->id,
+            'scientific_name' => $medicine->scientific_name,
+            'price' => $medicine->price
+        ]
+    ],200);
 }
+
+
 }

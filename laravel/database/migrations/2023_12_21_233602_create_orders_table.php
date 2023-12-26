@@ -15,10 +15,10 @@ return new class extends Migration
         $table->id();
         $table->unsignedBigInteger('user_id');
         $table->unsignedBigInteger('warehouse_id');
-        $table->string('status');
-        $table->boolean('paid');
-        $table->date('creation date');
-        $table->date('estimated date');
+        $table->string('status')->default('pending');
+        $table->boolean('paid')->default(false);
+        $table->double('total')->default(0);
+        $table->date('estimated_date');
         $table->timestamps();
         $table->foreign('user_id')->references('id')->on('users');
         $table->foreign('warehouse_id')->references('id')->on('warehouses');

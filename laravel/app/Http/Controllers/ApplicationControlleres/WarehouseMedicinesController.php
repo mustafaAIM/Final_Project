@@ -8,26 +8,28 @@ use Illuminate\Http\Request;
 use App\Models\Warehouse;
 class WarehouseMedicinesController extends Controller
 {
-    public function getMedicines($id){
+  public function getMedicines($id){
         $warehouse = Warehouse::findOrFail($id);
         $medicines = $warehouse->medicines;
-        $transformedMedicines = $medicines->map(function ($medicine) {
-            return [
-                'id' => $medicine->id,
-                'scientific_name' => $medicine->scientific_name,
-                'trading_name' => $medicine->trading_name,
-                'category' => $medicine->category->category,
-                'manufacturer_company' => $medicine->manufacturer_company,
-                'price' => $medicine->pivot->price,
-                'quantity' => $medicine->pivot->quantity,
-                'expirydate' => $medicine->pivot->expirydate,
-            ];
-        });
+        if(count($medicines) == 0){
+            return response()->json([
+                "message" => "no medicines yet"
+            ],404);
+        }
+        $formatted_medicines = array();
+        foreach ($medicines as $medicine) {
+            $formatted_medicines[] = array(
+                "id" => $medicine->id,
+                "scientific_name" => $medicine->scientific_name,
+                "price" => $medicine->pivot->price
+            );
+        }
+        $formatted_medicines = collect($formatted_medicines)->unique('scientific_name')->values()->all();
         $categories = $medicines->pluck('category.category')->unique();
         return response()->json([
-            'message' => 'Medicines retrieved successfully',
-            'medicines' => $transformedMedicines,
-            'categories'=>$categories->values()
-        ], 200);
-    }
+            "categories" => $categories->values(),
+            "medicines" => $formatted_medicines
+        ],200);
+  }
+
 }

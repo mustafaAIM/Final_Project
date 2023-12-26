@@ -15,4 +15,5 @@ class Warehouse_Medicine extends Model
       'quantity',
       'expirydate',
   ];
+  protected $table = 'warehouse_medicines';
 }
