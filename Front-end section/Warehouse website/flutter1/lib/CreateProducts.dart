@@ -21,6 +21,20 @@ class _createProductPageState extends State<createProductPage> {
     'item 4',
     'item 5',
   ];
+  DateTime selectDate = DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectDate) {
+      setState(() {
+        selectDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -274,63 +288,30 @@ class _createProductPageState extends State<createProductPage> {
                     width: 800,
                     height: 60,
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: 300,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Expanded(
-                              // or SizedBox
-                              child: TextField(
-                                style: TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  hintText: 'Expiration date',
-                                  contentPadding: EdgeInsets.all(6),
-                                  hintStyle: TextStyle(
-                                      color: Colors.black.withOpacity(0.4)),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(12)),
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(mainAxisSize: MainAxisSize.min, children: [
+                          Row(children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () => _selectDate(context),
+                                  child: const Text('select date'),
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 20.0,
+                                )
+                              ],
                             ),
-                          ),
-                          Container(
-                            width: 300,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Expanded(
-                              // or SizedBox
-                              child: TextField(
-                                style: TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  hintText: 'Photo',
-                                  contentPadding: EdgeInsets.all(6),
-                                  hintStyle: TextStyle(
-                                      color: Colors.black.withOpacity(0.4)),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(12)),
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ])),
+                          ])
+                        ]),
+                        Text(
+                          "${selectDate.toLocal()}".split(' ')[0],
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    )),
                 SizedBox(
                   height: 50,
                 ),
