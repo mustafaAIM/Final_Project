@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/CreateProducts.dart';
+import 'package:flutter1/Profile.dart';
 import 'package:flutter1/Register.dart';
 import 'package:flutter1/home.dart';
 import 'package:flutter1/login.dart';
+import 'package:flutter1/searchProduct.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
             debugShowCheckedModeBanner: false,
-        initialRoute: '/login',
+        initialRoute: '/',
         routes: {
            '/': (context) => home(),
           '/createProducts': (context) => createProductPage(),

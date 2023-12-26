@@ -21,14 +21,13 @@ class _homePageState extends State<homePage> {
   ];
   int selectedIndex = 0;
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
           Container(
-            height: 300,
+            height: 250,
             color: Colors.white,
             child: Stack(
               children: [
@@ -54,11 +53,19 @@ class _homePageState extends State<homePage> {
                           Container(
                             child: Row(children: [
                               IconButton(
+                                icon: Icon(Icons.search,
+                                    color: Colors.black, size: 35),
+                                onPressed: () => {
+                                  showSearch(
+                                      context: context,
+                                      delegate: CustomSearch())
+                                },
+                              ),
+                              IconButton(
                                 icon: Icon(Icons.star,
                                     color: Colors.yellow, size: 35),
                                 onPressed: () => {
                                   Navigator.pushNamed(context, '/favoritePage')
-                                      
                                 },
                               ),
                               IconButton(
@@ -67,10 +74,10 @@ class _homePageState extends State<homePage> {
                                   size: 35,
                                 ),
                                 onPressed: () => {
-                                   Navigator.pushNamed(
-                      context,
-                      '/ProfilePage',
-                    )
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/ProfilePage',
+                                  )
                                 },
                               )
                             ]),
@@ -80,28 +87,6 @@ class _homePageState extends State<homePage> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        width: 350,
-                        height: 55,
-                        child: TextField(
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            hintText: "search",
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: Colors.black.withOpacity(0.4),
-                            ),
-                            hintStyle:
-                                TextStyle(color: Colors.black.withOpacity(0.4)),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(200)),
-                                borderSide: BorderSide(color: Colors.white)),
-                          ),
-                        ),
-                      ),
                       SizedBox(
                         height: 100,
                       )
@@ -109,16 +94,16 @@ class _homePageState extends State<homePage> {
                   ),
                 ),
                 Positioned(
-                    top: 150,
-                    left: 50,
-                    child: ClipRRect(
+                  top: 100,
+                  left: 50,
+                  child: ClipRRect(
                       borderRadius: BorderRadius.circular(25),
                       child: Image.asset(
-                      "images/background.jpg",
-                      width: 300,
-                      height: 250,
+                        "images/background.jpg",
+                        width: 300,
+                        height: 250,
                       )),
-                    )
+                )
               ],
             ),
           ),
@@ -164,34 +149,38 @@ class _homePageState extends State<homePage> {
               scrollDirection: Axis.horizontal,
               itemCount: catNameAndImage.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding: EdgeInsets.all(10),
-                  width: 175,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(
+                return InkWell(
+                  onTap: () {
+                    
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.all(10),
+                    width: 175,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(
                         color: Colors.black,
                         width: 1.2,
                       ),
-                  ),
-                  
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ClipRRect(
-                        child: Image.asset(
-                          "${catNameAndImage[index]['image']}",
-                          width: 50,
-                          height: 50,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ClipRRect(
+                          child: Image.asset(
+                            "${catNameAndImage[index]['image']}",
+                            width: 50,
+                            height: 50,
+                          ),
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      Text("${catNameAndImage[index]['name']}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)),
-                    ],
+                        Text("${catNameAndImage[index]['name']}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -221,7 +210,6 @@ class _homePageState extends State<homePage> {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return InkWell(
-                  
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -230,14 +218,11 @@ class _homePageState extends State<homePage> {
                   },
                   child: Card(
                     child: Column(
-                      
                       children: [
-                        
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.grey[300],
-                                  
                           ),
                           width: 120,
                           height: 100,
@@ -246,7 +231,6 @@ class _homePageState extends State<homePage> {
                             child: Image.asset(
                               "images/product2.jpg",
                               fit: BoxFit.fill,
-                              
                             ),
                           ),
                         ),
@@ -280,5 +264,153 @@ class _homePageState extends State<homePage> {
         ],
       ),
     );
+  }
+}
+
+class CustomSearch extends SearchDelegate {
+  List username = [
+    "mohh",
+    "shady",
+    "mohannd",
+    "mootaz",
+    "kenan",
+    "kamal",
+    "laith",
+    "omar",
+    "moafaq",
+    "hamza"
+  ];
+  List? firstChar;
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.arrow_forward_outlined),
+        onPressed: () {
+          close(context, ());
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.close),
+      onPressed: () {
+        query = "";
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Text("result : $query");
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query == "") {
+      return ListView.builder(
+        itemCount: username.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/item");
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                height: 100,
+                child: Card(
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)),
+                        child: Image.asset(
+                          "images/product2.jpg",
+                          width: 75,
+                          height: 75,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(9),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${username[index]}",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
+        },
+      );
+    } else {
+      firstChar = username.where((element) => element.contains(query)).toList();
+      return ListView.builder(
+        itemCount: firstChar!.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+              onTap: () {
+                showResults(context);
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                height: 100,
+                child: Card(
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)),
+                        child: Image.asset(
+                          "images/product2.jpg",
+                          width: 75,
+                          height: 75,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(9),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${firstChar?[index]}",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            
+                            
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
+        },
+      );
+    }
   }
 }
