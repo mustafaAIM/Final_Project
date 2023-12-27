@@ -8,6 +8,8 @@ use App\Models\Medicine;
 use App\Models\Warehouse;
 use App\Models\Warehouse_Medicine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class CreateMedicineController extends Controller
 {
@@ -21,12 +23,20 @@ class CreateMedicineController extends Controller
             'quantity' => 'required|integer',
             'price' => 'required|numeric',
             'expirydate' => 'required|date',
-            'warehouse_id' => 'required|exists:warehouses,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+
+        $userID = Auth::user()->id;
+        $warehouse = Warehouse::where('user_id', $userID)->first();
+
+        if (!$warehouse) {
+            return response()->json(['error' => 'Warehouse not found.'], 404);
+        }
+
+        //$warehouseId = $warehouse->id;
 
         $medicine = Medicine::where('scientific_name', $request->scientific_name)
             ->where('trading_name', $request->trading_name)
@@ -46,22 +56,34 @@ class CreateMedicineController extends Controller
             ]);
         }
 
-        $warehouseId = $request->warehouse_id;
-        $warehouse = Warehouse::find($warehouseId);
-
-        if (!$warehouse) {
-            return response()->json(['error' => 'Warehouse not found.'], 404);
-        }
-
         $medicineId = $medicine->id;
 
-        $warehouse->medicines()->attach($medicineId, [
+        $existingMedicine = $warehouse->medicines()
+        ->where('medicine_id', $medicineId)
+        ->where('expirydate', $request->expirydate)
+        ->first();
+
+    if ($existingMedicine) {
+        // If medicine exists in the warehouse with the same expiry date, update the quantity
+            $warehouse->medicines()
+            ->wherePivot('medicine_id', $medicineId)
+            ->wherePivot('expirydate', $request->expirydate)
+            ->updateExistingPivot($medicineId, [
+            'quantity' => $existingMedicine->pivot->quantity + $request->quantity,
             'price' => $request->price,
-            'quantity' => $request->quantity,
-            'expirydate' => $request->expirydate
         ]);
 
+        return response()->json(['message' => 'Medicine is already exists the quantity updated successfully.'], 200);
+    }
+    else{
+            // If medicine doesn't exist in the warehouse, add it
+            $warehouse->medicines()->attach($medicineId, [
+                'price' => $request->price,
+                'quantity' => $request->quantity,
+                'expirydate' => $request->expirydate,
+            ]);
 
-        return response()->json(['message' => 'Medicine created successfully.'], 201);
+            return response()->json(['message' => 'Medicine created successfully.'], 201);
+        }
     }
 }
