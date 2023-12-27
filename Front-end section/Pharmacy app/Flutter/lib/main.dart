@@ -26,32 +26,67 @@ void main() async {
 }
 
 class AppState {
-  final int _currentIndex;
+  int currentIndex;
+   String url;
+   String header;
+   String body;
+  // int get currentIndex => _currentIndex;
+  // String get url => _url;
 
-  int get currentIndex => _currentIndex;
+  AppState({
+    this.currentIndex = 0,
+    this.url = '',
+    this.body = '',
+    this.header = ''
+    });
 
-  AppState(this._currentIndex);
-
-  AppState.initialState() : _currentIndex = 0;
+  // AppState.initialState() : _currentIndex = 0,_url='';
 }
 
 class NavClickAction {
   final int currentIndex;
 
   NavClickAction(this.currentIndex);
+  
+  // String get url => '';
+  
+}
+class GetDataAction{
+final String url;
+final String header;
+
+  GetDataAction(this.url, this.header,);
+  
+  // int get currentIndex => currentIndex;
+  
+  // int get currentIndex => _currentIndex;
+  
+  // String get url => _url; 
+}
+class PostDataAction{
+final String url;
+final String header;
+final String body;
+
+
+  PostDataAction(this.url, this.header, this.body); 
 }
 
 AppState reducer(AppState prev, dynamic action) {
   if (action is NavClickAction) {
-    return AppState(action.currentIndex);
-  } else {
-    return prev;
+    return AppState(currentIndex: action.currentIndex);
+  }else if (action is GetDataAction) {
+     return AppState(url : action.url,header: action.header);
+  }else if(action is PostDataAction) {
+     return AppState(url : action.url,header: action.header,body: action.body);
+  }else{
+     return prev;
   }
 }
 
 class MyApp extends StatelessWidget {
   final store = Store(reducer,
-      initialState: AppState.initialState(), middleware: [thunkMiddleware]);
+      initialState: AppState(), middleware: [thunkMiddleware]);
   Widget build(BuildContext context) {
     return StoreProvider(
         store: store,
