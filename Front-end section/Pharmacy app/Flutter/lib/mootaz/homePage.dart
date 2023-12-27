@@ -331,9 +331,7 @@ class CustomSearch extends SearchDelegate {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)),
+                        borderRadius: BorderRadius.circular(100),
                         child: Image.asset(
                           "images/product2.jpg",
                           width: 75,
@@ -348,7 +346,7 @@ class CustomSearch extends SearchDelegate {
                             Text(
                               "${username[index]}",
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontSize: 25, fontWeight: FontWeight.bold),
                             ),
                             
                           ],
@@ -367,7 +365,7 @@ class CustomSearch extends SearchDelegate {
         itemBuilder: (context, index) {
           return InkWell(
               onTap: () {
-                showResults(context);
+                Navigator.pushNamed(context, "/item");
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 10),
@@ -381,9 +379,7 @@ class CustomSearch extends SearchDelegate {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)),
+                        borderRadius: BorderRadius.circular(100),
                         child: Image.asset(
                           "images/product2.jpg",
                           width: 75,
@@ -398,7 +394,7 @@ class CustomSearch extends SearchDelegate {
                             Text(
                               "${firstChar?[index]}",
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontSize: 25, fontWeight: FontWeight.bold),
                             ),
                             
                             

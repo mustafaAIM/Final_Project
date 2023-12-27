@@ -92,9 +92,9 @@ class _postBottomBarState extends State<postBottomBar> {
                               color: Colors.black),
                           underline: SizedBox(),
                           onChanged: (String? newValue) => {
-                            setState(() {
-                              dropdownValue = newValue!;
-                            })
+                            // setState(() {
+                            //   dropdownValue = newValue!;
+                            // })
                           },
                           items: <String>[
                             "2020-1-2. Q: 20",
@@ -103,6 +103,7 @@ class _postBottomBarState extends State<postBottomBar> {
                             "2010-6-1. Q: 20",
                           ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
+                              enabled: false,
                               value: value,
                               child: Text(value),
                             );
