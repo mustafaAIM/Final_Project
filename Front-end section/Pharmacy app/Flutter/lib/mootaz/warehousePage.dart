@@ -40,14 +40,18 @@ class _warehousePageState extends State<warehousePage> {
                         IconButton(
                           icon:
                               Icon(Icons.star, color: Colors.yellow, size: 35),
-                          onPressed: () => {},
+                          onPressed: () => {
+                            Navigator.pushNamed(context, '/favoritePage')
+                          },
                         ),
                         IconButton(
                           icon: Icon(
                             Icons.account_circle,
                             size: 35,
                           ),
-                          onPressed: () => {},
+                          onPressed: () => {
+                            Navigator.pushNamed(context, "/ProfilePage")
+                          },
                         )
                       ]),
                     )
