@@ -21,7 +21,7 @@ class AppState {
 
   AppState(this._currentIndex);
 
-  AppState.initialState() : _currentIndex = 4;
+  AppState.initialState() : _currentIndex = 5;
 }
 
 class NavClickAction {
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-            debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
            '/': (context) => home(),

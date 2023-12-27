@@ -23,10 +23,7 @@ class _boxAppState extends State<boxApp> {
           children: [
             InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                        context,
-                        '/',
-                      );
+                Navigator.pop(context);
               },
               child: Container(
                 padding: EdgeInsets.all(10),

@@ -97,7 +97,7 @@ class _categoryPageState extends State<categoryPage> {
           ),
         ),
         IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_forward_sharp),
           onPressed: () {
             Navigator.pop(context);
           },

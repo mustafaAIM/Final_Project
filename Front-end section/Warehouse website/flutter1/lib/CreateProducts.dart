@@ -127,7 +127,7 @@ class _createProductPageState extends State<createProductPage> {
                                 underline: SizedBox(),
                                 isExpanded: true,
                                 borderRadius: BorderRadius.circular(12),
-                                dropdownColor: Color.fromARGB(255, 16, 22, 58),
+                                
                                 icon: Icon(Icons.arrow_drop_down),
                                 iconSize: 30,
                                 style: TextStyle(
@@ -290,25 +290,38 @@ class _createProductPageState extends State<createProductPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(mainAxisSize: MainAxisSize.min, children: [
-                          Row(children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
+                        Container(
+                          width: 300,
+                          child: Column(mainAxisSize: MainAxisSize.min, children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () => _selectDate(context),
-                                  child: const Text('select date'),
-                                ),
-                                const SizedBox(
-                                  height: 20.0,
-                                )
-                              ],
-                            ),
-                          ])
-                        ]),
-                        Text(
-                          "${selectDate.toLocal()}".split(' ')[0],
-                          style: TextStyle(color: Colors.white),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    
+                                    width: 300,
+                                    child: ElevatedButton(
+                                      
+                                      onPressed: () => _selectDate(context),
+                                      child: const Text('select date',style: 
+                                      TextStyle(
+                                        color: Colors.grey
+                                      ),),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ])
+                          ]),
+                        ),
+                        Container(
+                          width: 300,
+                          child: Text(
+                            "${selectDate.toLocal()}".split(' ')[0],
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     )),

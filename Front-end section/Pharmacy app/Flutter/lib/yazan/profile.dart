@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
 
   Future<void> initializePreferences() async {
-    var prefs = await SharedPreferences.getInstance();
+     var prefs = await SharedPreferences.getInstance();
     // Do any necessary initialization with SharedPreferences here.
   }
 
@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white, // Change the color to blue
             // onPressed: () => Navigator.of(context).pop(),
             onPressed: () {
-              Navigator.pushNamed(context, '/homePage');
+              Navigator.pop(context);
             },
           ),
         ),
