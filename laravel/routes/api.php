@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationAuth\RegisterationController;
 use App\Http\Controllers\ApplicationAuth\LoginController;
+use App\Http\Controllers\ApplicationControlleres\AddPictureController;
 use App\Http\Controllers\ApplicationControlleres\AddToFavoritesController;
 use App\Http\Controllers\ApplicationControlleres\GetFavoritesController;
 use App\Http\Controllers\ApplicationControlleres\ListOrdersController;
@@ -40,9 +41,7 @@ use App\Http\Controllers\WebControllers\CreateMedicineController;
 
 
 //Application Routes
-
- 
-Route::middleware('auth:api')->group( function () {
+Route::middleware(['auth:api', 'user.type:Pharmacist'])->group( function () {
     Route::post('logout',[LogoutController::class,'logout']);
     Route::get('warehouses',[WarehouseController::class,'warehouses']);
     Route::get('warehouses/{id}',[WarehouseMedicinesController::class,'getMedicines']);
@@ -56,7 +55,8 @@ Route::middleware('auth:api')->group( function () {
     Route::get('favorites',[GetFavoritesController::class,'favorites']);
     Route::get('profile',[UserProfileController::class,'profile']);
     Route::get('report/{start_date}/{end_date}',[ReportController::class,'report']);
-
+    Route::post('add-picture',[AddPictureController::class,'addPicture']);
+    
 });
 Route::post('register-pharmacist',[RegisterationController::class,'register']);
 Route::post('login-pharmacist',[LoginController::class,'login'])->name('login');

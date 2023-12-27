@@ -5,10 +5,17 @@ namespace App\Http\Controllers\ApplicationControlleres;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 class OrderDetailsController extends Controller
 {
     public function orderDetails($id){
             $order = Order::findOrFail($id);
+
+            if(Auth::user()->id != $order -> user_id ){
+              return response()->json(["Unauthorized"],403);
+            }
+
+
             $order_details = $order -> ordered_medicines;
             
             $data = [
