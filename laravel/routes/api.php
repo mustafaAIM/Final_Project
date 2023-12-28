@@ -30,6 +30,8 @@ use App\Http\Controllers\WebControllers\ReadMedicinesController;
 use App\Http\Controllers\WebControllers\MedicinDetailsController;
 use App\Http\Controllers\WebControllers\DisplayByCategoryController;
 use App\Http\Controllers\WebControllers\ProfileController;
+use App\Http\Controllers\WebControllers\StatusesController;
+use App\Http\Controllers\WebControllers\WReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +47,7 @@ use App\Http\Controllers\WebControllers\ProfileController;
 
 //Application Routes
 
- 
+
 Route::middleware('auth:api')->group( function () {
     Route::post('logout',[LogoutController::class,'logout']);
     Route::get('warehouses',[WarehouseController::class,'warehouses']);
@@ -53,7 +55,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('warehouses/{id}/{medicine_id}',[SpecificMedicineController::class,'medicine']);
     Route::get('get-medicines-by-category/{warehouse_id}/{category}',[MedicinesByCategoryController::class,'getMedicinesByCategories']);
     Route::get('search/{id}/{query}',[SearchMedicineController::class,'searchMedicines']);
-    Route::post('make-order',[MakeOrderController::class,'order']);    
+    Route::post('make-order',[MakeOrderController::class,'order']);
     Route::get('orders',[ListOrdersController::class,'listOrders']);
     Route::get('order-details/{id}',[OrderDetailsController::class,'orderDetails']);
     Route::post('add-to-favorites',[AddToFavoritesController::class,'addFavorites']);
@@ -83,4 +85,6 @@ Route::middleware('auth:api')->group( function () {
     Route::post('editusername',[ProfileController::class ,'Editusername']);
     Route::post('editwarehousename',[ProfileController::class ,'EditWarehouseName']);
     Route::post('editpicture',[ProfileController::class ,'EditPicture']);
+    Route::post('change-status',[StatusesController::class ,'ChangeStatuses']);
+    Route::get('report',[WReportController::class,'report']);
 });
