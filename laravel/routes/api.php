@@ -75,7 +75,7 @@ Route::post('login-warehouse' , [WebLoginController::class ,'login']);
 
 
 
-Route::middleware('auth:api')->group( function () {
+Route::middleware(['auth:api', 'user.type:Warehouse Owner'])->group( function () {
     Route::post('logout-warehouse',[WebLogoutController::class,'logout']);
     Route::post('create-medicine',[CreateMedicineController::class, 'create']);
     Route::get('display-medicines',[ReadMedicinesController::class, 'getWarehouseMedicines']);
