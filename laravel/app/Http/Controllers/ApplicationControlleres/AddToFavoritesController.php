@@ -14,11 +14,11 @@ class AddToFavoritesController extends Controller
     public function addFavorites(Request $request){
             Medicine::findOrFail($request->medicine_id);
             $user = $request->user();
-            $favorites = $user->favourites()
+            $favorites = $user->favorites()
                               ->where('medicine_id',$request->medicine_id)->get();
             if(Count($favorites) != 0)
-                return response()->json("added before");
-            $request -> user() -> favourites()->attach($request->medicine_id);
-            return response()->json(200);
+                return response()->json("added before",409);
+            $request -> user() -> favorites()->attach($request->medicine_id);
+            return response()->json(["added to favorites"],200);
     }
 }

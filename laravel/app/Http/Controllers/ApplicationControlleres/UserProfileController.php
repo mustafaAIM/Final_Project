@@ -16,6 +16,7 @@ class UserProfileController extends Controller
               "phone"=> $user->phone,
               "city" => $user->city,
               "gender" => $user->gender,
+              "created_at" => $user->created_at->format("Y-m-d"),
               "picture" => $user->picture
             ];
             return response()->json([$data],200);
