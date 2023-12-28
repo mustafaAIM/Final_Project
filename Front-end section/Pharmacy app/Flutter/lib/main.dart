@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/HomePage.dart';
@@ -13,6 +14,7 @@ import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
 import 'package:flutter1/yazan/reports.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:http/http.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -97,9 +99,9 @@ void DataMiddleware(Store store, action) async {
   else if(action is GetDataAction){
     var response = await get(
       Uri.parse(action.url),
-      headers: {"Accept": 
-      "application/json",
-      'Authorization': 'Bearer ${action.header}'},
+       headers: {
+    HttpHeaders.authorizationHeader: '${action.header}',
+  },
     );
      print("Response Body: ${response.body}");
   }

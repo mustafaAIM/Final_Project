@@ -17,7 +17,7 @@ class Medicine extends Model
       ];
      public function warehouses(){
         return $this->belongsToMany(Warehouse::class, 'warehouse_medicine', 'medicine_id', 'warehouse_id')
-                    ->withPivot('price','quantity', 'expiry_date');
+                    ->withPivot('price','quantity', 'expirydate');
     }
 
     public function category()
@@ -27,7 +27,7 @@ class Medicine extends Model
 
     public function orders(){
       return $this->belongsToMany(Warehouse::class, 'order_details', 'medicine_id', 'order_id')
-                  ->withPivot('price','quantity', 'expiry_date');
+                  ->withPivot('price','quantity', 'expirydate');
 
     }
 
