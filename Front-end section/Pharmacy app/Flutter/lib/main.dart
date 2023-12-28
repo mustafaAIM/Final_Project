@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/HomePage.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
@@ -11,6 +13,7 @@ import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
 import 'package:flutter1/yazan/reports.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -26,14 +29,21 @@ void main() async {
 }
 
 class AppState {
-  final int _currentIndex;
+  int currentIndex;
+  String url;
+  String header;
+  Map body;
+  String token;
 
-  int get currentIndex => _currentIndex;
-
-  AppState(this._currentIndex);
-
-  AppState.initialState() : _currentIndex = 0;
+  AppState(
+      {this.currentIndex = 0,
+      this.url = '',
+      this.body = const {},
+      this.header = '',
+      this.token = ''});
 }
+
+// AppState.initialState() : _currentIndex = 0,_url='';
 
 class NavClickAction {
   final int currentIndex;
@@ -41,17 +51,63 @@ class NavClickAction {
   NavClickAction(this.currentIndex);
 }
 
+class GetDataAction {
+  final String url;
+  final String header;
+
+  GetDataAction({
+    required this.url,
+    this.header = '',
+  });
+}
+
+class PostDataAction {
+  final String url;
+  final String header;
+  final Map body;
+
+  PostDataAction({required this.url, this.header = '', required this.body});
+}
+
 AppState reducer(AppState prev, dynamic action) {
   if (action is NavClickAction) {
-    return AppState(action.currentIndex);
+    return AppState(currentIndex: action.currentIndex);
+  } else if (action is GetDataAction) {
+    return AppState(url: action.url, header: action.header);
+  } else if (action is PostDataAction) {
+    return AppState(url: action.url, header: action.header, body: action.body);
   } else {
     return prev;
   }
 }
 
+// Define a middleware
+void DataMiddleware(Store store, action) async {
+  if (action is PostDataAction) {
+    var response = await post(
+      Uri.parse(action.url),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(action.body),
+    );
+    if (action.url == "http://127.0.0.1:8000/api/login-pharmacist/") {
+      print("Response token: ${response.body}");
+      AppState(token: jsonDecode(response.body)['token']);
+    }
+  }
+  else if(action is GetDataAction){
+    var response = await get(
+      Uri.parse(action.url),
+      headers: {"Accept": 
+      "application/json",
+      'Authorization': 'Bearer ${action.header}'},
+    );
+     print("Response Body: ${response.body}");
+  }
+}
+
 class MyApp extends StatelessWidget {
-  final store = Store(reducer,
-      initialState: AppState.initialState(), middleware: [thunkMiddleware]);
+  final store =
+      Store(reducer, initialState: AppState(), middleware: [thunkMiddleware]);
   Widget build(BuildContext context) {
     return StoreProvider(
         store: store,

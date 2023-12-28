@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:redux/redux.dart';
 
 class warehousePage extends StatefulWidget {
   const warehousePage({
@@ -12,118 +13,147 @@ class warehousePage extends StatefulWidget {
   State<warehousePage> createState() => _warehousePageState();
 }
 
+class _ViewModel {
+  final void Function(String, Map) onPressed;
+
+  _ViewModel({required this.onPressed});
+
+  factory _ViewModel.create(Store<AppState> store) {
+    _onPressed(String url, Map body) {
+      ;
+    }
+
+    return _ViewModel(onPressed: _onPressed);
+  }
+}
+
 class _warehousePageState extends State<warehousePage> {
   int currentIndex = 0;
-
+  @override
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 7),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 56, 161, 241),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StoreConnector<AppState, _ViewModel>(
+      converter: (Store<AppState> store) => _ViewModel.create(store),
+      onInit: (store) {
+        DataMiddleware(
+            StoreProvider.of<AppState>(context),
+            GetDataAction(
+                url: 'http://127.0.0.1:8000/api/warehouses/',
+                header: store.state.token));
+      },
+      builder: (BuildContext context, _ViewModel viewModel) {
+        // Return a widget here. For example, a loading spinner:
+        return Scaffold(
+          body: ListView(
+            children: [
+              Container(
+                padding:
+                    EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 7),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 56, 161, 241),
+                ),
+                child: Column(
                   children: [
-                    Image.asset(
-                      "images/logo.png",
-                      width: 75,
-                      height: 75,
-                    ),
-                    Container(
-                      child: Row(children: [
-                        IconButton(
-                          icon:
-                              Icon(Icons.star, color: Colors.yellow, size: 35),
-                          onPressed: () => {
-                            Navigator.pushNamed(context, '/favoritePage')
-                          },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          "images/logo.png",
+                          width: 75,
+                          height: 75,
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.account_circle,
-                            size: 35,
-                          ),
-                          onPressed: () => {
-                            Navigator.pushNamed(context, "/ProfilePage")
-                          },
+                        Container(
+                          child: Row(children: [
+                            IconButton(
+                              icon: Icon(Icons.star,
+                                  color: Colors.yellow, size: 35),
+                              onPressed: () => {
+                                Navigator.pushNamed(context, '/favoritePage')
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.account_circle,
+                                size: 35,
+                              ),
+                              onPressed: () => {
+                                Navigator.pushNamed(context, "/ProfilePage")
+                              },
+                            )
+                          ]),
                         )
-                      ]),
-                    )
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            height: 2000,
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return StoreConnector<AppState, AppState>(
-                    converter: (store) => store.state,
-                    builder: (_, state) {
-                      return InkWell(
-                          onTap: () {
-                            StoreProvider.of<AppState>(context)
-                                .dispatch(NavClickAction(4));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            height: 100,
-                            child: Card(
-                              elevation: 6,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15)),
-                                    child: Image.asset(
-                                      "images/product2.jpg",
-                                      width: 75,
-                                      height: 75,
-                                    ),
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                height: 2000,
+                child: ListView.builder(
+                  itemCount: 20,
+                  itemBuilder: (context, index) {
+                    return StoreConnector<AppState, AppState>(
+                        converter: (store) => store.state,
+                        builder: (_, state) {
+                          return InkWell(
+                              onTap: () {
+                                StoreProvider.of<AppState>(context)
+                                    .dispatch(NavClickAction(4));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                height: 100,
+                                child: Card(
+                                  elevation: 6,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.all(9),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Warehouse Name",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15)),
+                                        child: Image.asset(
+                                          "images/product2.jpg",
+                                          width: 75,
+                                          height: 75,
                                         ),
-                                        SizedBox(height: 3),
-                                        Chip(
-                                          label: Text("Status"),
-                                          backgroundColor: Colors.blue,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(9),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "Warehouse Name",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 3),
+                                            Chip(
+                                              label: Text("Status"),
+                                              backgroundColor: Colors.blue,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ));
-                    });
-              },
-            ),
-          )
-        ],
-      ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ));
+                        });
+                  },
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
+    ;
   }
 }
