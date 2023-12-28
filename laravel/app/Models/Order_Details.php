@@ -13,10 +13,7 @@ class Order_Details extends Model
       'medicine_id',
       'quantity',
       'price',
-      'expiry date',
+      'expirydate',
   ];
 
-
-
-  
 }
