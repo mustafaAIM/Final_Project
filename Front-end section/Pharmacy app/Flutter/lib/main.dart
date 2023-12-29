@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/HomePage.dart';
@@ -14,6 +14,7 @@ import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
 import 'package:flutter1/yazan/reports.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:http/http.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -31,85 +32,86 @@ void main() async {
 
 class AppState {
   int currentIndex;
-   String url;
-   Map<String,String> header;
-   String body;
-  // int get currentIndex => _currentIndex;
-  // String get url => _url;
+  String url;
+  String header;
+  Map body;
+  String token;
 
-  AppState({
-    this.currentIndex = 0,
-    this.url = '',
-    this.body = '',
-    this.header = 
-    });
-
-  // AppState.initialState() : _currentIndex = 0,_url='';
+  AppState(
+      {this.currentIndex = 0,
+      this.url = '',
+      this.body = const {},
+      this.header = '',
+      this.token = ''});
 }
+
+// AppState.initialState() : _currentIndex = 0,_url='';
 
 class NavClickAction {
   final int currentIndex;
 
   NavClickAction(this.currentIndex);
-  
-  // String get url => '';
-  
-}
-class GetDataAction{
-final String url;
-final Map<String,String> header;
-
-  GetDataAction(this.url, this.header,);
-  
-  // int get currentIndex => currentIndex;
-  
-  // int get currentIndex => _currentIndex;
-  
-  // String get url => _url; 
-}
-class PostDataAction{
-final String url;
-final Map<String,String> header;
-final List<dynamic> body;
-
-
-  PostDataAction(this.url, this.header, this.body); 
 }
 
+class GetDataAction {
+  final String url;
+  final String header;
+
+  GetDataAction({
+    required this.url,
+    this.header = '',
+  });
+}
+
+class PostDataAction {
+  final String url;
+  final String header;
+  final Map body;
+
+  PostDataAction({required this.url, this.header = '', required this.body});
+}
 
 AppState reducer(AppState prev, dynamic action) {
   if (action is NavClickAction) {
     return AppState(currentIndex: action.currentIndex);
-  }else if (action is GetDataAction) {
-     return AppState(url : action.url,header: action.header);
-  }else if(action is PostDataAction) {
-     return AppState(url : action.url,header: action.header,body: action.body);
-  }else{
-     return prev;
+  } else if (action is GetDataAction) {
+    return AppState(url: action.url, header: action.header);
+  } else if (action is PostDataAction) {
+    return AppState(url: action.url, header: action.header, body: action.body);
+  } else {
+    return prev;
   }
 }
-ThunkAction<AppState> fetchData = (Store<AppState> store) async {
 
-  Map<String,String> wareHouse;
-  List<String> wareHouseBody;
-
-  try {
-    Response response = await get(
-        Uri.parse('http://127.0.0.1/:8000/api/warehouses'));
-    wareHouse = jsonDecode(response.headers as String);
-    wareHouseBody = jsonDecode(response.body);
-  }catch(e){
-    print('caught error: $e');
-    return;
+// Define a middleware
+void DataMiddleware(Store store, action) async {
+  String token = '';
+  if (action is PostDataAction) {
+    var response = await post(
+      Uri.parse(action.url),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(action.body),
+    );
+    if (action.url == "http://127.0.0.1:8000/api/login-pharmacist/") {
+      print("Response token: ${(response.body)}");
+      token = jsonDecode(response.body)['token'];
+      AppState(token: token);
+    }
   }
-
-  // store.dispatch(GetDataAction('http://127.0.0.1/:8000/api/warehouses',wareHouse as String));
-
-};
+  else if(action is GetDataAction){
+    var response = await get(
+      Uri.parse(action.url),
+      headers: {
+      HttpHeaders.authorizationHeader: 'bearer ${action.header}',
+    },
+    );
+     print("Response Body: ${response.body}");
+  }
+}
 
 class MyApp extends StatelessWidget {
-  final store = Store(reducer,
-      initialState: AppState(), middleware: [thunkMiddleware]);
+  final store =
+      Store(reducer, initialState: AppState(), middleware: [thunkMiddleware]);
   Widget build(BuildContext context) {
     return StoreProvider(
         store: store,

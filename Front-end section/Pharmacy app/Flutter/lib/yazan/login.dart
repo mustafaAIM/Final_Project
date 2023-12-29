@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter1/main.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:redux/redux.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,10 +22,28 @@ class Loginpage extends StatefulWidget {
   State<Loginpage> createState() => _LoginpageState();
 }
 
+class _ViewModel {
+  final void Function(String, Map) onPressed;
+
+  _ViewModel({required this.onPressed});
+
+  factory _ViewModel.create(Store<AppState> store) {
+    _onPressed(String url, Map body) {
+      ;
+    }
+
+    return _ViewModel(onPressed: _onPressed);
+  }
+}
+
 class _LoginpageState extends State<Loginpage> {
+  String phone = "";
+  String password = "";
+
   bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
+    Map Logindetails = {'phone': "$phone", 'password': '$password'};
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
@@ -76,6 +97,11 @@ class _LoginpageState extends State<Loginpage> {
                   Container(
                     width: 250,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          phone = value;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "Phone number",
                         labelStyle: TextStyle(color: Colors.black),
@@ -96,6 +122,13 @@ class _LoginpageState extends State<Loginpage> {
                   Container(
                     width: 250,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+
+
+},
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         labelText: "password",
@@ -140,40 +173,53 @@ class _LoginpageState extends State<Loginpage> {
                   SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/welcome');
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 250,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromARGB(148, 0, 40, 249),
-                                Color.fromARGB(135, 125, 0, 145),
-                              ])),
-                      child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: LocaleText(
-                            'login1',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600),
-                          )),
-                    ),
-                  ),
+                  StoreConnector<AppState, _ViewModel>(
+                      converter: (Store<AppState> store) =>
+                          _ViewModel.create(store),
+                      builder: (BuildContext context, _ViewModel viewModel) {
+                        return GestureDetector(
+                          onTap: () => {
+                            DataMiddleware(
+                                StoreProvider.of<AppState>(context),
+                                PostDataAction(
+                                    url:
+                                        'http://127.0.0.1:8000/api/login-pharmacist/',
+                                    body: Logindetails)),
+                                    Navigator.pushReplacementNamed(context,'/welcome'),
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 250,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Color.fromARGB(148, 0, 40, 249),
+                                      Color.fromARGB(135, 125, 0, 145),
+                                    ])),
+                            child: Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: LocaleText(
+                                  'login1',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                          ),
+                        );
+                      }),
                   Divider(
                     color: Colors.blue[600],
                     height: 50,
                     thickness: 2,
                     indent: 20,
                     endIndent: 20,
-                  ),
+
+
+),
                   LocaleText(
                     "na",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
