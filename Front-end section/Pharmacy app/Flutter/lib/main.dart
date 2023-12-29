@@ -33,10 +33,11 @@ void main() async {
 class AppState {
   int currentIndex;
   String token;
-  Map Warehouses;
+  final bool isLoading;
+  Map<dynamic,dynamic> Warehouses;
 
   AppState(
-      {this.currentIndex = 0, this.token = '', this.Warehouses = const {}});
+      {this.isLoading = true,this.currentIndex = 0, this.token = '', this.Warehouses = const {}});
 }
 
 // AppState.initialState() : _currentIndex = 0,_url='';
@@ -61,6 +62,7 @@ class LoginAction {
 class getWarehousesAction {
   final String url;
   final Map Warehouses;
+  
 
   getWarehousesAction({
     this.url = '',
@@ -127,6 +129,7 @@ AppState reducer(AppState prev, dynamic action) {
     return prev;
   }
 }
+
 
 class MyApp extends StatelessWidget {
   final store =
