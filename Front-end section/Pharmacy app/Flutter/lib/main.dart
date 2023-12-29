@@ -33,18 +33,26 @@ void main() async {
 class AppState {
   int currentIndex;
   String token;
-  final bool isLoading;
-  Map<dynamic,dynamic> Warehouses;
-
-  AppState(
-      {this.isLoading = true,this.currentIndex = 0, this.token = '', this.Warehouses = const {}});
+  Map warehouse;
+  AppState({
+    this.currentIndex = 0,
+    this.token = '',
+    this.warehouse = const {},
+  });
 }
 
+class RegisterAction {
+  final String url;
+  final Map body;
 
-class NavClickAction {
-  final int currentIndex;
+  RegisterAction({required this.url, required this.body});
+}
 
-  NavClickAction(this.currentIndex);
+class GetWarehouseAction {
+  final String url;
+  final String token;
+  final Map warehouse;
+  GetWarehouseAction({this.url = '', this.token = '', this.warehouse = const {}});
 }
 
 class LoginAction {
@@ -58,23 +66,13 @@ class LoginAction {
   });
 }
 
-class getWarehousesAction {
-  final String url;
-  final Map Warehouses;
-  
+class NavClickAction {
+  final int currentIndex;
 
-  getWarehousesAction({
-    this.url = '',
-    this.Warehouses = const {},
-  });
+  NavClickAction(this.currentIndex);
 }
 
-class RegisterAction {
-  final String url;
-  final Map body;
 
-  RegisterAction({required this.url, required this.body});
-}
 
 void DataMiddleware(Store store, action, NextDispatcher next) async {
   if (action is RegisterAction) {
@@ -83,7 +81,8 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
     );
-    
+
+    print(response.body);
   } else if (action is LoginAction) {
     var response = await post(
       Uri.parse(action.url),
@@ -94,41 +93,33 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
     if (response.statusCode == 200) {
       next(LoginAction(token: json.decode(response.body)['token']));
     } else {}
-  } else if (action is getWarehousesAction) {
-    print("token: ${store.state.token}");
-
+  } else if (action is GetWarehouseAction) {
     var response = await get(
       Uri.parse(action.url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${store.state.token}',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${store.state.token}"
       },
     );
-
     if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, then parse the JSON.
-      print('Response body: ${response.body}');
-      next(getWarehousesAction(Warehouses: json.decode(response.body)));
+      print("got dataaa: ${response.body}");
+      next(GetWarehouseAction(warehouse: json.decode(response.body)));
     } else {
-      print('Response body: ${response.body}');
-      // If the server returns an unsuccessful response code, then throw an exception.
-      // throw Exception('Failed to load data');
+      // handle error
     }
   }
 }
-
 AppState reducer(AppState prev, dynamic action) {
   if (action is NavClickAction) {
     return AppState(currentIndex: action.currentIndex);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
-  } else if (action is getWarehousesAction) {
-    return AppState(Warehouses: action.Warehouses);
+  } else if (action is GetWarehouseAction) {
+    return AppState(warehouse: action.warehouse);
   } else {
     return prev;
   }
 }
-
 
 class MyApp extends StatelessWidget {
   final store =

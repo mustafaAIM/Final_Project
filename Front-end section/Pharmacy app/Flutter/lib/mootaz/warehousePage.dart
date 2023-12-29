@@ -26,18 +26,13 @@ class _warehousePageState extends State<warehousePage> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-  future: StoreProvider.of<AppState>(context)
-      .dispatch(getWarehousesAction(url: 'http://127.0.0.1:8000/api/warehouses')),
-  builder: (BuildContext context, AsyncSnapshot snapshot) {
-    if (snapshot.connectionState == ConnectionState.done) {
-      if (snapshot.hasData) {
-        // If the server returns a 200 OK response, then parse the JSON.
-      
-        print("this is heeeeeeeeeeeeeeeeeee${snapshot.data['Warehouses']}");
-        List<dynamic> warehouses = snapshot.data['Warehouses'];
-        print("this is heeeeeeeeeeeeeeeeeee${warehouses}");
-        return Scaffold(
+    return StoreConnector<AppState, dynamic>(
+        converter: (store) => store.state.warehouse,
+        builder: (context, data) {
+          if (data == {}) {
+            return CircularProgressIndicator();
+          } else {
+            return Scaffold(
       body: ListView(
         children: [
           Container(
@@ -82,7 +77,7 @@ class _warehousePageState extends State<warehousePage> {
             padding: EdgeInsets.all(10),
             height: 2000,
             child: ListView.builder(
-              itemCount: warehouses.length,
+              itemCount: data.length,
               itemBuilder: (context, index) {
                 return StoreConnector<AppState, AppState>(
                     converter: (store) => store.state,
@@ -119,7 +114,7 @@ class _warehousePageState extends State<warehousePage> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          "${warehouses[index]['name']}",
+                                          "${data[index]['name']}",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
@@ -143,13 +138,10 @@ class _warehousePageState extends State<warehousePage> {
         ],
       ),
     );
-      } else {
-        return Text('No data found');
-      }
-    } else {
-      return CircularProgressIndicator();
-    }
-  },
-);;
+  }},
+   onInit: (store) {
+        store.dispatch(GetWarehouseAction(token: store.state.token,url: "http://127.0.0.1:8000/api/warehouses"));
+      },
+  );
   }
 }

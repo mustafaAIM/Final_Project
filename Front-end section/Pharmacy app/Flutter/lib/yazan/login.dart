@@ -29,7 +29,7 @@ class _LoginpageState extends State<Loginpage> {
   bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
-    Map Logindetails = {'phone': "$phone", 'password': '$password'};
+    Map LoginDetails = {'phone': "$phone", 'password': '$password'};
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
@@ -159,14 +159,21 @@ class _LoginpageState extends State<Loginpage> {
                   ),
                   StoreConnector<AppState, void Function()>(
                       converter: (Store<AppState> store) {
-                    return () => store.dispatch(LoginAction(
-                        url: 'http://127.0.0.1:8000/api/login-pharmacist/',
-                        body: Logindetails));
+                    return () async {
+                      var action = LoginAction(
+                          url: 'http://127.0.0.1:8000/api/login-warehouse',
+                          body: LoginDetails);
+                      await store.dispatch(action);
+                      if (store.state.token != "") {
+                        print(store.state.token);
+                        Navigator.pushReplacementNamed(context, '/welcome');
+                      }
+                    };
                   }, builder: (BuildContext context, callback) {
                     return GestureDetector(
                       onTap: () => {
+                        
                         callback(),
-                        Navigator.pushReplacementNamed(context,'/welcome'),
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -198,9 +205,7 @@ class _LoginpageState extends State<Loginpage> {
                     thickness: 2,
                     indent: 20,
                     endIndent: 20,
-
-
-),
+                  ),
                   LocaleText(
                     "na",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
