@@ -9,12 +9,12 @@ import 'package:flutter1/Mootaz/categoryPage.dart';
 import 'package:flutter1/Mootaz/favorite.dart';
 import 'package:flutter1/Mootaz/itemInfoPage.dart';
 import 'package:flutter1/mootaz/splashScreen.dart';
+import 'package:flutter1/mootaz/warehousePage.dart';
 import 'package:flutter1/mootaz/welcome.dart';
 import 'package:flutter1/yazan/home.dart';
 import 'package:flutter1/yazan/orderDetailsPage.dart';
 import 'package:flutter1/yazan/reports.dart';
 import 'package:flutter_locales/flutter_locales.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -32,17 +32,11 @@ void main() async {
 
 class AppState {
   int currentIndex;
-  String url;
-  String header;
-  Map body;
   String token;
+  Map Warehouses;
 
   AppState(
-      {this.currentIndex = 0,
-      this.url = '',
-      this.body = const {},
-      this.header = '',
-      this.token = ''});
+      {this.currentIndex = 0, this.token = '', this.Warehouses = const {}});
 }
 
 // AppState.initialState() : _currentIndex = 0,_url='';
@@ -53,59 +47,54 @@ class NavClickAction {
   NavClickAction(this.currentIndex);
 }
 
-class GetDataAction {
+class LoginAction {
   final String url;
-  final String header;
-
-  GetDataAction({
-    required this.url,
-    this.header = '',
+  final Map body;
+  final String token;
+  LoginAction({
+    this.url = '',
+    this.body = const {},
+    this.token = "",
   });
 }
 
-class getTokenAction {
-  final String Token;
+class getWarehousesAction {
+  final String url;
+  final Map Warehouses;
 
-  getTokenAction({required this.Token});
+  getWarehousesAction({
+    this.url = '',
+    this.Warehouses = const {},
+  });
 }
 
-class PostDataAction {
+class RegisterAction {
   final String url;
-  final String header;
   final Map body;
 
-  PostDataAction({required this.url, this.header = '', required this.body});
+  RegisterAction({required this.url, required this.body});
 }
 
-AppState reducer(AppState prev, dynamic action) {
-  if (action is NavClickAction) {
-    return AppState(currentIndex: action.currentIndex);
-  } else if (action is GetDataAction) {
-    return AppState(url: action.url, header: action.header);
-  } else if (action is PostDataAction) {
-    return AppState(url: action.url, header: action.header, body: action.body);
-  } else if (action is getTokenAction) {
-    return AppState(token: action.Token);
-  } else {
-    return prev;
-  }
-}
-
-// Define a middleware
-void DataMiddleware(Store store, action) async {
-  if (action is PostDataAction) {
+void DataMiddleware(Store store, action, NextDispatcher next) async {
+  if (action is RegisterAction) {
     var response = await post(
       Uri.parse(action.url),
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
     );
-    if (action.url == "http://127.0.0.1:8000/api/login-pharmacist/") {
-      print("Response token: ${response.body}");
-      store.dispatch(getTokenAction(Token: jsonDecode(response.body)['token']));
-    }
-  } else if (action is GetDataAction) {
-    print(
-        "header: {  Content-Type: application/json; charset=UTF-8,Authorization: Bearer ${store.state.token}");
+    next(action);
+  } else if (action is LoginAction) {
+    var response = await post(
+      Uri.parse(action.url),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(action.body),
+    );
+
+    if (response.statusCode == 200) {
+      next(LoginAction(token: json.decode(response.body)['token']));
+    } else {}
+  } else if (action is getWarehousesAction) {
+    print("token: ${store.state.token}");
 
     var response = await get(
       Uri.parse(action.url),
@@ -118,18 +107,30 @@ void DataMiddleware(Store store, action) async {
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, then parse the JSON.
       print('Response body: ${response.body}');
+      next(getWarehousesAction(Warehouses: json.decode(response.body)));
     } else {
+      print('Response body: ${response.body}');
       // If the server returns an unsuccessful response code, then throw an exception.
       // throw Exception('Failed to load data');
     }
+  }
+}
 
-    print("Response Body: ${response.body}");
+AppState reducer(AppState prev, dynamic action) {
+  if (action is NavClickAction) {
+    return AppState(currentIndex: action.currentIndex);
+  } else if (action is LoginAction) {
+    return AppState(token: action.token);
+  } else if (action is getWarehousesAction) {
+    return AppState(Warehouses: action.Warehouses);
+  } else {
+    return prev;
   }
 }
 
 class MyApp extends StatelessWidget {
   final store =
-      Store(reducer, initialState: AppState(), middleware: [thunkMiddleware]);
+      Store(reducer, initialState: AppState(), middleware: [DataMiddleware]);
   Widget build(BuildContext context) {
     return StoreProvider(
         store: store,

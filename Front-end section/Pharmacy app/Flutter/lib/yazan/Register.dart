@@ -14,19 +14,7 @@ class Registerpage extends StatefulWidget {
   State<Registerpage> createState() => _RegisterpageState();
 }
 
-class _ViewModel {
-  final void Function(String, Map) onPressed;
 
-  _ViewModel({required this.onPressed});
-
-  factory _ViewModel.create(Store<AppState> store) {
-    _onPressed(String url, Map body) {
-      ;
-    }
-
-    return _ViewModel(onPressed: _onPressed);
-  }
-}
 
 class _RegisterpageState extends State<Registerpage> {
   String username = '';
@@ -267,16 +255,13 @@ class _RegisterpageState extends State<Registerpage> {
                   SizedBox(
                     height: 20,
                   ),
-                  StoreConnector<AppState, _ViewModel>(
-                      converter: (Store<AppState> store) =>
-                          _ViewModel.create(store),
-                      builder: (BuildContext context, _ViewModel viewModel) {
+                  StoreConnector<AppState, void Function()>(
+                      converter: (Store<AppState> store) {
+    return () => store.dispatch(RegisterAction(url: 'http://127.0.0.1:8000/api/register-pharmacist/', body: userDetails));
+  },
+                      builder: (BuildContext context,callback) {
                         return GestureDetector(
-                          onTap: () => {
-                            DataMiddleware(StoreProvider.of<AppState>(context), PostDataAction(url: 'http://127.0.0.1:8000/api/register-pharmacist/',
-                             body: userDetails))
-                            
-                                            },
+                          onTap: callback,
                           child: Container(
                             alignment: Alignment.center,
                             width: 250,

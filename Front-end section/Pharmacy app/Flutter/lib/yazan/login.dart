@@ -22,20 +22,6 @@ class Loginpage extends StatefulWidget {
   State<Loginpage> createState() => _LoginpageState();
 }
 
-class _ViewModel {
-  final void Function(String, Map) onPressed;
-
-  _ViewModel({required this.onPressed});
-
-  factory _ViewModel.create(Store<AppState> store) {
-    _onPressed(String url, Map body) {
-      ;
-    }
-
-    return _ViewModel(onPressed: _onPressed);
-  }
-}
-
 class _LoginpageState extends State<Loginpage> {
   String phone = "";
   String password = "";
@@ -171,44 +157,41 @@ class _LoginpageState extends State<Loginpage> {
                   SizedBox(
                     height: 20,
                   ),
-                  StoreConnector<AppState, _ViewModel>(
-                      converter: (Store<AppState> store) =>
-                          _ViewModel.create(store),
-                      builder: (BuildContext context, _ViewModel viewModel) {
-                        return GestureDetector(
-                          onTap: () => {
-                            DataMiddleware(
-                                StoreProvider.of<AppState>(context),
-                                PostDataAction(
-                                    url:
-                                        'http://127.0.0.1:8000/api/login-pharmacist/',
-                                    body: Logindetails)),
-                                    Navigator.pushReplacementNamed(context,'/welcome'),
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 250,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Color.fromARGB(148, 0, 40, 249),
-                                      Color.fromARGB(135, 125, 0, 145),
-                                    ])),
-                            child: Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: LocaleText(
-                                  'login1',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
-                                )),
-                          ),
-                        );
-                      }),
+                  StoreConnector<AppState, void Function()>(
+                      converter: (Store<AppState> store) {
+                    return () => store.dispatch(LoginAction(
+                        url: 'http://127.0.0.1:8000/api/login-pharmacist/',
+                        body: Logindetails));
+                  }, builder: (BuildContext context, callback) {
+                    return GestureDetector(
+                      onTap: () => {
+                        callback(),
+                        Navigator.pushReplacementNamed(context,'/welcome'),
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 250,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Color.fromARGB(148, 0, 40, 249),
+                                  Color.fromARGB(135, 125, 0, 145),
+                                ])),
+                        child: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: LocaleText(
+                              'login1',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600),
+                            )),
+                      ),
+                    );
+                  }),
                   Divider(
                     color: Colors.blue[600],
                     height: 50,
