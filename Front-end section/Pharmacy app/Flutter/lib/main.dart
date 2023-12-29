@@ -63,6 +63,12 @@ class GetDataAction {
   });
 }
 
+class getTokenAction {
+  final String Token;
+
+  getTokenAction({required this.Token});
+}
+
 class PostDataAction {
   final String url;
   final String header;
@@ -78,6 +84,8 @@ AppState reducer(AppState prev, dynamic action) {
     return AppState(url: action.url, header: action.header);
   } else if (action is PostDataAction) {
     return AppState(url: action.url, header: action.header, body: action.body);
+  } else if (action is getTokenAction) {
+    return AppState(token: action.Token);
   } else {
     return prev;
   }
@@ -93,17 +101,29 @@ void DataMiddleware(Store store, action) async {
     );
     if (action.url == "http://127.0.0.1:8000/api/login-pharmacist/") {
       print("Response token: ${response.body}");
-      AppState(token: jsonDecode(response.body)['token']);
+      store.dispatch(getTokenAction(Token: jsonDecode(response.body)['token']));
     }
-  }
-  else if(action is GetDataAction){
+  } else if (action is GetDataAction) {
+    print(
+        "header: {  Content-Type: application/json; charset=UTF-8,Authorization: Bearer ${store.state.token}");
+
     var response = await get(
       Uri.parse(action.url),
-       headers: {
-    HttpHeaders.authorizationHeader: '${action.header}',
-  },
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${store.state.token}',
+      },
     );
-     print("Response Body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, then parse the JSON.
+      print('Response body: ${response.body}');
+    } else {
+      // If the server returns an unsuccessful response code, then throw an exception.
+      // throw Exception('Failed to load data');
+    }
+
+    print("Response Body: ${response.body}");
   }
 }
 
