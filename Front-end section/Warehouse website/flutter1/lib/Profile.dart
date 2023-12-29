@@ -1,3 +1,4 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +12,28 @@ class profilePage extends StatefulWidget {
 }
 
 class _profilePageState extends State<profilePage> {
+  String dropdownValue = "sfasf";
+    List details = [
+    "Warehouse name",
+    "Phone Number",
+    "Username",
+    
+  ];
+  List apidetails = [
+    "albarka",
+    "035452424524",
+    'yazan',
+  ];
   String? selectedLanguage;
   List LangList = [
     'English',
     'Arabic',
   ];
-  
+  late List<TextEditingController> _controllers = List.generate(
+      3, (index) => TextEditingController(text: "${apidetails[index]}"));
+  List<bool> _isEditing = List.generate(3, (index) => false);
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,217 +62,232 @@ class _profilePageState extends State<profilePage> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  Container(
-                    width: 450,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      // border: Border.all(color: Colors.black, width: 2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Expanded(
-                      child: TextField(
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          hintText: 'John Doe',
-                          suffixIcon: Icon(Icons.edit),
-                          hintStyle: TextStyle(color: Colors.black),
-                          filled: true,
-                          fillColor:  Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
+              Column(children: [
+                    Container(
+                      width: 300,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${details[0]}: ",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: _controllers[2],
+                                readOnly: !_isEditing[2],
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                    icon: Icon(_isEditing[2]
+                                        ? Icons.check
+                                        : Icons.edit),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isEditing[2] = !_isEditing[2];
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Text("Ryan@Aministrator.com  -  Administrator"),
-                  )
-                ],
-              )
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 15,
+                    )
+                  ]),
             ],
           ),
           SizedBox(
             height: 30,
           ),
+
           Container(
-            width: 750,
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Expanded(
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Email: Ryan@administrator.com',
-                  contentPadding: EdgeInsets.all(10),
-                  suffixIcon: Icon(Icons.edit),
-                  hintStyle: TextStyle(color: Colors.black),
-                  filled: true,
-                  fillColor:  Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                ),
-              ),
-            ),
-          ),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        width: 1000,
+                        child: DropdownButton<String>(
+                           underline: SizedBox(),
+                          value: dropdownValue,
+                          isExpanded: true,
+                          icon: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(Icons.arrow_downward),
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                          
+                          onChanged: (String? newValue) => {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            })
+                          },
+                          items: <String>[
+                            "sfasf",
+                            "sfs",
+                            "sfadf",
+                            "sfasdf",
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        )),
           SizedBox(
             height: 10,
           ),
+          Column(children: [
+                    Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${details[0]}: ",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: _controllers[0],
+                                readOnly: !_isEditing[0],
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                    icon: Icon(_isEditing[0]
+                                        ? Icons.check
+                                        : Icons.edit),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isEditing[0] = !_isEditing[0];
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 15,
+                    )
+                  ]),
+          Column(children: [
+                    Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${details[1]}: ",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: _controllers[1],
+                                readOnly: !_isEditing[1],
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                    icon: Icon(_isEditing[1]
+                                        ? Icons.check
+                                        : Icons.edit),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isEditing[1] = !_isEditing[1];
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 50,
+                    )
+                  ]),
+        
           Container(
-            width: 750,
-            height: 40,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Expanded(
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'City: Damascus',
-                  contentPadding: EdgeInsets.all(10),
-                  suffixIcon: Icon(Icons.edit),
-                  hintStyle: TextStyle(color: Colors.black),
-                  filled: true,
-                  fillColor:  Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            width: 750,
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Expanded(
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Passowrd: ***********',
-                  contentPadding: EdgeInsets.all(10),
-                  suffixIcon: Icon(Icons.edit),
-                  hintStyle: TextStyle(color: Colors.black),
-                  filled: true,
-                  fillColor:  Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            width: 750,
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Expanded(
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Warehouse name: elbarka',
-                  contentPadding: EdgeInsets.all(10),
-                  suffixIcon: Icon(Icons.edit),
-                  hintStyle: TextStyle(color: Colors.black),
-                  filled: true,
-                  fillColor:  Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            width: 750,
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Expanded(
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Phone Number: 0922334455',
-                  contentPadding: EdgeInsets.all(10),
-                  suffixIcon: Icon(Icons.edit),
-                  hintStyle: TextStyle(color: Colors.black),
-                  filled: true,
-                  fillColor:  Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-           Container(
-                width: 750,
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 12,vertical: 0),
-                decoration:
-                    BoxDecoration(color: Colors.white,
-                    
-                      border: Border.all(color: Color.fromARGB(255, 74, 74, 74), width: 2),
-              borderRadius: BorderRadius.circular(20),),
-                child: Expanded(
-                  // or SizedBox
-                  child: DropdownButton(  
-                    underline: SizedBox(),
-                    isExpanded: true,
-                    borderRadius: BorderRadius.circular(12),
-                    dropdownColor: Colors.white,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 30,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                    hint: Text("Language"),
-                    onChanged: (value) {
-                      setState(() => selectedLanguage = value as String?);
-                    },
-                    value: selectedLanguage,
-                    items: LangList.map((e) {
-                      return DropdownMenuItem(
-                        value: e,
-                        child: Text("$e"),
-                      );
-                    }).toList(),
-                  ),
+                borderRadius: BorderRadius.circular(20),
+                color: Color.fromARGB(255, 222, 69, 41)),
+            child: MaterialButton(
+                padding: EdgeInsets.symmetric(horizontal: 300, vertical: 20),
+                onPressed: () {},
+                child: Text(
+                  "LOGOUT",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
                 )),
-          
+          )
+          //  Container(
+          //       width: 750,
+          //       height: 50,
+          //       padding: EdgeInsets.symmetric(horizontal: 12,vertical: 0),
+          //       decoration:
+          //           BoxDecoration(color: Colors.white,
+
+          //             border: Border.all(color: Color.fromARGB(255, 74, 74, 74), width: 2),
+          //     borderRadius: BorderRadius.circular(20),),
+          //       child: Expanded(
+          //         // or SizedBox
+          //         child: DropdownButton(
+          //           underline: SizedBox(),
+          //           isExpanded: true,
+          //           borderRadius: BorderRadius.circular(12),
+          //           dropdownColor: Colors.white,
+          //           icon: Icon(Icons.arrow_drop_down),
+          //           iconSize: 30,
+          //           style: TextStyle(
+          //               color: Colors.black,
+          //               fontSize: 15,
+          //               fontWeight: FontWeight.bold),
+          //           hint: Text("Language"),
+          //           onChanged: (value) {
+          //             setState(() => selectedLanguage = value as String?);
+          //           },
+          //           value: selectedLanguage,
+          //           items: LangList.map((e) {
+          //             return DropdownMenuItem(
+          //               value: e,
+          //               child: Text("$e"),
+          //             );
+          //           }).toList(),
+          //         ),
+          //       )),
         ],
       ),
     )));

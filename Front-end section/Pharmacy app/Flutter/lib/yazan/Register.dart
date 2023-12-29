@@ -126,9 +126,7 @@ class _RegisterpageState extends State<Registerpage> {
                     width: 250,
                     child: TextField(
                       keyboardType: TextInputType.number,
-
-
-onChanged: (value) {
+                      onChanged: (value) {
                         setState(() {
                           phone = value;
                         });

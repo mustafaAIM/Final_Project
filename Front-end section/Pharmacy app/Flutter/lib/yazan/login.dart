@@ -126,9 +126,7 @@ class _LoginpageState extends State<Loginpage> {
                         setState(() {
                           password = value;
                         });
-
-
-},
+                      },
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         labelText: "password",
