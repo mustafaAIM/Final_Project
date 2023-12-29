@@ -212,9 +212,7 @@ class _RegisterpageState extends State<Registerpage> {
                           'Al-Suwayada',
                           'Rif Dimashq',
                           'Raqqa',
-
-
-'Quneitra'
+                          'Quneitra'
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,

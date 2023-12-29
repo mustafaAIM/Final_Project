@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter1/main.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:redux/redux.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -20,8 +23,12 @@ class Loginpage extends StatefulWidget {
 
 class _LoginpageState extends State<Loginpage> {
   bool _obscureText = true;
+  String phone = "";
+  String password = "";
   @override
   Widget build(BuildContext context) {
+    Map loginDetails = {"phone": phone, "password": password};
+    print(loginDetails);
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
@@ -75,6 +82,11 @@ class _LoginpageState extends State<Loginpage> {
                   Container(
                     width: 500,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          phone = value;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "Phone number",
                         labelStyle: TextStyle(color: Colors.black),
@@ -95,6 +107,11 @@ class _LoginpageState extends State<Loginpage> {
                   Container(
                     width: 500,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+                      },
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         labelText: "password",
@@ -139,30 +156,48 @@ class _LoginpageState extends State<Loginpage> {
                   SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 500,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromARGB(148, 0, 40, 249),
-                                Color.fromARGB(135, 125, 0, 145),
-                              ])),
-                      child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600),
-                          )),
-                    ),
-                  ),
+                  StoreConnector<AppState, void Function()>(
+                      converter: (Store<AppState> store) {
+                    return () async {
+                      var action = LoginAction(
+                          url: 'http://127.0.0.1:8000/api/login-warehouse',
+                          body: loginDetails);
+                      await store.dispatch(action);
+                      if (store.state.token != "") {
+                        
+                        Navigator.pushReplacementNamed(context, '/');
+                      }
+                    };
+                  }, builder: (BuildContext context, callback) {
+                    return GestureDetector(
+                      onTap: () => {
+                        
+                        callback(),
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 500,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Color.fromARGB(148, 0, 40, 249),
+                                  Color.fromARGB(135, 125, 0, 145),
+                                ])),
+                        child: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600),
+                            )),
+                      ),
+                    );
+                  }),
                   Divider(
                     color: Colors.blue[600],
                     height: 50,

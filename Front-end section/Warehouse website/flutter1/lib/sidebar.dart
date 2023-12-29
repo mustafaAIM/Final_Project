@@ -35,7 +35,9 @@ class _sidebarState extends State<sidebar> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                      color: state.currentIndex == 0 ? Color.fromARGB(255, 222, 69, 41) : null,
+                      color: state.currentIndex == 0
+                          ? Color.fromARGB(255, 222, 69, 41)
+                          : null,
                       borderRadius: BorderRadius.circular(20)),
                   child: InkWell(
                     onTap: () {
@@ -61,12 +63,19 @@ class _sidebarState extends State<sidebar> {
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                        color: state.currentIndex == 1|| state.currentIndex == 4 || state.currentIndex == 5? Color.fromARGB(255, 222, 69, 41) : null,
+                        color: state.currentIndex == 1 ||
+                                state.currentIndex == 4 ||
+                                state.currentIndex == 5
+                            ? Color.fromARGB(255, 222, 69, 41)
+                            : null,
                         borderRadius: BorderRadius.circular(20)),
                     child: InkWell(
                       onTap: () {
                         StoreProvider.of<AppState>(context)
                             .dispatch(NavClickAction(1));
+                        print(StoreProvider.of<AppState>(context)
+                            .state
+                            .currentIndex);
                       },
                       child: ListTile(
                           tileColor: Colors.orange,
@@ -86,8 +95,9 @@ class _sidebarState extends State<sidebar> {
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                        color: state.currentIndex == 2 ?  
-                        Color.fromARGB(255, 222, 69, 41): null,
+                        color: state.currentIndex == 2
+                            ? Color.fromARGB(255, 222, 69, 41)
+                            : null,
                         borderRadius: BorderRadius.circular(20)),
                     child: InkWell(
                       onTap: () {
@@ -111,7 +121,9 @@ class _sidebarState extends State<sidebar> {
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                        color: state.currentIndex == 3 ? Color.fromARGB(255, 222, 69, 41):null,
+                        color: state.currentIndex == 3
+                            ? Color.fromARGB(255, 222, 69, 41)
+                            : null,
                         borderRadius: BorderRadius.circular(20)),
                     child: InkWell(
                       onTap: () {
