@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter1/chart.dart';
 import 'package:flutter1/chart2.dart';
+import 'package:flutter1/main.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 class dashboard extends StatefulWidget {
   const dashboard({super.key});
@@ -14,91 +16,100 @@ class dashboard extends StatefulWidget {
 class _dashboardState extends State<dashboard> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-            children:[           
-           Row(
-            
-            children: [
-        infoCard(
-            title: "test",
-            value: "20",
-            topColor: Colors.red,
-            isActive: true,
-            onTap: () {}),
-        infoCard(
-            title: "test",
-            value: "20",
-            topColor: Colors.green,
-            isActive: true,
-            onTap: () {}),
-        infoCard(
-            title: "test",
-            value: "20",
-            topColor: Colors.blue,
-            isActive: true,
-            onTap: () {}),
-        infoCard(
-            title: "test",
-            value: "3",
-            topColor: Colors.orange,
-            isActive: true,
-            onTap: () {}),
-      ]
-      ),
-      SizedBox(height: 60,),
-      Expanded
-      (child: Row(
-        children: 
-        [
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  offset: Offset(0, 6), color: Colors.grey, blurRadius: 12)
-            ],
-            borderRadius: BorderRadius.circular(8)),
-                child:  Column(
-                  children: [
-                    Text("Sales:",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600
-                    )),
-                     Expanded(child: SimpleTimeSeriesChart.withSampleData()),
-                  ],
-                ),     
-                )
-              ),
-           Container(
-              width: 400,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  offset: Offset(0, 6), color: Colors.grey, blurRadius: 12)
-            ],
-            borderRadius: BorderRadius.circular(8)),
-                child:  Column(
-                  children: [
-                    Text("Products Sales Percentages:",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600
-                    )),
-                    Expanded(child: chart()),
-                  ],
-                ),   
-                )
-            ])),
-        ]);
-        
+    
+    return StoreConnector<AppState, dynamic>(
       
+        converter: (store) => store.state.data,
+        builder: (context, data) {
+          if (data == {}) {
+            return CircularProgressIndicator();
+          } else {
+            return Column(children: [
+              Row(children: [
+                infoCard(
+                    title: "Orders count",
+                    value: data["orderCount"].toString(),
+                    topColor: Colors.red,
+                    isActive: true,
+                    onTap: () {}),
+                infoCard(
+                    title: "test",
+                    value: "20",
+                    topColor: Colors.green,
+                    isActive: true,
+                    onTap: () {}),
+                infoCard(
+                    title: "test",
+                    value: "20",
+                    topColor: Colors.blue,
+                    isActive: true,
+                    onTap: () {}),
+                infoCard(
+                    title: "test",
+                    value: "3",
+                    topColor: Colors.orange,
+                    isActive: true,
+                    onTap: () {}),
+              ]),
+              SizedBox(
+                height: 60,
+              ),
+              Expanded(
+                  child: Row(children: [
+                Expanded(
+                    child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 6),
+                            color: Colors.grey,
+                            blurRadius: 12)
+                      ],
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Column(
+                    children: [
+                      Text("Sales:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600)),
+                      Expanded(child: SimpleTimeSeriesChart.withSampleData()),
+                    ],
+                  ),
+                )),
+                Container(
+                  width: 400,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 6),
+                            color: Colors.grey,
+                            blurRadius: 12)
+                      ],
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Column(
+                    children: [
+                      Text("Products Sales Percentages:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600)),
+                      Expanded(child: chart()),
+                    ],
+                  ),
+                )
+              ])),
+            ]);
+          }
+
+        },
+        onInit: (store) {
+        store.dispatch(FetchDataAction(token: store.state.token,url: "http://127.0.0.1:8000/api/report"));
+      },
+        );
+        
   }
 }
 

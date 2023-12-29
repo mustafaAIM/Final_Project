@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter1/main.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:redux/redux.dart';
 
 class Registerpage extends StatefulWidget {
   const Registerpage({super.key});
@@ -14,8 +17,22 @@ class _RegisterpageState extends State<Registerpage> {
   bool _obscureText = true;
   String dropdownValue = 'Damascus';
   String? gender;
+  String username = '';
+  String password = '';
+  String warehousename = '';
+  String phone = '';
   @override
   Widget build(BuildContext context) {
+    Map registerDetails = {
+      'username': "${username}",
+      'name': "${warehousename}",
+      'phone': "$phone",
+      'password': '$password',
+      'city': "$dropdownValue",
+      "gender": "$gender",
+      'type': 'Warehouse Owner',
+    };
+    print('$registerDetails');
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
@@ -69,6 +86,11 @@ class _RegisterpageState extends State<Registerpage> {
                   Container(
                     width: 500,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          username = value;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "User name",
                         labelStyle: TextStyle(color: Colors.black),
@@ -89,6 +111,11 @@ class _RegisterpageState extends State<Registerpage> {
                   Container(
                     width: 500,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          phone = value;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "Phone number",
                         labelStyle: TextStyle(color: Colors.black),
@@ -109,6 +136,11 @@ class _RegisterpageState extends State<Registerpage> {
                   Container(
                     width: 500,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          warehousename = value;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "Warehouse name",
                         labelStyle: TextStyle(color: Colors.black),
@@ -129,6 +161,11 @@ class _RegisterpageState extends State<Registerpage> {
                   Container(
                     width: 500,
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+                      },
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         labelText: "password",
@@ -214,7 +251,7 @@ class _RegisterpageState extends State<Registerpage> {
                             child: RadioListTile<String>(
                               contentPadding: EdgeInsets.only(left: 100),
                               title: Text("Male"),
-                              value: "Male",
+                              value: "male",
                               groupValue: gender,
                               onChanged: (value) {
                                 setState(() {
@@ -226,7 +263,7 @@ class _RegisterpageState extends State<Registerpage> {
                           Expanded(
                             child: RadioListTile<String>(
                               title: Text("Female"),
-                              value: "Female",
+                              value: "female",
                               groupValue: gender,
                               onChanged: (value) {
                                 setState(() {
@@ -240,7 +277,13 @@ class _RegisterpageState extends State<Registerpage> {
                   SizedBox(
                     height: 10,
                   ),
-                  GestureDetector(
+                  StoreConnector<AppState, void Function()>(
+                      converter: (Store<AppState> store) {
+    return () => store.dispatch(RegisterAction(url: 'http://127.0.0.1:8000/api/register-pharmacist/', body: registerDetails));
+  },
+                      builder: (BuildContext context,callback) {
+                        return GestureDetector(
+                          onTap: callback,
                     child: Container(
                       alignment: Alignment.center,
                       width: 500,
@@ -263,7 +306,7 @@ class _RegisterpageState extends State<Registerpage> {
                                 fontWeight: FontWeight.w600),
                           )),
                     ),
-                  ),
+                  );}),
                   SizedBox(
                     height: 10,
                   ),

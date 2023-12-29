@@ -40,7 +40,6 @@ class AppState {
       {this.isLoading = true,this.currentIndex = 0, this.token = '', this.Warehouses = const {}});
 }
 
-// AppState.initialState() : _currentIndex = 0,_url='';
 
 class NavClickAction {
   final int currentIndex;
@@ -84,7 +83,7 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
     );
-    next(action);
+    
   } else if (action is LoginAction) {
     var response = await post(
       Uri.parse(action.url),

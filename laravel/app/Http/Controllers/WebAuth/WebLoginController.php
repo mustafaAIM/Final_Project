@@ -1,14 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\WebAuth;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-
 
 class WebLoginController extends Controller
 {
@@ -25,12 +24,19 @@ class WebLoginController extends Controller
 
         $credentials = $request->only('phone', 'password');
 
+        // Attempt to authenticate the user
         if (Auth::attempt($credentials)) {
+            // Check the user type after authentication
+            if (Auth::user()->type != "Warehouse Owner") {
+                Auth::logout(); // Logout the pharmacist user
+                return response()->json(['error' => 'Forbidden'], 403);
+            }
+
+            // If not a pharmacist, create and return the token
             $token = Auth::user()->createToken('MyApp')->accessToken;
             return response()->json(['token' => $token], 200);
-        }
-        else {
+        } else {
             return response()->json(['error' => 'Invalid phone or password'], 401);
-            }
         }
+    }
 }
