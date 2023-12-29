@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:redux/redux.dart';
 
 class homePage extends StatefulWidget {
   const homePage({
@@ -12,6 +13,7 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  
   List catNameAndImage = [
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
     {'name': 'Panadol', 'image': 'images/product2.jpg'},

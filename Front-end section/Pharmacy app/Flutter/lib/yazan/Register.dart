@@ -212,7 +212,9 @@ class _RegisterpageState extends State<Registerpage> {
                           'Al-Suwayada',
                           'Rif Dimashq',
                           'Raqqa',
-                          'Quneitra'
+
+
+'Quneitra'
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -297,7 +299,9 @@ class _RegisterpageState extends State<Registerpage> {
                           padding: EdgeInsets.only(left: 10),
                           child: GestureDetector(
                             child: LocaleText(
-                              "login",
+
+
+"login",
                               style: TextStyle(color: Colors.blue[800]),
                             ),
                             onTap: () => {

@@ -198,7 +198,9 @@ class _LoginpageState extends State<Loginpage> {
                     thickness: 2,
                     indent: 20,
                     endIndent: 20,
-                  ),
+
+
+),
                   LocaleText(
                     "na",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
