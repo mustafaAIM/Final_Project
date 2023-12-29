@@ -19,5 +19,5 @@ yarn-error.log
 /.idea
 /.vscode
 composer.json
-conposer.lock
+composer.lock
 .rnd
