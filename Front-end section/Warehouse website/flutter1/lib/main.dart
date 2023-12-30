@@ -33,11 +33,13 @@ class AppState {
   String token;
   Map data;
   List medicines;
+  int index;
   AppState({
     this.currentIndex = 0,
     this.token = '',
     this.data = const {},
     this.medicines = const [],
+    this.index = 0,
   });
 }
 
@@ -75,8 +77,8 @@ class LoginAction {
 
 class NavClickAction {
   final int currentIndex;
-
-  NavClickAction(this.currentIndex);
+  final int index;
+  NavClickAction({this.currentIndex = 0, this.index = 0});
 }
 
 void DataMiddleware(Store store, action, NextDispatcher next) async {
@@ -135,7 +137,7 @@ AppState reducer(AppState prev, dynamic action) {
   print("reducer");
   if (action is NavClickAction) {
     print("current index: ${action.currentIndex}");
-    return AppState(currentIndex: action.currentIndex);
+    return AppState(currentIndex: action.currentIndex,index: action.index);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
   } else if (action is FetchDataAction) {

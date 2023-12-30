@@ -42,7 +42,7 @@ class _sidebarState extends State<sidebar> {
                   child: InkWell(
                     onTap: () {
                       StoreProvider.of<AppState>(context)
-                          .dispatch(NavClickAction(0));
+                          .dispatch(NavClickAction(currentIndex: 0));
                     },
                     child: ListTile(
                         tileColor: Colors.orange,
@@ -72,7 +72,7 @@ class _sidebarState extends State<sidebar> {
                     child: InkWell(
                       onTap: () {
                         StoreProvider.of<AppState>(context)
-                            .dispatch(NavClickAction(1));
+                            .dispatch(NavClickAction(currentIndex: 1));
                         print(StoreProvider.of<AppState>(context)
                             .state
                             .currentIndex);
@@ -102,7 +102,7 @@ class _sidebarState extends State<sidebar> {
                     child: InkWell(
                       onTap: () {
                         StoreProvider.of<AppState>(context)
-                            .dispatch(NavClickAction(2));
+                            .dispatch(NavClickAction(currentIndex: 2));
                       },
                       child: ListTile(
                           leading: Icon(
@@ -128,7 +128,7 @@ class _sidebarState extends State<sidebar> {
                     child: InkWell(
                       onTap: () {
                         StoreProvider.of<AppState>(context)
-                            .dispatch(NavClickAction(3));
+                            .dispatch(NavClickAction(currentIndex: 3));
                       },
                       child: ListTile(
                           leading: Icon(

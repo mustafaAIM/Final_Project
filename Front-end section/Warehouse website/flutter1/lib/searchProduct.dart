@@ -62,7 +62,7 @@ class _searchProductPageState extends State<searchProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (products == []) {
+    if (products ==const []) {
       return CircularProgressIndicator();
     } else {
       return Scaffold(
@@ -112,7 +112,7 @@ class _searchProductPageState extends State<searchProductPage> {
                             MaterialButton(
                               onPressed: () {
                                 StoreProvider.of<AppState>(context)
-                                    .dispatch(NavClickAction(4));
+                                    .dispatch(NavClickAction(currentIndex: 4));
                               },
                               color: Colors.white,
                               padding: EdgeInsets.all(20),
@@ -261,7 +261,7 @@ class _searchProductPageState extends State<searchProductPage> {
                       return DataRow(
                           onLongPress: () {
                             StoreProvider.of<AppState>(context)
-                                .dispatch(NavClickAction(5));
+                                .dispatch(NavClickAction(currentIndex: 5,index: index));
                           },
                           color: MaterialStatePropertyAll(
                               Color.fromARGB(255, 217, 217, 217)),
@@ -279,7 +279,7 @@ class _searchProductPageState extends State<searchProductPage> {
                       return DataRow(
                           onLongPress: () {
                             StoreProvider.of<AppState>(context)
-                                .dispatch(NavClickAction(5));
+                                .dispatch(NavClickAction(currentIndex: 5,index: index));
                           },
                           cells: [
                             DataCell(

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:http/http.dart';
 
 class showProductPage extends StatefulWidget {
   const showProductPage({
@@ -24,20 +27,45 @@ class _showProductPageState extends State<showProductPage> {
     "Available quantity",
     "Price"
   ];
-  List apidetails = [
-    "panadol",
-    "Panadol",
-    'phizer',
-    '200',
-    
-    '20\$'
+  List info = [
+    "2020-2-2. Q:2",
+    "2022-2-4. Q:3",
+    "2003-2-4. Q:5",
+    "2320-34-5. Q:4",
   ];
+  List apidetails = ["panadol", "Panadol", 'phizer', '200', '20\$'];
   List categories = [
     "sfasf",
     "sfs",
     "sfadf",
     "sfasdf",
   ];
+  @override
+  void initState() {
+    super.initState();
+
+    getData();
+  }
+
+  getData() async {
+    String? token = await getToken();
+    Response response = await get(
+      Uri.parse('http://127.0.0.1:8000/api/display-medicines'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+    );
+    StoreConnector<AppState, dynamic>(
+      converter: (store) => store.state.index,
+      builder: (context, data) {
+        print("got index")
+      });
+    if (response.statusCode == 200) {
+      print('products : ${response.body}');
+    }
+  }
+
   late List<TextEditingController> _controllers = List.generate(
       5, (index) => TextEditingController(text: "${apidetails[index]}"));
   List<bool> _isEditing = List.generate(5, (index) => false);
@@ -55,15 +83,19 @@ class _showProductPageState extends State<showProductPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                    onPressed: () {
-                      StoreProvider.of<AppState>(context)
-                          .dispatch(NavClickAction(1));
-                    },
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.black,
-                    ))
+                StoreConnector<AppState, dynamic>(
+                    converter: (store) => store.state.index,
+                    builder: (context, data) {
+                      return IconButton(
+                          onPressed: () {
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(NavClickAction(currentIndex: 1));
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ));
+                    })
               ],
             ),
             SizedBox(
@@ -163,7 +195,7 @@ class _showProductPageState extends State<showProductPage> {
                             borderRadius: BorderRadius.circular(20)),
                         width: 1000,
                         child: DropdownButton<String>(
-                           underline: SizedBox(),
+                          underline: SizedBox(),
                           value: dropdownValue,
                           isExpanded: true,
                           icon: Padding(
@@ -176,7 +208,6 @@ class _showProductPageState extends State<showProductPage> {
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                               color: Colors.black),
-                          
                           onChanged: (String? newValue) => {
                             setState(() {
                               dropdownValue = newValue!;
@@ -194,7 +225,6 @@ class _showProductPageState extends State<showProductPage> {
                             );
                           }).toList(),
                         )),
-                        
                     SizedBox(
                       height: 15,
                     )
@@ -242,57 +272,46 @@ class _showProductPageState extends State<showProductPage> {
                     )
                   ]),
                   Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20)),
-                        width: 1000,
-                        child: Theme(
-                          data: Theme.of(context).copyWith(
-    canvasColor: Colors.white,  
-  ),
-                          child: DropdownButton<String>(
-                            
-                            enableFeedback: false,
-                             underline: SizedBox(),
-                            value: expirationDate,
-                            isExpanded: true,
-                            icon: Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(Icons.arrow_downward),
-                            ),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
-                            
-                            onChanged: (String? newValue) => {
-                              setState(() {
-                                
-                              })
-                            },
-                            items: <String>[
-                              "2020-2-2. Q:2",
-                              "2022-2-4. Q:3",
-                              "2003-2-4. Q:5",
-                              "2320-34-5. Q:4",
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                enabled: false,
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      width: 1000,
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          canvasColor: Colors.white,
+                        ),
+                        child: DropdownButton<String>(
+                          enableFeedback: false,
+                          underline: SizedBox(),
+                          value: expirationDate,
+                          isExpanded: true,
+                          icon: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(Icons.arrow_downward),
                           ),
-                        )),
-                        
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Column(children: [
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                          onChanged: (String? newValue) => {setState(() {})},
+                          items: info
+                              .map<DropdownMenuItem<String>>((dynamic value) {
+                            return DropdownMenuItem<String>(
+                              enabled: false,
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      )),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Column(children: [
                     Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -324,7 +343,7 @@ class _showProductPageState extends State<showProductPage> {
                       height: 15,
                     )
                   ]),
-                    Column(children: [
+                  Column(children: [
                     Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 10),

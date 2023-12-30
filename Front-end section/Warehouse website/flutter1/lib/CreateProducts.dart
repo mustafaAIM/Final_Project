@@ -54,7 +54,7 @@ class _createProductPageState extends State<createProductPage> {
                     IconButton(
                         onPressed: () {
                           StoreProvider.of<AppState>(context)
-                              .dispatch(NavClickAction(1));
+                              .dispatch(NavClickAction(currentIndex: 1));
                         },
                         color: Colors.white,
                         icon: Icon(Icons.close))
