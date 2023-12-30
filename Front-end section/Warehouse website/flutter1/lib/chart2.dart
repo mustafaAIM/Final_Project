@@ -67,7 +67,7 @@ class chart extends StatelessWidget {
         ]
       ),
 
-      swapAnimationDuration: Duration(milliseconds: 150), // Optional
+      swapAnimationDuration: Duration(milliseconds: 500), // Optional
     swapAnimationCurve: Curves.linear
     );
   }

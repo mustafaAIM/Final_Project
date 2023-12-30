@@ -81,10 +81,7 @@ class _warehousePageState extends State<warehousePage> {
             child: ListView.builder(
               itemCount: data['warehouses'].length!,
               itemBuilder: (context, index) {
-                return StoreConnector<AppState, AppState>(
-                    converter: (store) => store.state,
-                    builder: (_, state) {
-                      return InkWell(
+                return  InkWell(
                           onTap: () {
                             // StoreProvider.of<AppState>(context)
                             //     .dispatch(ClickWarehouseAction(index));
@@ -135,7 +132,7 @@ class _warehousePageState extends State<warehousePage> {
                               ),
                             ),
                           ));
-                    });
+                    
               },
             ),
           )

@@ -11,19 +11,33 @@ import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
+}
+
+Future<void> saveToken(String token) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', token);
+}
+
+Future<String?> getToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
+  return token;
 }
 
 class AppState {
   int currentIndex;
   String token;
   Map data;
+  List medicines;
   AppState({
     this.currentIndex = 0,
     this.token = '',
     this.data = const {},
+    this.medicines = const [],
   });
 }
 
@@ -36,9 +50,16 @@ class RegisterAction {
 
 class FetchDataAction {
   final String url;
-  final String token;
+  final String? token;
   final Map data;
   FetchDataAction({this.url = '', this.token = '', this.data = const {}});
+}
+
+class FetchMedicineAction {
+  final String url;
+  final String? token;
+  final List data;
+  FetchMedicineAction({this.url = '', this.token = '', this.data = const []});
 }
 
 class LoginAction {
@@ -58,8 +79,6 @@ class NavClickAction {
   NavClickAction(this.currentIndex);
 }
 
-
-
 void DataMiddleware(Store store, action, NextDispatcher next) async {
   if (action is RegisterAction) {
     var response = await post(
@@ -77,35 +96,57 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
     );
 
     if (response.statusCode == 200) {
-      next(LoginAction(token: json.decode(response.body)['token']));
+      String token = json.decode(response.body)['token'];
+      await saveToken(token);
+      next(LoginAction(token: token));
     } else {}
   } else if (action is FetchDataAction) {
     var response = await get(
       Uri.parse(action.url),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${store.state.token}"
+        "Authorization": "Bearer ${action.token}"
       },
     );
     if (response.statusCode == 200) {
-      print("got dataaa: ${response.body}");
+      print("got dataaa: ${json.decode(response.body)}");
       next(FetchDataAction(data: json.decode(response.body)));
     } else {
       // handle error
     }
+  } else if (action is FetchMedicineAction) {
+    var response = await get(
+      Uri.parse(action.url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${action.token}"
+      },
+    );
+    if (response.statusCode == 200) {
+      print("got dataaa: ${json.decode(response.body)}");
+      next(FetchMedicineAction(data: json.decode(response.body)));
+    }
+  } else {
+    next(action);
   }
 }
+
 AppState reducer(AppState prev, dynamic action) {
+  print("reducer");
   if (action is NavClickAction) {
+    print("current index: ${action.currentIndex}");
     return AppState(currentIndex: action.currentIndex);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
   } else if (action is FetchDataAction) {
     return AppState(data: action.data);
+  } else if (action is FetchMedicineAction) {
+    return AppState(medicines: action.data);
   } else {
     return prev;
   }
 }
+
 class MyApp extends StatelessWidget {
   final store =
       Store(reducer, initialState: AppState(), middleware: [DataMiddleware]);

@@ -47,6 +47,7 @@ dependencies:
   flutter_locales: ^3.0.1
 dependency_overrides:
   intl: 0.17.0
+  shared_preferences: ^2.0.8
 
 dev_dependencies:
   flutter_test:

@@ -164,8 +164,8 @@ class _LoginpageState extends State<Loginpage> {
                           url: 'http://127.0.0.1:8000/api/login-pharmacist',
                           body: LoginDetails);
                       await store.dispatch(action);
+                      print(store.state.token);
                       if (store.state.token != "") {
-                        print(store.state.token);
                         Navigator.pushReplacementNamed(context, '/welcome');
                       }
                     };
