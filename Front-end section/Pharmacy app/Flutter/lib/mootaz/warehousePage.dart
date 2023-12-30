@@ -28,9 +28,11 @@ class _warehousePageState extends State<warehousePage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store.state.warehouse,
-        builder: (context, warehouse) {
-          if (warehouse == {}) {
-            return CircularProgressIndicator();
+        builder: (context, data) {
+          if (data == const {}) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
             return Scaffold(
       body: ListView(
@@ -77,10 +79,12 @@ class _warehousePageState extends State<warehousePage> {
             padding: EdgeInsets.all(10),
             height: 2000,
             child: ListView.builder(
-              itemCount:  warehouse['warehouses'].length,
+              itemCount: data['warehouses'].length!,
               itemBuilder: (context, index) {
                 return  InkWell(
                           onTap: () {
+                            // StoreProvider.of<AppState>(context)
+                            //     .dispatch(ClickWarehouseAction(index));
                             StoreProvider.of<AppState>(context)
                                 .dispatch(NavClickAction(4));
                           },
@@ -111,7 +115,7 @@ class _warehousePageState extends State<warehousePage> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          "${warehouse['warehouses'][index]['name']}",
+                                          "${data["warehouses"][index]["name"]}",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
@@ -136,8 +140,9 @@ class _warehousePageState extends State<warehousePage> {
       ),
     );
   }},
-   onInit: (store) {
-        store.dispatch(GetWarehouseAction(token: store.state.token,url: "http://127.0.0.1:8000/api/warehouses"));
+   onInit: (store) async {
+     String? token = await getToken();
+        store.dispatch(GetWarehouseAction(token: token,url: "http://127.0.0.1:8000/api/warehouses"));
       },
   );
   }

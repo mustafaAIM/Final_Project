@@ -22,7 +22,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:flutter1/yazan/login.dart';
 import 'package:flutter1/yazan/Register.dart';
 import 'package:flutter1/yazan/profile.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Locales.init(['en', 'ar']); // get last saved language
@@ -30,14 +30,28 @@ void main() async {
   runApp(MyApp());
 }
 
+Future<void> saveToken(String token) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', token);
+}
+
+Future<String?> getToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
+  return token;
+}
 class AppState {
   int currentIndex;
+  // int thisIndex;
   String token;
   Map warehouse;
+  // Map medicines;
   AppState({
     this.currentIndex = 0,
+    // this.thisIndex = 0,
     this.token = '',
     this.warehouse = const {},
+    // this.medicines = const {},
   });
 }
 
@@ -50,11 +64,17 @@ class RegisterAction {
 
 class GetWarehouseAction {
   final String url;
-  final String token;
+  final String? token;
   final Map warehouse;
   GetWarehouseAction(
       {this.url = '', this.token = '', this.warehouse = const {}});
 }
+// class GetMedicinesAction {
+//   final String url;
+//   final String token;
+//   final Map medicines;
+//   GetMedicinesAction({this.url = '', this.token = '', this.medicines = const {}});
+// }
 
 class LoginAction {
   final String url;
@@ -72,6 +92,11 @@ class NavClickAction {
 
   NavClickAction(this.currentIndex);
 }
+// class ClickWarehouseAction {
+//   final int thisIndex;
+  
+//   ClickWarehouseAction(this.thisIndex);
+// }
 
 void DataMiddleware(Store store, action, NextDispatcher next) async {
   if (action is RegisterAction) {
@@ -81,33 +106,51 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       body: json.encode(action.body),
     );
 
-    
+    print(response.body);
   } else if (action is LoginAction) {
     var response = await post(
       Uri.parse(action.url),
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
-      
     );
-    print("response: ${response.body}");
+
     if (response.statusCode == 200) {
-      next(LoginAction(token: json.decode(response.body)['token']));
+      String token = json.decode(response.body)['token'];
+      await saveToken(token);
+      next(LoginAction(token: token));
     } else {}
   } else if (action is GetWarehouseAction) {
     var response = await get(
       Uri.parse(action.url),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${store.state.token}"
+        "Authorization": "Bearer ${action.token}"
       },
     );
-    print(response.body);
     if (response.statusCode == 200) {
-      print("got dataaa: ${response.body}");
+      print("got dataaa: ${json.decode(response.body)}");
       next(GetWarehouseAction(warehouse: json.decode(response.body)));
-    } else {
+    }else {
       // handle error
     }
+  } 
+  // else if (action is GetMedicinesAction) {
+  //   var response = await get(
+  //     Uri.parse(action.url),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer ${store.state.token}"
+  //     },
+  //   );
+  //   if (response.statusCode == 200) {
+  //     print("the response medicens is: ${response.body}");
+  //     next(GetMedicinesAction(medicines: json.decode(response.body)));
+  //   } else {
+  //     // handle error
+  //   }
+  // }
+    else {
+    next(action);
   }
 }
 
@@ -118,7 +161,14 @@ AppState reducer(AppState prev, dynamic action) {
     return AppState(token: action.token);
   } else if (action is GetWarehouseAction) {
     return AppState(warehouse: action.warehouse);
-  } else {
+  } 
+  // else if (action is ClickWarehouseAction) {
+  //   print("the index is: ${action.thisIndex}");
+    // return AppState(thisIndex: action.thisIndex);
+  //   else if (action is GetMedicinesAction) {
+  //   return AppState(medicines: action.medicines);
+  // } 
+  else {
     return prev;
   }
 }
