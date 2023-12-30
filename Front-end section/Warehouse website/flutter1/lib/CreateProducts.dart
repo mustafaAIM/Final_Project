@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:http/http.dart';
 
 class createProductPage extends StatefulWidget {
   const createProductPage({
@@ -12,14 +15,37 @@ class createProductPage extends StatefulWidget {
   State<createProductPage> createState() => _createProductPageState();
 }
 
+String Sname = '';
+String Tname = '';
+String Mname = '';
+String Quan = '';
+String Price = '';
+
 class _createProductPageState extends State<createProductPage> {
   String? selectedCategory;
   List CategoryList = [
-    'item 1',
-    'item 2',
-    'item 3',
-    'item 4',
-    'item 5',
+    "Antibiotics",
+    "Analgesics",
+    "Antidepressants",
+    "Antihypertensives",
+    "Antivirals",
+    "Antifungals",
+    "Anti-Inflammatories",
+    "Antacids",
+    "Antianxiety Drugs",
+    "Antiemetics",
+    "Antipyretics",
+    "Bronchodilators",
+    "Corticosteroids",
+    "Diuretics",
+    "Expectorants",
+    "Hormones",
+    "Immunosuppressives",
+    "Laxatives",
+    "Muscle Relaxants",
+    "Tranquilizers",
+    "Vitamins",
+    "Other"
   ];
   DateTime selectDate = DateTime.now();
   Future<void> _selectDate(BuildContext context) async {
@@ -37,6 +63,16 @@ class _createProductPageState extends State<createProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    Map data = {
+      "scientific_name": "$Sname",
+      "trading_name": "$Tname",
+      "manufacturer_company": "$Mname",
+      "category": "$selectedCategory",
+      "quantity": "$Quan",
+      "price": "$Price",
+      "expirydate": "${selectDate.toLocal()}".split(' ')[0],
+    };
+    print("dataa ${data}");
     return Scaffold(
       body: Center(
         child: Container(
@@ -95,7 +131,12 @@ class _createProductPageState extends State<createProductPage> {
                           child: Expanded(
                             // or SizedBox
                             child: TextField(
-                              style: TextStyle(color: Colors.white),
+                              onChanged: (value) {
+                                setState(() {
+                                  Sname = value;
+                                });
+                              },
+                              style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                 hintText: 'Scientific name',
                                 contentPadding: EdgeInsets.all(6),
@@ -127,7 +168,6 @@ class _createProductPageState extends State<createProductPage> {
                                 underline: SizedBox(),
                                 isExpanded: true,
                                 borderRadius: BorderRadius.circular(12),
-                                
                                 icon: Icon(Icons.arrow_drop_down),
                                 iconSize: 30,
                                 style: TextStyle(
@@ -170,9 +210,14 @@ class _createProductPageState extends State<createProductPage> {
                             child: Expanded(
                               // or SizedBox
                               child: TextField(
-                                style: TextStyle(color: Colors.white),
+                                onChanged: (value) {
+                                  setState(() {
+                                    Tname = value;
+                                  });
+                                },
+                                style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                  hintText: 'Comercial name',
+                                  hintText: 'Commercial name',
                                   contentPadding: EdgeInsets.all(6),
                                   hintStyle: TextStyle(
                                       color: Colors.black.withOpacity(0.4)),
@@ -197,7 +242,12 @@ class _createProductPageState extends State<createProductPage> {
                             child: Expanded(
                               // or SizedBox
                               child: TextField(
-                                style: TextStyle(color: Colors.white),
+                                onChanged: (value) {
+                                  setState(() {
+                                    Mname = value;
+                                  });
+                                },
+                                style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: 'Manufacturing Company',
                                   contentPadding: EdgeInsets.all(6),
@@ -235,7 +285,12 @@ class _createProductPageState extends State<createProductPage> {
                             child: Expanded(
                               // or SizedBox
                               child: TextField(
-                                style: TextStyle(color: Colors.white),
+                                onChanged: (value) {
+                                  setState(() {
+                                    Quan = value;
+                                  });
+                                },
+                                style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: 'Available quantity',
                                   contentPadding: EdgeInsets.all(6),
@@ -262,7 +317,12 @@ class _createProductPageState extends State<createProductPage> {
                             child: Expanded(
                               // or SizedBox
                               child: TextField(
-                                style: TextStyle(color: Colors.white),
+                                onChanged: (value) {
+                                  setState(() {
+                                    Price = value;
+                                  });
+                                },
+                                style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: 'Price',
                                   contentPadding: EdgeInsets.all(6),
@@ -292,28 +352,29 @@ class _createProductPageState extends State<createProductPage> {
                       children: [
                         Container(
                           width: 300,
-                          child: Column(mainAxisSize: MainAxisSize.min, children: [
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    
-                                    width: 300,
-                                    child: ElevatedButton(
-                                      
-                                      onPressed: () => _selectDate(context),
-                                      child: const Text('select date',style: 
-                                      TextStyle(
-                                        color: Colors.grey
-                                      ),),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ])
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 300,
+                                        child: ElevatedButton(
+                                          onPressed: () => _selectDate(context),
+                                          child: const Text(
+                                            'select date',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ])
                           ]),
                         ),
                         Container(
@@ -335,7 +396,35 @@ class _createProductPageState extends State<createProductPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MaterialButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            String? token = await getToken();
+                            Response response = await post(
+                                Uri.parse(
+                                    'http://127.0.0.1:8000/api/create-medicine'),
+                                headers: {
+                                  "Content-Type": "application/json",
+                                  "Authorization": "Bearer ${token}"
+                                },
+                                body: jsonEncode(data));
+                            
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+              
+                                  content: Text('${jsonDecode(response.body)['message']}.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Close'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           color: Color.fromARGB(255, 222, 69, 41),
                           height: 100,
                           minWidth: 200,

@@ -8,6 +8,7 @@ import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class dashboard extends StatefulWidget {
   const dashboard({super.key});
@@ -70,8 +71,10 @@ class _dashboardState extends State<dashboard> {
       converter: (store) => store.state.data,
       builder: (context, data) {
         if (data == const {}) {
-          print('loading');
-          return CircularProgressIndicator();
+          return SpinKitWave(
+            color: Colors.blue,
+            size: 50.0,
+          );
         } else {
           return Column(children: [
             Row(children: [
@@ -167,7 +170,7 @@ class _dashboardState extends State<dashboard> {
       },
       onInit: (store) async {
         String? token = await getToken();
-        
+
         await store.dispatch(FetchDataAction(
             token: token, url: "http://127.0.0.1:8000/api/report"));
       },

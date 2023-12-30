@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 
@@ -17,8 +18,8 @@ class showProductPage extends StatefulWidget {
 }
 
 class _showProductPageState extends State<showProductPage> {
-  String dropdownValue = "sfasf";
-  String expirationDate = "2020-2-2. Q:2";
+  String dropdownValue = "Antibiotics";
+  String expirationDate = "";
 
   @override
   List details = [
@@ -28,22 +29,33 @@ class _showProductPageState extends State<showProductPage> {
     "Available quantity",
     "Price"
   ];
-  List info = [
-    "2020-2-2. Q:2",
-    "2022-2-4. Q:3",
-    "2003-2-4. Q:5",
-    "2320-34-5. Q:4",
-  ];
+  List info = ["", "1"];
   List apidetails = ["panadol", "Panadol", 'phizer', '200', '20\$'];
   List categories = [
-    "sfasf",
-    "sfs",
-    "sfadf",
-    "sfasdf",
+    "Antibiotics",
+    "Analgesics",
+    "Antidepressants",
+    "Antihypertensives",
+    "Antivirals",
+    "Antifungals",
+    "Anti-Inflammatories",
+    "Antacids",
+    "Antianxiety Drugs",
+    "Antiemetics",
+    "Antipyretics",
+    "Bronchodilators",
+    "Corticosteroids",
+    "Diuretics",
+    "Expectorants",
+    "Hormones",
+    "Immunosuppressives",
+    "Laxatives",
+    "Muscle Relaxants",
+    "Tranquilizers",
+    "Vitamins",
+    "Other"
   ];
   @override
-  
-
   bool loading = true;
   getData(index) async {
     String? token = await getToken();
@@ -63,23 +75,33 @@ class _showProductPageState extends State<showProductPage> {
         loading = false;
         apidetails[0] = data['scientific_name'];
         apidetails[1] = data['trading_name'];
-        apidetails[0] = data['manufacturer_company'];
+        apidetails[2] = data['manufacturer_company'];
+        apidetails[3] = data['totalquantity'].toString();
         apidetails[4] = data['price'].toString();
+        dropdownValue = data["category"];
+        info = data["info"].map((item) {
+          return '${item['expiration']}. Q:${item['quantity'].toString()}';
+        }).toList();
+        expirationDate = info[0];
       });
     }
   }
 
-  List<bool> _isEditing = List.generate(5, (index) => false);
-  Widget build(BuildContext context) {
   late List<TextEditingController> _controllers = List.generate(
       5, (index) => TextEditingController(text: "${apidetails[index]}"));
+  List<bool> _isEditing = List.generate(5, (index) => false);
+  Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       converter: (store) => store.state.index,
       builder: (context, index) {
-        getData(index);
         if (loading) {
-          return CircularProgressIndicator();
+          getData(index);
+          return SpinKitWave(
+            color: Colors.blue,
+            size: 50.0,
+          );;
         } else {
+          print(info);
           return Container(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 20),
               height: MediaQuery.of(context).size.height * .75,
@@ -223,12 +245,8 @@ class _showProductPageState extends State<showProductPage> {
                                     dropdownValue = newValue!;
                                   })
                                 },
-                                items: <String>[
-                                  "sfasf",
-                                  "sfs",
-                                  "sfadf",
-                                  "sfasdf",
-                                ].map<DropdownMenuItem<String>>((String value) {
+                                items: categories.map<DropdownMenuItem<String>>(
+                                    (dynamic value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),

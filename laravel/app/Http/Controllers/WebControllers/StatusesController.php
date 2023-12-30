@@ -28,7 +28,7 @@ class StatusesController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'orderId' => 'required|int',
+            'order_id' => 'required|int',
             'status' => 'required|string|max:255',
             'paid' => 'required|boolean',
         ]);
@@ -37,7 +37,7 @@ class StatusesController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $order = Order::find($request->orderId);
+        $order = Order::find($request->order_id);
 
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);

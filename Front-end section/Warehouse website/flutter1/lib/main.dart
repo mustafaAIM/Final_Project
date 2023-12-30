@@ -34,12 +34,14 @@ class AppState {
   Map data;
   List medicines;
   int index;
+  List orders;
   AppState({
     this.currentIndex = 0,
     this.token = '',
     this.data = const {},
     this.medicines = const [],
     this.index = 0,
+    this.orders = const[]
   });
 }
 
@@ -55,6 +57,12 @@ class FetchDataAction {
   final String? token;
   final Map data;
   FetchDataAction({this.url = '', this.token = '', this.data = const {}});
+}
+class FetchOrdersAction {
+  final String url;
+  final String? token;
+  final List data;
+  FetchOrdersAction({this.url = '', this.token = '', this.data = const []});
 }
 
 class FetchMedicineAction {
@@ -88,8 +96,6 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
     );
-
-    print(response.body);
   } else if (action is LoginAction) {
     var response = await post(
       Uri.parse(action.url),
@@ -111,12 +117,12 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       },
     );
     if (response.statusCode == 200) {
-      print("got dataaa: ${json.decode(response.body)}");
+      print(response.body);
       next(FetchDataAction(data: json.decode(response.body)));
     } else {
       // handle error
     }
-  } else if (action is FetchMedicineAction) {
+  } else if (action is FetchOrdersAction) {
     var response = await get(
       Uri.parse(action.url),
       headers: {
@@ -125,8 +131,7 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       },
     );
     if (response.statusCode == 200) {
-      print("got dataaa: ${json.decode(response.body)}");
-      next(FetchMedicineAction(data: json.decode(response.body)));
+      next(FetchOrdersAction(data: json.decode(response.body)));
     }
   } else {
     next(action);
@@ -134,16 +139,14 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
 }
 
 AppState reducer(AppState prev, dynamic action) {
-  print("reducer");
   if (action is NavClickAction) {
-    print("current index: ${action.currentIndex}");
-    return AppState(currentIndex: action.currentIndex,index: action.index);
+    return AppState(currentIndex: action.currentIndex, index: action.index);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
   } else if (action is FetchDataAction) {
     return AppState(data: action.data);
-  } else if (action is FetchMedicineAction) {
-    return AppState(medicines: action.data);
+  } else if (action is FetchOrdersAction) {
+    return AppState(orders: action.data);
   } else {
     return prev;
   }
@@ -157,10 +160,9 @@ class MyApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/register',
+        initialRoute: '/login',
         routes: {
           '/': (context) => home(),
-          '/createProducts': (context) => createProductPage(),
           '/login': (context) => Loginpage(),
           '/register': (context) => Registerpage(),
         },

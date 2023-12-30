@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 
 class searchProductPage extends StatefulWidget {
@@ -17,13 +18,38 @@ class searchProductPage extends StatefulWidget {
 }
 
 class _searchProductPageState extends State<searchProductPage> {
-  List products = [];
-  List findProducts = [];
+  List Categories = [
+    "Antibiotics",
+    "Analgesics",
+    "Antidepressants",
+    "Antihypertensives",
+    "Antivirals",
+    "Antifungals",
+    "Anti-Inflammatories",
+    "Antacids",
+    "Antianxiety Drugs",
+    "Antiemetics",
+    "Antipyretics",
+    "Bronchodilators",
+    "Corticosteroids",
+    "Diuretics",
+    "Expectorants",
+    "Hormones",
+    "Immunosuppressives",
+    "Laxatives",
+    "Muscle Relaxants",
+    "Tranquilizers",
+    "Vitamins",
+    "Other"
+  ];
+  bool loading = true;
+  List products = const [];
+  List findProducts = const [];
+  
   @override
   void initState() {
-    getMeds();
-    findProducts = products;
     super.initState();
+    getMeds();
   }
 
   Future<void> getMeds() async {
@@ -37,24 +63,28 @@ class _searchProductPageState extends State<searchProductPage> {
     );
     if (response.statusCode == 200) {
       setState(() {
-        findProducts = jsonDecode(response.body);
+        products = jsonDecode(response.body);
+        findProducts = products;
+        loading = false;
       });
-      print('products : $findProducts');
     }
   }
 
-  void runSearchProduct(String enterdeKey) {
+  void runSearchProduct(String enteredKey) {
+    print("rrr");
     List results = [];
-    if (enterdeKey.isEmpty) {
+    if (enteredKey.isEmpty) {
       results = products;
     } else {
       results = products
-          .where((element) => element["Commercial Name"]
+          .where((element) => element["trading_name"]
               .toLowerCase()
-              .contains(enterdeKey..toLowerCase()))
+              .contains(enteredKey.toLowerCase())|| element["scientific_name"]
+              .toLowerCase()
+              .contains(enteredKey.toLowerCase()))
           .toList();
     }
-
+    print(results);
     setState(() {
       findProducts = results;
     });
@@ -62,8 +92,11 @@ class _searchProductPageState extends State<searchProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (products ==const []) {
-      return CircularProgressIndicator();
+    if (loading) {
+      return SpinKitWave(
+            color: Colors.blue,
+            size: 50.0,
+          );;
     } else {
       return Scaffold(
           body: Container(
@@ -148,7 +181,7 @@ class _searchProductPageState extends State<searchProductPage> {
                                       return Dialog(
                                         child: Container(
                                           padding: EdgeInsets.all(0),
-                                          width: 600,
+                                          width: 800,
                                           child: AlertDialog(
                                             content: Container(
                                               width: double.maxFinite,
@@ -190,9 +223,9 @@ class _searchProductPageState extends State<searchProductPage> {
                                                             border: Border.all(
                                                                 color: Colors
                                                                     .black,
-                                                                width: 2)),
+                                                                width: 1)),
                                                         child: Text(
-                                                          'Category ${index + 1}',
+                                                          "${Categories[index]}",
                                                           style:
                                                               Theme.of(context)
                                                                   .textTheme
@@ -225,76 +258,82 @@ class _searchProductPageState extends State<searchProductPage> {
             SizedBox(
               height: 20,
             ),
-             Expanded(
-                child: DataTable2(
-                    border: TableBorder(
-                        verticalInside:
-                            BorderSide(color: Colors.black, width: 2)),
-                    headingRowColor: MaterialStatePropertyAll(Colors.black26),
-                    dataTextStyle: TextStyle(fontSize: 16),
-                    columnSpacing: 12,
-                    horizontalMargin: 12,
-                    minWidth: 600,
-                    columns: [
-                      DataColumn2(
-                        label: Text('Commercial Name'),
-                        size: ColumnSize.L,
-                      ),
-                      DataColumn(
-                        label: Text('scientific Name'),
-                      ),
-                      DataColumn(
-                        label: Text('Quantity'),
-                      ),
-                      DataColumn(
-                        label: Text('Manifacturing company'),
-                      ),
-                    ],
-                    headingRowDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12))),
-                    headingTextStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    rows: List<DataRow>.generate(findProducts.length, (index) {
-                      if (index.isEven) {
-                        return DataRow(
-                            onLongPress: () {
-                              StoreProvider.of<AppState>(context)
-                                  .dispatch(NavClickAction(currentIndex: 5,index: index));
-                            },
-                            color: MaterialStatePropertyAll(
-                                Color.fromARGB(255, 217, 217, 217)),
-                            cells: [
-                              DataCell(
-                                Text('${findProducts[index]["trading_name"]}'),
-                              ),
-                              DataCell(Text(
-                                  '${findProducts[index]["scientific_name"]}')),
-                              DataCell(
-                                  Text('${findProducts[index]["total_quantity"]}')),
-                              DataCell(Text('${findProducts[index]["manufacturer_company"]}')),
-                            ]);
-                      } else {
-                        return DataRow(
-                            onLongPress: () {
-                              StoreProvider.of<AppState>(context)
-                                  .dispatch(NavClickAction(currentIndex: 5,index: index));
-                            },
-                            cells: [
-                              DataCell(
-                                Text('${findProducts[index]["trading_name"]}'),
-                              ),
-                              DataCell(Text(
-                                  '${findProducts[index]["scientific_name"]}')),
-                              DataCell(
-                                  Text('${findProducts[index]["total_quantity"]}')),
-                              DataCell(Text('${findProducts[index]["manufacturer_company"]}')),
-                            ]);
-                      }
-                    })),
-              ),
-            
+            Expanded(
+              child: DataTable2(
+                  border: TableBorder(
+                      verticalInside:
+                          BorderSide(color: Colors.black, width: 2)),
+                  headingRowColor: MaterialStatePropertyAll(Colors.black26),
+                  dataTextStyle: TextStyle(fontSize: 16),
+                  columnSpacing: 12,
+                  horizontalMargin: 12,
+                  minWidth: 600,
+                  columns: [
+                    DataColumn2(
+                      label: Text('Commercial Name'),
+                      size: ColumnSize.L,
+                    ),
+                    DataColumn(
+                      label: Text('scientific Name'),
+                    ),
+                    DataColumn(
+                      label: Text('Quantity'),
+                    ),
+                    DataColumn(
+                      label: Text('Price'),
+                    ),
+                    DataColumn(
+                      label: Text('Manifacturing company'),
+                    ),
+                  ],
+                  headingRowDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12))),
+                  headingTextStyle:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  rows: List<DataRow>.generate(findProducts.length, (index) {
+                    if (index.isEven) {
+                      return DataRow(
+                          onLongPress: () {
+                            StoreProvider.of<AppState>(context).dispatch(
+                                NavClickAction(currentIndex: 5, index: index));
+                          },
+                          color: MaterialStatePropertyAll(
+                              Color.fromARGB(255, 217, 217, 217)),
+                          cells: [
+                            DataCell(
+                              Text('${findProducts[index]["trading_name"]}'),
+                            ),
+                            DataCell(Text(
+                                '${findProducts[index]["scientific_name"]}')),
+                            DataCell(Text(
+                                '${findProducts[index]["total_quantity"]}')),
+                            DataCell(Text('${findProducts[index]["price"]}')),
+                            DataCell(Text(
+                                '${findProducts[index]["manufacturer_company"]}')),
+                          ]);
+                    } else {
+                      return DataRow(
+                          onLongPress: () {
+                            StoreProvider.of<AppState>(context).dispatch(
+                                NavClickAction(currentIndex: 5, index: index));
+                          },
+                          cells: [
+                            DataCell(
+                              Text('${findProducts[index]["trading_name"]}'),
+                            ),
+                            DataCell(Text(
+                                '${findProducts[index]["scientific_name"]}')),
+                            DataCell(Text(
+                                '${findProducts[index]["total_quantity"]}')),
+                            DataCell(Text('${findProducts[index]["price"]}')),
+                            DataCell(Text(
+                                '${findProducts[index]["manufacturer_company"]}')),
+                          ]);
+                    }
+                  })),
+            ),
           ],
         ),
       ));

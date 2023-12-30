@@ -37,9 +37,6 @@ class WReportController extends Controller
 
         $uniqueUserIdsCount = $orders->pluck('user_id')->unique()->count();
 
-        $uniqueUserIds = $orders->pluck('user_id')->unique();
-        $usernames = User::whereIn('id', $uniqueUserIds)->pluck('username')->implode(' , ');
-
         $totalOfAllTotals = $orders->sum('total');
         $total = 0;
 
@@ -102,15 +99,20 @@ class WReportController extends Controller
         $countOfRemaining = array_sum($medicinePercentages) - array_sum($topFiveMedicinePercentages);
 
         // Create a new array with the first five elements and count of the rest
-        $newArray = array_merge($topFiveMedicinePercentages, ['others' => $countOfRemaining]);
+        $newArray = array_merge($topFiveMedicinePercentages, ['other' => $countOfRemaining]);
 
+        $mostOrdersUserId = $orders->countBy('user_id')->sortDesc()->keys()->first();
+
+        // Get the username of the user with the most orders
+        $mostOrdersUsername = User::find($mostOrdersUserId)->username;
 
         return response()->json([
             'orderCount' => $orderCount,
             'uniqueUserIdsCount' => $uniqueUserIdsCount,
-            'mostRepeatedUsername' => $usernames,
+            'mostRepeatedUsername' => $mostOrdersUsername,
             'totalOfAllTotals' => $totalOfAllTotals,
             'medicinePercentages' => $newArray,
             'dailyOrderTotals' => $dailyOrderTotals,
         ], 200);
-    }}
+    }
+}

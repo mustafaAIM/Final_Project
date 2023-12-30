@@ -28,7 +28,6 @@ class _LoginpageState extends State<Loginpage> {
   @override
   Widget build(BuildContext context) {
     Map loginDetails = {"phone": phone, "password": password};
-    print(loginDetails);
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
