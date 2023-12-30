@@ -42,16 +42,18 @@ Future<String?> getToken() async {
 }
 class AppState {
   int currentIndex;
-  // int thisIndex;
+  int index;
+  int indexPhoto;
   String token;
   Map warehouse;
-  // Map medicines;
+  Map medicines;
   AppState({
     this.currentIndex = 0,
-    // this.thisIndex = 0,
+    this.index = 0,
+    this.indexPhoto = 0,
     this.token = '',
     this.warehouse = const {},
-    // this.medicines = const {},
+    this.medicines = const {},
   });
 }
 
@@ -69,12 +71,12 @@ class GetWarehouseAction {
   GetWarehouseAction(
       {this.url = '', this.token = '', this.warehouse = const {}});
 }
-// class GetMedicinesAction {
-//   final String url;
-//   final String token;
-//   final Map medicines;
-//   GetMedicinesAction({this.url = '', this.token = '', this.medicines = const {}});
-// }
+class GetMedicinesAction {
+  final String url;
+  final String? token;
+  final Map medicines;
+  GetMedicinesAction({this.url = '', this.token = '', this.medicines = const {}});
+}
 
 class LoginAction {
   final String url;
@@ -89,8 +91,9 @@ class LoginAction {
 
 class NavClickAction {
   final int currentIndex;
-
-  NavClickAction(this.currentIndex);
+  final int index;
+  final int indexPhoto;
+  NavClickAction({this.indexPhoto = 0, this.currentIndex = 0, this.index = 0});
 }
 // class ClickWarehouseAction {
 //   final int thisIndex;
@@ -134,40 +137,39 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       // handle error
     }
   } 
-  // else if (action is GetMedicinesAction) {
-  //   var response = await get(
-  //     Uri.parse(action.url),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer ${store.state.token}"
-  //     },
-  //   );
-  //   if (response.statusCode == 200) {
-  //     print("the response medicens is: ${response.body}");
-  //     next(GetMedicinesAction(medicines: json.decode(response.body)));
-  //   } else {
-  //     // handle error
-  //   }
-  // }
+  else if (action is GetMedicinesAction) {
+    print("in middleware action");
+    var response = await get(
+      Uri.parse(action.url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${store.state.token}"
+      },
+    );
+    if (response.statusCode == 200) {
+      print("the response medicens is: ${response.body}");
+      next(GetMedicinesAction(medicines: json.decode(response.body)));
+    } else {
+      // handle error
+    }
+  }
     else {
     next(action);
   }
 }
 
 AppState reducer(AppState prev, dynamic action) {
-  if (action is NavClickAction) {
-    return AppState(currentIndex: action.currentIndex);
+   if (action is NavClickAction) {
+    print("index photo is: ${action.indexPhoto}");
+    return AppState(currentIndex: action.currentIndex,index: action.index,indexPhoto: action.indexPhoto);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
   } else if (action is GetWarehouseAction) {
     return AppState(warehouse: action.warehouse);
+  } else if (action is GetMedicinesAction) {
+    print("in reduser action");
+    return AppState(medicines: action.medicines);
   } 
-  // else if (action is ClickWarehouseAction) {
-  //   print("the index is: ${action.thisIndex}");
-    // return AppState(thisIndex: action.thisIndex);
-  //   else if (action is GetMedicinesAction) {
-  //   return AppState(medicines: action.medicines);
-  // } 
   else {
     return prev;
   }

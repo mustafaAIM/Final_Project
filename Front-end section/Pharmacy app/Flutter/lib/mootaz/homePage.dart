@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 
 class homePage extends StatefulWidget {
@@ -14,6 +17,7 @@ class homePage extends StatefulWidget {
   State<homePage> createState() => _homePageState();
 }
 
+
 class _homePageState extends State<homePage> {
   List catNameAndImage = [
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
@@ -23,10 +27,48 @@ class _homePageState extends State<homePage> {
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
   ];
   int selectedIndex = 0;
-
+  List category = [];
+  List medicines = [{}];
+bool loading = true;
+  getData(index) async {
+    String? token = await getToken();
+  print(token);
+    Response response = await get(
+      Uri.parse(
+          'http://127.0.0.1:8000/api/warehouses/${index+1}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+    );
+    print("index : ${index}");
+    print(response.body);
+    if (response.statusCode == 200) {
+      print('products : ${response.body}');
+      Map data = jsonDecode(response.body);
+      setState(() {
+        loading = false;
+        category = data['categories'];
+        medicines = data['medicines'];
+        print(category);
+        print(medicines);
+      });
+    return {category,medicines};
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return StoreConnector<AppState, dynamic>(
+      converter: (store) => store.state.index,
+      builder: (context, index) {
+        if (loading) {
+        getData(index);
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Scaffold(
             body: ListView(
               children: [
                 Container(
@@ -151,15 +193,15 @@ class _homePageState extends State<homePage> {
                   height: 60,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount:20,
-                    // itemCount: data['categories'].length!,
+                    itemCount:category.length,
+                    // itemCount: getData(index).length!,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {},
                         child: Container(
                           margin: EdgeInsets.only(right: 10),
                           padding: EdgeInsets.all(10),
-                          width: 175,
+                          width: 200,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(50),
@@ -179,10 +221,10 @@ class _homePageState extends State<homePage> {
                                 ),
                                 borderRadius: BorderRadius.circular(50),
                               ),
-                              Text("${catNameAndImage[index]['name']}",
+                              Text("${category[index]}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20)),
+                                      fontSize: 17)),
                             ],
                           ),
                         ),
@@ -211,10 +253,13 @@ class _homePageState extends State<homePage> {
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, mainAxisExtent: 170),
-                    itemCount: 10,
+                    itemCount: medicines.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
+                           StoreProvider.of<AppState>(context)
+                                .dispatch(NavClickAction(indexPhoto: index));
+                          
                           Navigator.pushNamed(
                             context,
                             '/item',
@@ -242,17 +287,17 @@ class _homePageState extends State<homePage> {
                                 height: 6,
                               ),
                               Text(
-                                "Product Name",
+                                "${medicines[index]["scientific_name"]}",
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 16,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                "120\$",
+                                "${medicines[index]['price']}\$",
                                 style: TextStyle(
                                     color: Colors.redAccent,
                                     fontSize: 15,
@@ -266,13 +311,13 @@ class _homePageState extends State<homePage> {
                   ),
                 )
               ],
-            ),
-          );
+            )
+        );}
         }
-      
+    );
     
   }
-
+}
 
 class CustomSearch extends SearchDelegate {
   List username = [
