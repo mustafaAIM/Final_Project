@@ -33,6 +33,7 @@ use App\Http\Controllers\WebControllers\DisplayByCategoryController;
 use App\Http\Controllers\WebControllers\ProfileController;
 use App\Http\Controllers\WebControllers\StatusesController;
 use App\Http\Controllers\WebControllers\WReportController;
+use App\Http\Controllers\WebControllers\DisplayOrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,4 +88,5 @@ Route::middleware(['auth:api', 'user.type:Warehouse Owner'])->group( function ()
     Route::post('editpicture',[ProfileController::class ,'EditPicture']);
     Route::post('change-status',[StatusesController::class ,'ChangeStatuses']);
     Route::get('report',[WReportController::class,'report']);
+    Route::get('orders',[DisplayOrdersController::class,'DisplayOrders']);
 });

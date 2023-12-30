@@ -28,12 +28,14 @@ class MedicinDetailsController extends Controller
         }
 
         $info =[];
+        $totalquntity=0;
         foreach ($medicines as $medicine) {
             $pivot = $medicine->pivot;
             $info[] = array(
                 "quantity" => $pivot->quantity,
                 "expiration" => $pivot->expirydate
             );
+            $totalquntity+= $pivot->quantity;
         }
 
         $formattedMedicine = [
@@ -42,6 +44,7 @@ class MedicinDetailsController extends Controller
             "manufacturer_company" =>$medicine->manufacturer_company,
             'category' => $medicine->category->category,
             "price" => $medicine->pivot->price,
+            "totalquantity" => $totalquntity,
         ];
         $formattedMedicine['info'] = $info;
 
