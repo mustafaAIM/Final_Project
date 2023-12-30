@@ -27,14 +27,15 @@ class _homePageState extends State<homePage> {
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
   ];
   int selectedIndex = 0;
- 
+  List category = [];
+  List medicines = [{}];
 bool loading = true;
   getData(index) async {
     String? token = await getToken();
   print(token);
     Response response = await get(
       Uri.parse(
-          'http://127.0.0.1:8000/api/warehouses/${index}'),
+          'http://127.0.0.1:8000/api/warehouses/${index+1}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
@@ -47,17 +48,25 @@ bool loading = true;
       Map data = jsonDecode(response.body);
       setState(() {
         loading = false;
+        category = data['categories'];
+        medicines = data['medicines'];
+        print(category);
+        print(medicines);
       });
+    return {category,medicines};
     }
   }
   @override
   Widget build(BuildContext context) {
+
     return StoreConnector<AppState, dynamic>(
       converter: (store) => store.state.index,
       builder: (context, index) {
-        getData(index);
         if (loading) {
-          return CircularProgressIndicator();
+        getData(index);
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         } else {
           return Scaffold(
             body: ListView(
@@ -184,15 +193,15 @@ bool loading = true;
                   height: 60,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount:20,
-                    // itemCount: data['categories'].length!,
+                    itemCount:category.length,
+                    // itemCount: getData(index).length!,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {},
                         child: Container(
                           margin: EdgeInsets.only(right: 10),
                           padding: EdgeInsets.all(10),
-                          width: 175,
+                          width: 200,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(50),
@@ -212,10 +221,10 @@ bool loading = true;
                                 ),
                                 borderRadius: BorderRadius.circular(50),
                               ),
-                              Text("${catNameAndImage[index]['name']}",
+                              Text("${category[index]}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20)),
+                                      fontSize: 17)),
                             ],
                           ),
                         ),
@@ -244,10 +253,13 @@ bool loading = true;
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, mainAxisExtent: 170),
-                    itemCount: 10,
+                    itemCount: medicines.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
+                           StoreProvider.of<AppState>(context)
+                                .dispatch(NavClickAction(indexPhoto: index));
+                          
                           Navigator.pushNamed(
                             context,
                             '/item',
@@ -275,17 +287,17 @@ bool loading = true;
                                 height: 6,
                               ),
                               Text(
-                                "Product Name",
+                                "${medicines[index]["scientific_name"]}",
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 16,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                "120\$",
+                                "${medicines[index]['price']}\$",
                                 style: TextStyle(
                                     color: Colors.redAccent,
                                     fontSize: 15,
@@ -299,9 +311,8 @@ bool loading = true;
                   ),
                 )
               ],
-            ),
-          );
-        }
+            )
+        );}
         }
     );
     

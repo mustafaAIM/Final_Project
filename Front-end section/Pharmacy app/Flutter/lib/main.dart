@@ -42,13 +42,15 @@ Future<String?> getToken() async {
 }
 class AppState {
   int currentIndex;
- int index;
+  int index;
+  int indexPhoto;
   String token;
   Map warehouse;
   Map medicines;
   AppState({
     this.currentIndex = 0,
     this.index = 0,
+    this.indexPhoto = 0,
     this.token = '',
     this.warehouse = const {},
     this.medicines = const {},
@@ -90,7 +92,8 @@ class LoginAction {
 class NavClickAction {
   final int currentIndex;
   final int index;
-  NavClickAction({this.currentIndex = 0, this.index = 0});
+  final int indexPhoto;
+  NavClickAction({this.indexPhoto = 0, this.currentIndex = 0, this.index = 0});
 }
 // class ClickWarehouseAction {
 //   final int thisIndex;
@@ -157,8 +160,8 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
 
 AppState reducer(AppState prev, dynamic action) {
    if (action is NavClickAction) {
-    print("current index: ${action.index}");
-    return AppState(currentIndex: action.currentIndex,index: action.index);
+    print("index photo is: ${action.indexPhoto}");
+    return AppState(currentIndex: action.currentIndex,index: action.index,indexPhoto: action.indexPhoto);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
   } else if (action is GetWarehouseAction) {
