@@ -52,7 +52,8 @@ class GetWarehouseAction {
   final String url;
   final String token;
   final Map warehouse;
-  GetWarehouseAction({this.url = '', this.token = '', this.warehouse = const {}});
+  GetWarehouseAction(
+      {this.url = '', this.token = '', this.warehouse = const {}});
 }
 
 class LoginAction {
@@ -72,8 +73,6 @@ class NavClickAction {
   NavClickAction(this.currentIndex);
 }
 
-
-
 void DataMiddleware(Store store, action, NextDispatcher next) async {
   if (action is RegisterAction) {
     var response = await post(
@@ -82,14 +81,15 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       body: json.encode(action.body),
     );
 
-    print(response.body);
+    
   } else if (action is LoginAction) {
     var response = await post(
       Uri.parse(action.url),
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
+      
     );
-
+    print("response: ${response.body}");
     if (response.statusCode == 200) {
       next(LoginAction(token: json.decode(response.body)['token']));
     } else {}
@@ -101,6 +101,7 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
         "Authorization": "Bearer ${store.state.token}"
       },
     );
+    print(response.body);
     if (response.statusCode == 200) {
       print("got dataaa: ${response.body}");
       next(GetWarehouseAction(warehouse: json.decode(response.body)));
@@ -109,6 +110,7 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
     }
   }
 }
+
 AppState reducer(AppState prev, dynamic action) {
   if (action is NavClickAction) {
     return AppState(currentIndex: action.currentIndex);

@@ -28,8 +28,8 @@ class _warehousePageState extends State<warehousePage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store.state.warehouse,
-        builder: (context, data) {
-          if (data == {}) {
+        builder: (context, warehouse) {
+          if (warehouse == {}) {
             return CircularProgressIndicator();
           } else {
             return Scaffold(
@@ -77,12 +77,9 @@ class _warehousePageState extends State<warehousePage> {
             padding: EdgeInsets.all(10),
             height: 2000,
             child: ListView.builder(
-              itemCount: data.length,
+              itemCount:  warehouse['warehouses'].length,
               itemBuilder: (context, index) {
-                return StoreConnector<AppState, AppState>(
-                    converter: (store) => store.state,
-                    builder: (_, state) {
-                      return InkWell(
+                return  InkWell(
                           onTap: () {
                             StoreProvider.of<AppState>(context)
                                 .dispatch(NavClickAction(4));
@@ -114,7 +111,7 @@ class _warehousePageState extends State<warehousePage> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          "${data[index]['name']}",
+                                          "${warehouse['warehouses'][index]['name']}",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
@@ -131,7 +128,7 @@ class _warehousePageState extends State<warehousePage> {
                               ),
                             ),
                           ));
-                    });
+                    
               },
             ),
           )
