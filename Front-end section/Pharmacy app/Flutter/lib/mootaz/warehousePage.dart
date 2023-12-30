@@ -140,8 +140,9 @@ class _warehousePageState extends State<warehousePage> {
       ),
     );
   }},
-   onInit: (store) {
-        store.dispatch(GetWarehouseAction(token: store.state.token,url: "http://127.0.0.1:8000/api/warehouses"));
+   onInit: (store) async {
+     String? token = await getToken();
+        store.dispatch(GetWarehouseAction(token: token,url: "http://127.0.0.1:8000/api/warehouses"));
       },
   );
   }
