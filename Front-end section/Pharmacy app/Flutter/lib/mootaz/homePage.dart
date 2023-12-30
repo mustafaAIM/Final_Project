@@ -3,6 +3,7 @@ import 'package:flutter1/Mootaz/bottomNav.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 
 class homePage extends StatefulWidget {
@@ -14,6 +15,7 @@ class homePage extends StatefulWidget {
   State<homePage> createState() => _homePageState();
 }
 
+
 class _homePageState extends State<homePage> {
   List catNameAndImage = [
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
@@ -23,9 +25,29 @@ class _homePageState extends State<homePage> {
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
   ];
   int selectedIndex = 0;
-
+ 
+getData(index) async{
+  print("the index is ${index}");
+     String? token = await getToken();
+     Response response = await get(
+     Uri.parse('http://127.0.0.1:8000/api/warehouses/$index'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+    );
+    print("index : ${index}");
+    if (response.statusCode == 200) {
+      print('products : ${response.body}');
+      setState(() {});
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    StoreConnector<AppState, dynamic>(
+      converter: (store) => store.state.index,
+      builder: (context, index) {
+        return getData(index);});
     return Scaffold(
             body: ListView(
               children: [

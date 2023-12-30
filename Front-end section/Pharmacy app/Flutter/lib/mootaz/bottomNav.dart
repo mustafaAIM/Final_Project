@@ -27,7 +27,7 @@ class _bottomNavState extends State<bottomNav> {
               gap: 8,
               padding: EdgeInsets.all(16),
               onTabChange: (value) => {
-                StoreProvider.of<AppState>(context).dispatch(NavClickAction(value)),
+                StoreProvider.of<AppState>(context).dispatch(NavClickAction(currentIndex:value)),
               },
               tabs: const [
                 GButton(icon: Icons.home_outlined),

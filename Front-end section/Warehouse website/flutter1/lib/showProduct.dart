@@ -59,7 +59,7 @@ class _showProductPageState extends State<showProductPage> {
     StoreConnector<AppState, dynamic>(
       converter: (store) => store.state.index,
       builder: (context, data) {
-        print("got index")
+       return Text("");
       });
     if (response.statusCode == 200) {
       print('products : ${response.body}');
