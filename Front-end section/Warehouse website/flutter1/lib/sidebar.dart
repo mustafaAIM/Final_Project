@@ -73,9 +73,6 @@ class _sidebarState extends State<sidebar> {
                       onTap: () {
                         StoreProvider.of<AppState>(context)
                             .dispatch(NavClickAction(currentIndex: 1));
-                        print(StoreProvider.of<AppState>(context)
-                            .state
-                            .currentIndex);
                       },
                       child: ListTile(
                           tileColor: Colors.orange,

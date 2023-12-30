@@ -38,6 +38,7 @@ class ReadMedicinesController extends Controller
                 "medicine_id" => $medicine->pivot->medicine_id,
                 "trading_name" => $medicine->trading_name,
                 "scientific_name" => $medicine->scientific_name,
+                "price" => $medicine->pivot->price,
                 "total_quantity" => $totalQuantity,
                 "manufacturer_company" => $medicine->manufacturer_company,
             );
