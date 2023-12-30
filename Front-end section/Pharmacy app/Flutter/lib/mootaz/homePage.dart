@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 import 'package:flutter1/main.dart';
@@ -26,29 +28,38 @@ class _homePageState extends State<homePage> {
   ];
   int selectedIndex = 0;
  
-getData(index) async{
-  print("the index is ${index}");
-     String? token = await getToken();
-     Response response = await get(
-     Uri.parse('http://127.0.0.1:8000/api/warehouses/$index'),
+bool loading = true;
+  getData(index) async {
+    String? token = await getToken();
+  print(token);
+    Response response = await get(
+      Uri.parse(
+          'http://127.0.0.1:8000/api/warehouses/${index}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
       },
     );
     print("index : ${index}");
+    print(response.body);
     if (response.statusCode == 200) {
       print('products : ${response.body}');
-      setState(() {});
+      Map data = jsonDecode(response.body);
+      setState(() {
+        loading = false;
+      });
     }
   }
   @override
   Widget build(BuildContext context) {
-    StoreConnector<AppState, dynamic>(
+    return StoreConnector<AppState, dynamic>(
       converter: (store) => store.state.index,
       builder: (context, index) {
-        return getData(index);});
-    return Scaffold(
+        getData(index);
+        if (loading) {
+          return CircularProgressIndicator();
+        } else {
+          return Scaffold(
             body: ListView(
               children: [
                 Container(
@@ -291,10 +302,11 @@ getData(index) async{
             ),
           );
         }
-      
+        }
+    );
     
   }
-
+}
 
 class CustomSearch extends SearchDelegate {
   List username = [

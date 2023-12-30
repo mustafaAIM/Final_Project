@@ -102,7 +102,7 @@ class WReportController extends Controller
         $countOfRemaining = array_sum($medicinePercentages) - array_sum($topFiveMedicinePercentages);
 
         // Create a new array with the first five elements and count of the rest
-        $newArray = array_merge($topFiveMedicinePercentages, ['others' => $countOfRemaining]);
+        $newArray = array_merge($topFiveMedicinePercentages, ['other' => $countOfRemaining]);
 
 
         return response()->json([
@@ -113,4 +113,5 @@ class WReportController extends Controller
             'medicinePercentages' => $newArray,
             'dailyOrderTotals' => $dailyOrderTotals,
         ], 200);
-    }}
+    }
+}

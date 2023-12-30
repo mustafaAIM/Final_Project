@@ -84,7 +84,7 @@ class _warehousePageState extends State<warehousePage> {
                 return  InkWell(
                           onTap: () {
                            StoreProvider.of<AppState>(context)
-                                .dispatch(NavClickAction(currentIndex: 4,index: index+1));
+                                .dispatch(NavClickAction(currentIndex: 4,index: index));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 10),
