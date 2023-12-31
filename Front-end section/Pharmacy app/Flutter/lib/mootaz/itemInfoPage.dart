@@ -33,6 +33,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
   String expirationDate = "";
   List<dynamic> info = [];
   String value = '';
+  Map cart = {};
   getData(index, indexPhoto) async {
     String? token = await getToken();
     Response response = await get(
@@ -56,8 +57,16 @@ class _itemInfoPageState extends State<itemInfoPage> {
         info = data["medicine"]["info"].map((item) {
           return '${item['expiration']}. Q:${item['quantity'].toString()}';
         }).toList();
+        info = data["medicine"]["info"].map((item) {
+          return '${item['expiration']}. Q:${item['quantity'].toString()}';
+        }).toList();
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
+        cart["warehouse_id"] = index + 1;
+        cart["medicines"] = [];
+cart["medicines"]
+    .add({"medicine_id": data['medicine']["id"], "scientific_name": data['medicine']['scientific_name'], "price": data['medicine']['price']});
+    // print("this is carttttttttt${cart}");
       });
     }
   }
@@ -120,7 +129,6 @@ class _itemInfoPageState extends State<itemInfoPage> {
                                   ),
                                 ],
                               ),
-                             
                             ],
                           ),
                           SizedBox(
@@ -178,23 +186,25 @@ class _itemInfoPageState extends State<itemInfoPage> {
                             height: 10,
                           ),
                           Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
                                   LocaleText(
                                     "available",
                                     style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     ": ${total_quantity} ",
                                     style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
-                               Text(
+                              Text(
                                 "${price}\$",
                                 style: TextStyle(
                                     fontSize: 21,
@@ -219,7 +229,6 @@ class _itemInfoPageState extends State<itemInfoPage> {
                                 child: DropdownButton<String>(
                                   enableFeedback: false,
                                   underline: SizedBox(),
-                                  // value: expirationDate,
                                   isExpanded: true,
                                   icon: Padding(
                                     padding: EdgeInsets.only(right: 10),

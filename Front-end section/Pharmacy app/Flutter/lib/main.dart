@@ -85,14 +85,6 @@ class GetWarehouseAction {
       {this.url = '', this.token = '', this.warehouse = const {}});
 }
 
-class GetMedicinesAction {
-  final String url;
-  final String? token;
-  final Map medicines;
-  GetMedicinesAction(
-      {this.url = '', this.token = '', this.medicines = const {}});
-}
-
 class LoginAction {
   final String url;
   final Map body;
@@ -110,11 +102,12 @@ class NavClickAction {
   final int indexPhoto;
   NavClickAction({this.indexPhoto = 0, this.currentIndex = 0, this.index = 0});
 }
-// class ClickWarehouseAction {
-//   final int thisIndex;
 
-//   ClickWarehouseAction(this.thisIndex);
-// }
+class cartAction {
+  final Map cart;
+
+  cartAction({this.cart = const {}});
+}
 
 void DataMiddleware(Store store, action, NextDispatcher next) async {
   if (action is RegisterAction) {
@@ -150,22 +143,6 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
     } else {
       // handle error
     }
-  } else if (action is GetMedicinesAction) {
-    var response = await get(
-      Uri.parse(action.url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${store.state.token}"
-      },
-    );
-    if (response.statusCode == 404) {
-      next(GetMedicinesAction(medicines: const {}));
-    }
-    if (response.statusCode == 200) {
-      next(GetMedicinesAction(medicines: json.decode(response.body)));
-    } else {
-      // handle error
-    }
   } else {
     next(action);
   }
@@ -181,8 +158,6 @@ AppState reducer(AppState prev, dynamic action) {
     return AppState(token: action.token);
   } else if (action is GetWarehouseAction) {
     return AppState(warehouse: action.warehouse);
-  } else if (action is GetMedicinesAction) {
-    return AppState(medicines: action.medicines);
   } else if (action is addToCartAction) {
     action.cart.add({'name': "${action.name}", "price": "${action.price}"});
     print(action.cart);

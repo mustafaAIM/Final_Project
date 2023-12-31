@@ -36,7 +36,7 @@ class _cartPageState extends State<cartPage> {
     "0",
     "0",
   ];
-
+  
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
+import 'package:flutter1/main.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class boxApp extends StatefulWidget {
@@ -42,7 +44,7 @@ class _boxAppState extends State<boxApp> {
             ),
             InkWell(
               onTap: () {
-               
+                
               },
               child: Container(
                 padding: EdgeInsets.all(10),
