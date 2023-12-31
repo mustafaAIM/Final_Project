@@ -56,7 +56,7 @@ Route::middleware(['auth:api', 'user.type:Pharmacist'])->group( function () {
     Route::get('get-medicines-by-category/{warehouse_id}/{category}',[MedicinesByCategoryController::class,'getMedicinesByCategories']);
     Route::get('search/{id}/{query}',[SearchMedicineController::class,'searchMedicines']);
     Route::post('make-order',[MakeOrderController::class,'order']);
-    Route::get('orders',[ListOrdersController::class,'listOrders']);
+    Route::get('orders-list',[ListOrdersController::class,'listOrders']);
     Route::get('order-details/{id}',[OrderDetailsController::class,'orderDetails']);
     Route::post('add-to-favorites',[AddToFavoritesController::class,'addFavorites']);
     Route::get('favorites',[GetFavoritesController::class,'favorites']);

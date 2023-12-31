@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ApplicationControlleres;
 use App\Http\Controllers\Controller;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SpecificMedicineController extends Controller{
   public function medicine($id,$medicine_id){
@@ -44,6 +45,14 @@ class SpecificMedicineController extends Controller{
           
         $medicine_i['info'] = $info;
         $medicine_i['total_quantity'] = $total_quantity;
+        
+        $user = Auth::user();
+        $prefrences = $user ->favorites ; 
+        $medicine_i['favorites'] = false;
+        foreach($prefrences as $prefrence){
+          if($prefrence->scientific_name === $medicine_i["scientific_name"])
+                $medicine_i['favorites'] = true;
+        }
 
         return response()->json(['medicine'=>$medicine_i],200);
       }

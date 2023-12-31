@@ -10,17 +10,19 @@ use App\Models\Warehouse_Medicine;
 
 class GetFavoritesController extends Controller
 {
-      public function favorites(){
-            $user = Auth::user();
-            $favorites = $user -> favorites;
-            $data = [];
-            foreach($favorites as $item){
-              $medicine = Medicine::find($item -> pivot -> medicine_id);
-              $data [] = [
-                "id" => $medicine->id,
-                "trading_name" => $medicine->trading_name,
-              ];
-            }
-            return response()->json($data);      
-      }
+  public function favorites(){
+    $user = Auth::user();
+    $favorites = $user -> favorites;
+    $data = [];
+    foreach($favorites as $item){
+      $medicine = Medicine::findOrFail($item -> pivot -> medicine_id);
+      $price = Warehouse_Medicine::findOrFail($item -> pivot -> medicine_id)->price;
+      $data [] = [
+        "id" => $medicine->id,
+        "trading_name" => $medicine->trading_name,
+        "price" => $price
+      ];
+    }
+    return response()->json($data);      
+}
 }
