@@ -21,7 +21,6 @@ class _homePageState extends State<homePage> {
   int selectedIndex = 0;
   List category = [];
   List medicines = [{}];
-  String selectedCategory = 'Vitamins';
   List catNameAndImage = [
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
@@ -231,6 +230,7 @@ class _homePageState extends State<homePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: category.length,
+                      // itemCount: getData(index).length!,
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
@@ -287,70 +287,67 @@ class _homePageState extends State<homePage> {
                   width: 100,
                   padding: EdgeInsets.all(15),
                   child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, mainAxisExtent: 170),
-                      itemCount: medicines.length,
-                      itemBuilder: (context, index) {
-                        //  if (medicines[index]["category"] == selectedCategory) {
-                        return InkWell(
-                          onTap: () {
-                            StoreProvider.of<AppState>(context)
-                                .dispatch(NavClickAction(indexPhoto: index));
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, mainAxisExtent: 170),
+                    itemCount: medicines.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          // StoreProvider.of<AppState>(context)
+                          //     .dispatch(NavClickAction(indexPhoto: medicines[index]['id']));
 
-                            Navigator.pushNamed(
-                              context,
-                              '/item',
-                              arguments: medicines[index]['id']
-                            );
-                          },
-                          child: Card(
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[300],
+                          Navigator.pushNamed(
+                            context,
+                            '/item',
+                            arguments: medicines[index]['id']
+                          );
+                        },
+                        child: Card(
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.grey[300],
+                                ),
+                                width: 120,
+                                height: 100,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset(
+                                    "images/product2.jpg",
+                                    fit: BoxFit.fill,
                                   ),
-                                  width: 120,
-                                  height: 100,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.asset(
-                                      "images/product2.jpg",
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
                                 ),
-                                SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  "${medicines[index]["scientific_name"]}",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "${medicines[index]['price']}\$",
-                                  style: TextStyle(
-                                      color: Colors.redAccent,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              Text(
+                                "${medicines[index]["scientific_name"]}",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "${medicines[index]['price']}\$",
+                                style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
                           ),
-                        );
-                      }
-                      // ;
-                      // },
-                      ),
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             ));
@@ -450,9 +447,9 @@ class CustomSearch extends SearchDelegate {
       );
     } else {
       firstChar = medicines
-          .where((element) => element["scientific_name"].contains(query))
-          .map((element) => element["scientific_name"])
-          .toList();
+  .where((element) => element["scientific_name"].contains(query))
+  .map((element) => element["scientific_name"])
+  .toList();
       return ListView.builder(
         itemCount: firstChar!.length,
         itemBuilder: (context, index) {
