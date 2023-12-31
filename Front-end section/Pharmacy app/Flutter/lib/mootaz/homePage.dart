@@ -18,6 +18,10 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  int selectedIndex = 0;
+  List category = [];
+  List medicines = [{}];
+  String selectedCategory = 'Vitamins';
   List catNameAndImage = [
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
@@ -25,11 +29,8 @@ class _homePageState extends State<homePage> {
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
   ];
-  int selectedIndex = 0;
-  List category = [];
-  List medicines = [{}];
   bool loading = true;
-  getData(index, context,store) async {
+  getData(index, context, store) async {
     String? token = await getToken();
     print(token);
     Response response = await get(
@@ -54,7 +55,6 @@ class _homePageState extends State<homePage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                     store.dispatch(NavClickAction(currentIndex: 0));
-                    
                   },
                 ),
               ],
@@ -71,7 +71,31 @@ class _homePageState extends State<homePage> {
         print(category);
         print(medicines);
       });
-      return {category, medicines};
+    }
+  }
+
+  GetCategory(index, context, store, category) async {
+    String? token = await getToken();
+    print(index);
+    print(category);
+    Response response = await get(
+      Uri.parse('http://127.0.0.1:8000/api/get-medicines-by-category/${index + 1}/$category'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+    );
+    print("index : ${index}");
+    print(response.body);
+    // if (response.statusCode == 404) {
+
+    // }
+    if (response.statusCode == 200) {
+      print('products : ${response.body}');
+      Map data = jsonDecode(response.body);
+      setState(() {
+        medicines = data['medicines'];
+      });
     }
   }
 
@@ -81,7 +105,7 @@ class _homePageState extends State<homePage> {
         converter: (store) => store,
         builder: (context, store) {
           if (loading) {
-            getData(store.state.index, context,store);
+            getData(store.state.index, context, store);
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -121,7 +145,7 @@ class _homePageState extends State<homePage> {
                                       onPressed: () => {
                                         showSearch(
                                             context: context,
-                                            delegate: CustomSearch())
+                                            delegate: CustomSearch(medicines))
                                       },
                                     ),
                                     IconButton(
@@ -212,10 +236,12 @@ class _homePageState extends State<homePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: category.length,
-                      // itemCount: getData(index).length!,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            return GetCategory(store.state.index, context,
+                                store, category[index]);
+                          },
                           child: Container(
                             margin: EdgeInsets.only(right: 10),
                             padding: EdgeInsets.all(10),
@@ -266,66 +292,69 @@ class _homePageState extends State<homePage> {
                   width: 100,
                   padding: EdgeInsets.all(15),
                   child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, mainAxisExtent: 170),
-                    itemCount: medicines.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          StoreProvider.of<AppState>(context)
-                              .dispatch(NavClickAction(indexPhoto: index));
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, mainAxisExtent: 170),
+                      itemCount: medicines.length,
+                      itemBuilder: (context, index) {
+                        //  if (medicines[index]["category"] == selectedCategory) {
+                        return InkWell(
+                          onTap: () {
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(NavClickAction(indexPhoto: index));
 
-                          Navigator.pushNamed(
-                            context,
-                            '/item',
-                          );
-                        },
-                        child: Card(
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.grey[300],
-                                ),
-                                width: 120,
-                                height: 100,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset(
-                                    "images/product2.jpg",
-                                    fit: BoxFit.fill,
+                            Navigator.pushNamed(
+                              context,
+                              '/item',
+                            );
+                          },
+                          child: Card(
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.grey[300],
+                                  ),
+                                  width: 120,
+                                  height: 100,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.asset(
+                                      "images/product2.jpg",
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              Text(
-                                "${medicines[index]["scientific_name"]}",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "${medicines[index]['price']}\$",
-                                style: TextStyle(
-                                    color: Colors.redAccent,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
+                                SizedBox(
+                                  height: 6,
+                                ),
+                                Text(
+                                  "${medicines[index]["scientific_name"]}",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "${medicines[index]['price']}\$",
+                                  style: TextStyle(
+                                      color: Colors.redAccent,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      }
+                      // ;
+                      // },
+                      ),
                 )
               ],
             ));
@@ -335,27 +364,20 @@ class _homePageState extends State<homePage> {
 }
 
 class CustomSearch extends SearchDelegate {
-  List username = [
-    "mohh",
-    "shady",
-    "mohannd",
-    "mootaz",
-    "kenan",
-    "kamal",
-    "laith",
-    "omar",
-    "moafaq",
-    "hamza"
-  ];
   List? firstChar;
-
+  final List medicines;
+  // Initialize the field in the constructor
+  CustomSearch(this.medicines);
+  // The rest of the code
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
         icon: Icon(Icons.arrow_forward_outlined),
         onPressed: () {
-          close(context, ());
+          Navigator.of(context).pop();
+          StoreProvider.of<AppState>(context)
+              .dispatch(NavClickAction(currentIndex: 4));
         },
       )
     ];
@@ -380,11 +402,17 @@ class CustomSearch extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     if (query == "") {
       return ListView.builder(
-        itemCount: username.length,
+        itemCount: medicines.length,
         itemBuilder: (context, index) {
           return InkWell(
               onTap: () {
-                Navigator.pushNamed(context, "/item");
+                StoreProvider.of<AppState>(context)
+                    .dispatch(NavClickAction(indexPhoto: index));
+
+                Navigator.pushNamed(
+                  context,
+                  '/item',
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 10),
@@ -411,9 +439,9 @@ class CustomSearch extends SearchDelegate {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "${username[index]}",
+                              "${medicines[index]["scientific_name"]}",
                               style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -425,7 +453,10 @@ class CustomSearch extends SearchDelegate {
         },
       );
     } else {
-      firstChar = username.where((element) => element.contains(query)).toList();
+      firstChar = medicines
+          .where((element) => element["scientific_name"].contains(query))
+          .map((element) => element["scientific_name"])
+          .toList();
       return ListView.builder(
         itemCount: firstChar!.length,
         itemBuilder: (context, index) {
@@ -460,7 +491,7 @@ class CustomSearch extends SearchDelegate {
                             Text(
                               "${firstChar?[index]}",
                               style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),

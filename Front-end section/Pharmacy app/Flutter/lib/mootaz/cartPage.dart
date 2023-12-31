@@ -35,7 +35,7 @@ class _cartPageState extends State<cartPage> {
     "0",
     "0",
   ];
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,14 +61,18 @@ class _cartPageState extends State<cartPage> {
                         IconButton(
                           icon:
                               Icon(Icons.star, color: Colors.yellow, size: 35),
-                          onPressed: () => {},
+                          onPressed: () => {
+                             Navigator.pushNamed(context, '/favoritePage')
+                          },
                         ),
                         IconButton(
                           icon: Icon(
                             Icons.account_circle,
                             size: 35,
                           ),
-                          onPressed: () => {},
+                          onPressed: () => {
+                            Navigator.pushNamed(context, "/ProfilePage")
+                          },
                         )
                       ]),
                     )
@@ -84,10 +88,10 @@ class _cartPageState extends State<cartPage> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+                  crossAxisCount: 2,
                   mainAxisExtent: 210,
                   crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+                  mainAxisSpacing: 20,
                   childAspectRatio: 2),
               itemCount: 20,
               itemBuilder: (context, index) {
@@ -95,7 +99,7 @@ class _cartPageState extends State<cartPage> {
                   children: [
                     Container(
                       width: 150,
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
@@ -117,13 +121,13 @@ class _cartPageState extends State<cartPage> {
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: 4,
-                            ),
+                            // SizedBox(
+                            //   height: 4,
+                            // ),
                             Text(
                               "Product",
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: 6,
@@ -177,6 +181,7 @@ class _cartPageState extends State<cartPage> {
                       height: 0.2,
                     ),
                     Container(
+                      width: 150,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(

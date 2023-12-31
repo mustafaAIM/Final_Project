@@ -48,14 +48,14 @@ class AppState {
   int indexPhoto;
   String token;
   Map warehouse;
-  Map medicines;
+  Map cart;
   AppState({
     this.currentIndex = 0,
     this.index = 0,
     this.indexPhoto = 0,
     this.token = '',
     this.warehouse = const {},
-    this.medicines = const {},
+    this.cart = const {},
   });
 }
 
@@ -72,14 +72,6 @@ class GetWarehouseAction {
   final Map warehouse;
   GetWarehouseAction(
       {this.url = '', this.token = '', this.warehouse = const {}});
-}
-
-class GetMedicinesAction {
-  final String url;
-  final String? token;
-  final Map medicines;
-  GetMedicinesAction(
-      {this.url = '', this.token = '', this.medicines = const {}});
 }
 
 class LoginAction {
@@ -99,11 +91,12 @@ class NavClickAction {
   final int indexPhoto;
   NavClickAction({this.indexPhoto = 0, this.currentIndex = 0, this.index = 0});
 }
-// class ClickWarehouseAction {
-//   final int thisIndex;
 
-//   ClickWarehouseAction(this.thisIndex);
-// }
+class cartAction {
+  final Map cart;
+
+  cartAction({this.cart = const {}});
+}
 
 void DataMiddleware(Store store, action, NextDispatcher next) async {
   if (action is RegisterAction) {
@@ -140,24 +133,6 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
     } else {
       // handle error
     }
-  } else if (action is GetMedicinesAction) {
-    print("in middleware action");
-    var response = await get(
-      Uri.parse(action.url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${store.state.token}"
-      },
-    );
-    if (response.statusCode == 404) {
-      next(GetMedicinesAction(medicines: const {}));
-    }
-    if (response.statusCode == 200) {
-      print("the response medicens is: ${response.body}");
-      next(GetMedicinesAction(medicines: json.decode(response.body)));
-    } else {
-      // handle error
-    }
   } else {
     next(action);
   }
@@ -165,7 +140,6 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
 
 AppState reducer(AppState prev, dynamic action) {
   if (action is NavClickAction) {
-    print("index photo is: ${action.indexPhoto}");
     return AppState(
         currentIndex: action.currentIndex,
         index: action.index,
@@ -174,9 +148,9 @@ AppState reducer(AppState prev, dynamic action) {
     return AppState(token: action.token);
   } else if (action is GetWarehouseAction) {
     return AppState(warehouse: action.warehouse);
-  } else if (action is GetMedicinesAction) {
-    print("in reduser action");
-    return AppState(medicines: action.medicines);
+  } else if (action is cartAction) {
+    print("this is cartttttttttt in action ${action.cart}");
+    return AppState(cart: action.cart);
   } else {
     return prev;
   }
