@@ -31,7 +31,6 @@ class _homePageState extends State<homePage> {
   ];
   bool loading = true;
   getData(index, context, store) async {
-  getData(index, context, store) async {
     String? token = await getToken();
     print(token);
     Response response = await get(
@@ -107,7 +106,6 @@ class _homePageState extends State<homePage> {
         builder: (context, store) {
           if (loading) {
             getData(store.state.index, context, store);
-            getData(store.state.index, context, store);
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -147,7 +145,6 @@ class _homePageState extends State<homePage> {
                                       onPressed: () => {
                                         showSearch(
                                             context: context,
-                                            delegate: CustomSearch(medicines))
                                             delegate: CustomSearch(medicines))
                                       },
                                     ),
@@ -310,6 +307,7 @@ class _homePageState extends State<homePage> {
                             Navigator.pushNamed(
                               context,
                               '/item',
+                              arguments: medicines[index]['id']
                             );
                           },
                           child: Card(
@@ -372,19 +370,12 @@ class CustomSearch extends SearchDelegate {
   // Initialize the field in the constructor
   CustomSearch(this.medicines);
   // The rest of the code
-  final List medicines;
-  // Initialize the field in the constructor
-  CustomSearch(this.medicines);
-  // The rest of the code
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
         icon: Icon(Icons.arrow_forward_outlined),
         onPressed: () {
-          Navigator.of(context).pop();
-          StoreProvider.of<AppState>(context)
-              .dispatch(NavClickAction(currentIndex: 4));
           Navigator.of(context).pop();
           StoreProvider.of<AppState>(context)
               .dispatch(NavClickAction(currentIndex: 4));
@@ -413,17 +404,9 @@ class CustomSearch extends SearchDelegate {
     if (query == "") {
       return ListView.builder(
         itemCount: medicines.length,
-        itemCount: medicines.length,
         itemBuilder: (context, index) {
           return InkWell(
               onTap: () {
-                StoreProvider.of<AppState>(context)
-                    .dispatch(NavClickAction(indexPhoto: index));
-
-                Navigator.pushNamed(
-                  context,
-                  '/item',
-                );
                 StoreProvider.of<AppState>(context)
                     .dispatch(NavClickAction(indexPhoto: index));
 
@@ -458,9 +441,7 @@ class CustomSearch extends SearchDelegate {
                           children: [
                             Text(
                               "${medicines[index]["scientific_name"]}",
-                              "${medicines[index]["scientific_name"]}",
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -511,7 +492,6 @@ class CustomSearch extends SearchDelegate {
                             Text(
                               "${firstChar?[index]}",
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ],
