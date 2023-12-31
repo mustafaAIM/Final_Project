@@ -237,10 +237,6 @@ class _homePageState extends State<homePage> {
                             return GetCategory(store.state.index, context,
                                 store, category[index]);
                           },
-                          onTap: () {
-                            return GetCategory(store.state.index, context,
-                                store, category[index]);
-                          },
                           child: Container(
                             margin: EdgeInsets.only(right: 10),
                             padding: EdgeInsets.all(10),
