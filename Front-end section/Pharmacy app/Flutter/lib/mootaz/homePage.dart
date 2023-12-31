@@ -29,11 +29,12 @@ class _homePageState extends State<homePage> {
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
   ];
   bool loading = true;
-  getData(index, context, store) async {
+  GetCategory(index, context, store, category) async {
     String? token = await getToken();
-    print(token);
+    print(index);
+    print(category);
     Response response = await get(
-      Uri.parse('http://127.0.0.1:8000/api/warehouses/${index + 1}'),
+      Uri.parse('http://127.0.0.1:8000/api/get-medicines-by-category/${index + 1}/$category'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
@@ -41,6 +42,26 @@ class _homePageState extends State<homePage> {
     );
     print("index : ${index}");
     print(response.body);
+    // if (response.statusCode == 404) {
+
+    // }
+    if (response.statusCode == 200) {
+      print('products : ${response.body}');
+      Map data = jsonDecode(response.body);
+      setState(() {
+        medicines = data['medicines'];
+      });
+    }
+  }
+  getData(index, context, store) async {
+    String? token = await getToken();
+    Response response = await get(
+      Uri.parse('http://127.0.0.1:8000/api/warehouses/${index + 1}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+    );
     if (response.statusCode == 404) {
       showDialog(
           context: context,
@@ -61,14 +82,12 @@ class _homePageState extends State<homePage> {
           });
     }
     if (response.statusCode == 200) {
-      print('products : ${response.body}');
       Map data = jsonDecode(response.body);
       setState(() {
         loading = false;
         category = data['categories'];
         medicines = data['medicines'];
-        print(category);
-        print(medicines);
+        
       });
       
     }
@@ -214,7 +233,10 @@ class _homePageState extends State<homePage> {
                       // itemCount: getData(index).length!,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            return GetCategory(store.state.index, context,
+                                store, category[index]);
+                          },
                           child: Container(
                             margin: EdgeInsets.only(right: 10),
                             padding: EdgeInsets.all(10),

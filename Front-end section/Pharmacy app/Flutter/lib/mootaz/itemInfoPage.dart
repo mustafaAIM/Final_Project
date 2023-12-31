@@ -35,7 +35,6 @@ class _itemInfoPageState extends State<itemInfoPage> {
   String value = '';
   getData(index, indexPhoto) async {
     String? token = await getToken();
-    print(token);
     Response response = await get(
       Uri.parse(
           'http://127.0.0.1:8000/api/warehouses/${index+1}/${indexPhoto}'),
@@ -44,10 +43,8 @@ class _itemInfoPageState extends State<itemInfoPage> {
         "Authorization": "Bearer ${token}"
       },
     );
-    print("index : ${index}");
-    print(response.body);
+  
     if (response.statusCode == 200) {
-      print('products : ${response.body}');
       Map data = jsonDecode(response.body);
       setState(() {
         loading = false;
@@ -59,7 +56,6 @@ class _itemInfoPageState extends State<itemInfoPage> {
         info = data["medicine"]["info"].map((item) {
           return '${item['expiration']}. Q:${item['quantity'].toString()}';
         }).toList();
-        print("this is infooooooooooooooo${info}");
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
       });
@@ -263,7 +259,10 @@ class _itemInfoPageState extends State<itemInfoPage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: MaterialButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                
+
+                              },
                               child: LocaleText(
                                 "add",
                                 style: TextStyle(

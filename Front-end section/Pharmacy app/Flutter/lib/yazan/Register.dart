@@ -34,7 +34,6 @@ class _RegisterpageState extends State<Registerpage> {
       "gender": "$gender",
       'type': 'pharmacist',
     };
-    print(userDetails);
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(

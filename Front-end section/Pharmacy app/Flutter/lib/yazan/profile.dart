@@ -35,7 +35,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void logout(context) async {
     String? token = await getToken();
-    print(token);
     Response response = await post(
       Uri.parse('http://127.0.0.1:8000/api/logout'),
       headers: {

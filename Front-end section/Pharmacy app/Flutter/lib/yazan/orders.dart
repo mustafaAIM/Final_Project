@@ -83,7 +83,6 @@ class _MyWidgetState extends State<OrdersPage> {
   bool loading = true;
   void getData() async {
     String? token = await getToken();
-    print(token);
     Response response = await get(
       Uri.parse('http://127.0.0.1:8000/api/orders-list'),
       headers: {
@@ -101,7 +100,6 @@ class _MyWidgetState extends State<OrdersPage> {
           'delivery date': order['estimated_date']
         };
       }).toList();
-      print("data ${data}");
       setState(() {
         orders = data;
         loading = false;
@@ -218,11 +216,7 @@ class _MyWidgetState extends State<OrdersPage> {
                               icon: Icon(Icons.arrow_forward),
                               onPressed: () async {
                                 List details = await getOrderDetails(orders[index]['id']);
-                                print([
-                                  orders[index],
-                                  details[0]['medicines'],
-                                  details[0]['total_price']
-                                ]);
+                                
                                   Navigator.pushNamed(context, '/orderDetails',
                                       arguments: [orders[index],details[0]['medicines'],details[0]['total_price']]);
                               },

@@ -23,7 +23,6 @@ List favourites = [
 class _favoritePageState extends State<favoritePage> {
   void getData() async {
     String? token = await getToken();
-    print(token);
     Response response = await get(
       Uri.parse('http://127.0.0.1:8000/api/favorites'),
       headers: {
