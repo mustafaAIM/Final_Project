@@ -33,9 +33,9 @@ class _itemInfoPageState extends State<itemInfoPage> {
   String expirationDate = "";
   List<dynamic> info = [];
   String value = '';
-  Map cart = {};
   getData(index, indexPhoto) async {
     String? token = await getToken();
+    print(token);
     Response response = await get(
       Uri.parse(
           'http://127.0.0.1:8000/api/warehouses/${index+1}/${indexPhoto}'),
@@ -44,8 +44,10 @@ class _itemInfoPageState extends State<itemInfoPage> {
         "Authorization": "Bearer ${token}"
       },
     );
-  
+    print("index : ${index}");
+    print(response.body);
     if (response.statusCode == 200) {
+      print('products : ${response.body}');
       Map data = jsonDecode(response.body);
       setState(() {
         loading = false;
@@ -57,16 +59,9 @@ class _itemInfoPageState extends State<itemInfoPage> {
         info = data["medicine"]["info"].map((item) {
           return '${item['expiration']}. Q:${item['quantity'].toString()}';
         }).toList();
-        info = data["medicine"]["info"].map((item) {
-          return '${item['expiration']}. Q:${item['quantity'].toString()}';
-        }).toList();
+        print("this is infooooooooooooooo${info}");
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
-        cart["warehouse_id"] = index + 1;
-        cart["medicines"] = [];
-cart["medicines"]
-    .add({"medicine_id": data['medicine']["id"], "scientific_name": data['medicine']['scientific_name'], "price": data['medicine']['price']});
-    // print("this is carttttttttt${cart}");
       });
     }
   }
@@ -129,6 +124,7 @@ cart["medicines"]
                                   ),
                                 ],
                               ),
+                             
                             ],
                           ),
                           SizedBox(
@@ -186,25 +182,23 @@ cart["medicines"]
                             height: 10,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
                                   LocaleText(
                                     "available",
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     ": ${total_quantity} ",
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 18, fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
-                              Text(
+                               Text(
                                 "${price}\$",
                                 style: TextStyle(
                                     fontSize: 21,
@@ -229,6 +223,7 @@ cart["medicines"]
                                 child: DropdownButton<String>(
                                   enableFeedback: false,
                                   underline: SizedBox(),
+                                  // value: expirationDate,
                                   isExpanded: true,
                                   icon: Padding(
                                     padding: EdgeInsets.only(right: 10),
