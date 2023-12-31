@@ -30,6 +30,7 @@ class _homePageState extends State<homePage> {
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
   ];
   bool loading = true;
+
   getData(index, context, store) async {
     String? token = await getToken();
     print(token);
