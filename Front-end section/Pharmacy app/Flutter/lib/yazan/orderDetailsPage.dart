@@ -112,7 +112,7 @@ class _orderDetailsPageState extends State<orderDetailsPage> {
                       margin: EdgeInsets.only(bottom: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [Text("${productDetails[1][index]['amount']} x ${productDetails[1][index]['name']}",
+                        children: [Text("${productDetails[1][index]['quantity']} x ${productDetails[1][index]['trading_name']}",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 15

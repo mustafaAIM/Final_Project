@@ -39,9 +39,7 @@ class CreateMedicineController extends Controller
         //$warehouseId = $warehouse->id;
 
         $medicine = Medicine::where('scientific_name', $request->scientific_name)
-            ->where('trading_name', $request->trading_name)
-            ->where('manufacturer_company', $request->manufacturer_company)
-            ->first();
+          ->first();
 
         if (!$medicine) {
             $categoryName = $request->category;

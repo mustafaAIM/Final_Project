@@ -114,17 +114,13 @@ class _warehousePageState extends State<warehousePage> {
                                   Container(
                                     padding: EdgeInsets.all(9),
                                     child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "${data["warehouses"][index]["name"]}",
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 20,
                                               fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(height: 3),
-                                        Chip(
-                                          label: Text("Status"),
-                                          backgroundColor: Colors.blue,
                                         ),
                                       ],
                                     ),

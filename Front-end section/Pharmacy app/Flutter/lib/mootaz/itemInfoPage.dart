@@ -20,6 +20,7 @@ class itemInfoPage extends StatefulWidget {
 }
 
 class _itemInfoPageState extends State<itemInfoPage> {
+  
   int selectedIndex = 0;
   String dropdownValue = '2020-1-2. Q: 20';
   bool loading = true;
@@ -38,7 +39,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
     print(token);
     Response response = await get(
       Uri.parse(
-          'http://127.0.0.1:8000/api/warehouses/${index + 1}/${indexPhoto + 1}'),
+          'http://127.0.0.1:8000/api/warehouses/${index+1}/${indexPhoto}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
@@ -59,7 +60,11 @@ class _itemInfoPageState extends State<itemInfoPage> {
         info = data["medicine"]["info"].map((item) {
           return '${item['expiration']}. Q:${item['quantity'].toString()}';
         }).toList();
+        info = data["medicine"]["info"].map((item) {
+          return '${item['expiration']}. Q:${item['quantity'].toString()}';
+        }).toList();
         print("this is infooooooooooooooo${info}");
+        value = info[selectedIndex];
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
         cart["warehouse_id"] = index + 1;
@@ -73,11 +78,12 @@ cart["medicines"]
 
   @override
   Widget build(BuildContext context) {
+    int id = ModalRoute.of(context)!.settings.arguments as int;
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store.state,
         builder: (context, state) {
           if (loading) {
-            getData(state.index, state.indexPhoto);
+            getData(state.index, id);
             return Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
