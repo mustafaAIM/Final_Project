@@ -17,7 +17,6 @@ class homePage extends StatefulWidget {
   State<homePage> createState() => _homePageState();
 }
 
-
 class _homePageState extends State<homePage> {
   List catNameAndImage = [
     {'name': 'Panadol', 'image': 'images/product2.jpg'},
@@ -29,13 +28,12 @@ class _homePageState extends State<homePage> {
   int selectedIndex = 0;
   List category = [];
   List medicines = [{}];
-bool loading = true;
-  getData(index) async {
+  bool loading = true;
+  getData(index, context,store) async {
     String? token = await getToken();
-  print(token);
+    print(token);
     Response response = await get(
-      Uri.parse(
-          'http://127.0.0.1:8000/api/warehouses/${index+1}'),
+      Uri.parse('http://127.0.0.1:8000/api/warehouses/${index + 1}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
@@ -43,6 +41,26 @@ bool loading = true;
     );
     print("index : ${index}");
     print(response.body);
+    if (response.statusCode == 404) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('No medicine yet'),
+              content: Text("This warehouse is empty"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    store.dispatch(NavClickAction(currentIndex: 0));
+                    
+                  },
+                ),
+              ],
+            );
+          });
+    }
     if (response.statusCode == 200) {
       print('products : ${response.body}');
       Map data = jsonDecode(response.body);
@@ -53,23 +71,23 @@ bool loading = true;
         print(category);
         print(medicines);
       });
-    return {category,medicines};
+      return {category, medicines};
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
     return StoreConnector<AppState, dynamic>(
-      converter: (store) => store.state.index,
-      builder: (context, index) {
-        if (loading) {
-        getData(index);
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Scaffold(
-            body: ListView(
+        converter: (store) => store,
+        builder: (context, store) {
+          if (loading) {
+            getData(store.state.index, context,store);
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Scaffold(
+                body: ListView(
               children: [
                 Container(
                   height: 250,
@@ -189,49 +207,48 @@ bool loading = true;
                   height: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 15),
-                  height: 60,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount:category.length,
-                    // itemCount: getData(index).length!,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10),
-                          padding: EdgeInsets.all(10),
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                              color: Colors.black,
-                              width: 1.2,
+                    padding: EdgeInsets.only(left: 15),
+                    height: 60,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: category.length,
+                      // itemCount: getData(index).length!,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {},
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10),
+                            padding: EdgeInsets.all(10),
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1.2,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ClipRRect(
+                                  child: Image.asset(
+                                    "${catNameAndImage[index]['image']}",
+                                    width: 50,
+                                    height: 50,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                Text("${category[index]}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17)),
+                              ],
                             ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ClipRRect(
-                                child: Image.asset(
-                                  "${catNameAndImage[index]['image']}",
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              Text("${category[index]}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17)),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    )
-        ),
+                        );
+                      },
+                    )),
                 SizedBox(
                   height: 20,
                 ),
@@ -257,9 +274,9 @@ bool loading = true;
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                           StoreProvider.of<AppState>(context)
-                                .dispatch(NavClickAction(indexPhoto: index));
-                          
+                          StoreProvider.of<AppState>(context)
+                              .dispatch(NavClickAction(indexPhoto: index));
+
                           Navigator.pushNamed(
                             context,
                             '/item',
@@ -311,11 +328,9 @@ bool loading = true;
                   ),
                 )
               ],
-            )
-        );}
-        }
-    );
-    
+            ));
+          }
+        });
   }
 }
 

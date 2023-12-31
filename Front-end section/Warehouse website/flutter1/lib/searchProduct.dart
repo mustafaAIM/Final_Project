@@ -71,7 +71,7 @@ class _searchProductPageState extends State<searchProductPage> {
   }
 
   void runSearchProduct(String enteredKey) {
-    print("rrr");
+    
     List results = [];
     if (enteredKey.isEmpty) {
       results = products;
@@ -96,7 +96,7 @@ class _searchProductPageState extends State<searchProductPage> {
       return SpinKitWave(
             color: Colors.blue,
             size: 50.0,
-          );;
+          );
     } else {
       return Scaffold(
           body: Container(

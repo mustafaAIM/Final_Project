@@ -23,6 +23,7 @@ import 'package:flutter1/yazan/login.dart';
 import 'package:flutter1/yazan/Register.dart';
 import 'package:flutter1/yazan/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Locales.init(['en', 'ar']); // get last saved language
@@ -40,6 +41,7 @@ Future<String?> getToken() async {
   String? token = prefs.getString('token');
   return token;
 }
+
 class AppState {
   int currentIndex;
   int index;
@@ -71,11 +73,13 @@ class GetWarehouseAction {
   GetWarehouseAction(
       {this.url = '', this.token = '', this.warehouse = const {}});
 }
+
 class GetMedicinesAction {
   final String url;
   final String? token;
   final Map medicines;
-  GetMedicinesAction({this.url = '', this.token = '', this.medicines = const {}});
+  GetMedicinesAction(
+      {this.url = '', this.token = '', this.medicines = const {}});
 }
 
 class LoginAction {
@@ -97,7 +101,7 @@ class NavClickAction {
 }
 // class ClickWarehouseAction {
 //   final int thisIndex;
-  
+
 //   ClickWarehouseAction(this.thisIndex);
 // }
 
@@ -133,11 +137,10 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
     if (response.statusCode == 200) {
       print("got dataaa: ${json.decode(response.body)}");
       next(GetWarehouseAction(warehouse: json.decode(response.body)));
-    }else {
+    } else {
       // handle error
     }
-  } 
-  else if (action is GetMedicinesAction) {
+  } else if (action is GetMedicinesAction) {
     print("in middleware action");
     var response = await get(
       Uri.parse(action.url),
@@ -146,22 +149,27 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
         "Authorization": "Bearer ${store.state.token}"
       },
     );
+    if (response.statusCode == 404) {
+      next(GetMedicinesAction(medicines: const {}));
+    }
     if (response.statusCode == 200) {
       print("the response medicens is: ${response.body}");
       next(GetMedicinesAction(medicines: json.decode(response.body)));
     } else {
       // handle error
     }
-  }
-    else {
+  } else {
     next(action);
   }
 }
 
 AppState reducer(AppState prev, dynamic action) {
-   if (action is NavClickAction) {
+  if (action is NavClickAction) {
     print("index photo is: ${action.indexPhoto}");
-    return AppState(currentIndex: action.currentIndex,index: action.index,indexPhoto: action.indexPhoto);
+    return AppState(
+        currentIndex: action.currentIndex,
+        index: action.index,
+        indexPhoto: action.indexPhoto);
   } else if (action is LoginAction) {
     return AppState(token: action.token);
   } else if (action is GetWarehouseAction) {
@@ -169,8 +177,7 @@ AppState reducer(AppState prev, dynamic action) {
   } else if (action is GetMedicinesAction) {
     print("in reduser action");
     return AppState(medicines: action.medicines);
-  } 
-  else {
+  } else {
     return prev;
   }
 }
