@@ -1,9 +1,6 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter1/login.dart';
-import 'package:flutter1/main.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class profilePage extends StatefulWidget {
   const profilePage({
@@ -14,31 +11,13 @@ class profilePage extends StatefulWidget {
   State<profilePage> createState() => _profilePageState();
 }
 
-void logout(context) async {
-  String? token = await getToken();
-  Response response = await post(
-    Uri.parse('http://127.0.0.1:8000/api/logout-warehouse'),
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer ${token}"
-    },
-  );
-  if (response.statusCode == 200) {
-    saveToken("");
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (BuildContext context) => Loginpage()),
-      (route) => false,
-    );
-  }
-}
-
 class _profilePageState extends State<profilePage> {
   String dropdownValue = "sfasf";
-  List details = [
+    List details = [
     "Warehouse name",
     "Phone Number",
     "Username",
+    
   ];
   List apidetails = [
     "albarka",
@@ -53,6 +32,7 @@ class _profilePageState extends State<profilePage> {
   late List<TextEditingController> _controllers = List.generate(
       3, (index) => TextEditingController(text: "${apidetails[index]}"));
   List<bool> _isEditing = List.generate(3, (index) => false);
+
 
   @override
   Widget build(BuildContext context) {
@@ -121,42 +101,46 @@ class _profilePageState extends State<profilePage> {
           SizedBox(
             height: 30,
           ),
+
           Container(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              width: 1000,
-              child: DropdownButton<String>(
-                underline: SizedBox(),
-                value: dropdownValue,
-                isExpanded: true,
-                icon: Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Icon(Icons.arrow_downward),
-                ),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black),
-                onChanged: (String? newValue) => {
-                  setState(() {
-                    dropdownValue = newValue!;
-                  })
-                },
-                items: <String>[
-                  "sfasf",
-                  "sfs",
-                  "sfadf",
-                  "sfasdf",
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              )),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        width: 1000,
+                        child: DropdownButton<String>(
+                           underline: SizedBox(),
+                          value: dropdownValue,
+                          isExpanded: true,
+                          icon: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(Icons.arrow_downward),
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                          
+                          onChanged: (String? newValue) => {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            })
+                          },
+                          items: <String>[
+                            "sfasf",
+                            "sfs",
+                            "sfadf",
+                            "sfasdf",
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        )),
           SizedBox(
             height: 10,
           ),
@@ -233,9 +217,7 @@ class _profilePageState extends State<profilePage> {
                 color: Color.fromARGB(255, 222, 69, 41)),
             child: MaterialButton(
                 padding: EdgeInsets.symmetric(horizontal: 300, vertical: 20),
-                onPressed: () {
-                  logout(context);
-                },
+                onPressed: () {},
                 child: Text(
                   "LOGOUT",
                   style: TextStyle(
@@ -244,6 +226,41 @@ class _profilePageState extends State<profilePage> {
                       fontSize: 20),
                 )),
           )
+          //  Container(
+          //       width: 750,
+          //       height: 50,
+          //       padding: EdgeInsets.symmetric(horizontal: 12,vertical: 0),
+          //       decoration:
+          //           BoxDecoration(color: Colors.white,
+
+          //             border: Border.all(color: Color.fromARGB(255, 74, 74, 74), width: 2),
+          //     borderRadius: BorderRadius.circular(20),),
+          //       child: Expanded(
+          //         // or SizedBox
+          //         child: DropdownButton(
+          //           underline: SizedBox(),
+          //           isExpanded: true,
+          //           borderRadius: BorderRadius.circular(12),
+          //           dropdownColor: Colors.white,
+          //           icon: Icon(Icons.arrow_drop_down),
+          //           iconSize: 30,
+          //           style: TextStyle(
+          //               color: Colors.black,
+          //               fontSize: 15,
+          //               fontWeight: FontWeight.bold),
+          //           hint: Text("Language"),
+          //           onChanged: (value) {
+          //             setState(() => selectedLanguage = value as String?);
+          //           },
+          //           value: selectedLanguage,
+          //           items: LangList.map((e) {
+          //             return DropdownMenuItem(
+          //               value: e,
+          //               child: Text("$e"),
+          //             );
+          //           }).toList(),
+          //         ),
+          //       )),
         ],
       ),
     )));
