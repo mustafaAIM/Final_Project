@@ -94,7 +94,8 @@ class _itemInfoPageState extends State<itemInfoPage> {
     }
   }
 
- 
+  
+
   @override
   Widget build(BuildContext context) {
     int id = ModalRoute.of(context)!.settings.arguments as int;
@@ -149,7 +150,8 @@ class _itemInfoPageState extends State<itemInfoPage> {
                         InkWell(
                           onTap: () async {
                             setState(() {
-                              iconColor = !iconColor;
+                              if(!iconColor)
+                                iconColor = !iconColor;
                             });
                             // Send the POST request
                             await addToFavorites(id);
