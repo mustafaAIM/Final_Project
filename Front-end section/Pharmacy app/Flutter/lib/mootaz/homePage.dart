@@ -67,11 +67,11 @@ class _homePageState extends State<homePage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('No medicine yet'),
-              content: Text("This warehouse is empty"),
+              title: LocaleText('medicine'),
+              content: LocaleText("empty"),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Close'),
+                  child: LocaleText('close'),
                   onPressed: () {
                     Navigator.of(context).pop();
                     store.dispatch(NavClickAction(currentIndex: 0));
@@ -255,7 +255,7 @@ class _homePageState extends State<homePage> {
                               children: [
                                 ClipRRect(
                                   child: Image.asset(
-                                    "${catNameAndImage[index]['image']}",
+                                    "images/category.png",
                                     width: 50,
                                     height: 50,
                                   ),
@@ -318,7 +318,7 @@ class _homePageState extends State<homePage> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
                                   child: Image.asset(
-                                    "images/product2.jpg",
+                                    "images/medicine.png",
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -422,7 +422,7 @@ class CustomSearch extends SearchDelegate {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: Image.asset(
-                          "images/product2.jpg",
+                          "images/medicine.png",
                           width: 75,
                           height: 75,
                         ),
@@ -472,7 +472,7 @@ class CustomSearch extends SearchDelegate {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: Image.asset(
-                          "images/product2.jpg",
+                          "images/medicine.png",
                           width: 75,
                           height: 75,
                         ),

@@ -64,7 +64,33 @@ class _itemInfoPageState extends State<itemInfoPage> {
         print("this is infooooooooooooooo${info}");
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
+         iconColor = data['medicine']['favorites'];
       });
+    }
+  }
+  Future<void> addToFavorites(int id) async {
+    String? token = await getToken();
+    print(id);
+    try {
+      final response = await post(
+        Uri.parse('http://127.0.0.1:8000/api/add-to-favorites'),
+       headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+        body: jsonEncode({"medicine_id":id}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        // The request was successful
+        print('Added to favorites');
+      } else {
+        // The request failed
+        print('Failed to add to favorites');
+      }
+    } catch (e) {
+      // There was an error
+      print(e);
     }
   }
 
@@ -112,7 +138,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
             return Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("images/product2.jpg"),
+                      image: AssetImage("images/itemInfo.jpg"),
                       fit: BoxFit.fill,
                       opacity: 0.8)),
               child: Scaffold(

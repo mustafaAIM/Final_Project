@@ -70,6 +70,10 @@ flutter:
     - images/
     - assets/locales/
     - images/photowe.png
+    - images/warehouse.jpg
+    - images/medicine.png
+    - images/category.png
+    - images/itemInfo.jpg
     
     
 
