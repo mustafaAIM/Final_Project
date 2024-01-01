@@ -133,6 +133,8 @@ class NavClickAction {
   });
 }
 
+class checkoutAction {}
+
 class DiscardAction {
   final int index;
   DiscardAction({required this.index});
@@ -217,6 +219,12 @@ AppState reducer(AppState prev, dynamic action) {
     return prev.copyWith(token: action.token);
   } else if (action is GetWarehouseAction) {
     return prev.copyWith(warehouse: action.warehouse);
+  } else if (action is checkoutAction) {
+    List list = prev.cart;
+    for (Map item in list) {
+      item['quantity'] -= item['amount'];
+    }
+    return prev.copyWith(cart: list);
   } else if (action is addToCartAction) {
     Map newItem = {
       'id': action.id,

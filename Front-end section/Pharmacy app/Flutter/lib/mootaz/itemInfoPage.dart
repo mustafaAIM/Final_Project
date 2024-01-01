@@ -20,6 +20,7 @@ class itemInfoPage extends StatefulWidget {
 }
 
 class _itemInfoPageState extends State<itemInfoPage> {
+  bool iconColor = true;
   int selectedIndex = 0;
   String medid = '';
   String dropdownValue = '2020-1-2. Q: 20';
@@ -67,13 +68,39 @@ class _itemInfoPageState extends State<itemInfoPage> {
     }
   }
 
+  Future<void> addToFavorites(int id) async {
+    String? token = await getToken();
+    print(id);
+    try {
+      final response = await post(
+        Uri.parse('http://127.0.0.1:8000/api/add-to-favorites'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${token}"
+        },
+        body: jsonEncode({"medicine_id": id}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        // The request was successful
+        print('Added to favorites');
+      } else {
+        // The request failed
+        print('Failed to add to favorites');
+      }
+    } catch (e) {
+      // There was an error
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     int id = ModalRoute.of(context)!.settings.arguments as int;
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store.state,
         builder: (context, state) {
-        print("in iteminfo state index: ${state.index}");
+          print("in iteminfo state index: ${state.index}");
           if (loading) {
             getData(state.index, id);
             return Scaffold(
@@ -92,7 +119,61 @@ class _itemInfoPageState extends State<itemInfoPage> {
                 backgroundColor: Colors.transparent,
                 appBar: PreferredSize(
                   preferredSize: Size.fromHeight(60),
-                  child: boxApp(),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 6,
+                                  )
+                                ]),
+                            child: Icon(
+                              Icons.arrow_back,
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              iconColor = !iconColor;
+                            });
+                            // Send the POST request
+                            await addToFavorites(id);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 6,
+                                  )
+                                ]),
+                            child: Icon(
+                              Icons.star,
+                              size: 28,
+                              color: iconColor ? Colors.yellow : Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 bottomNavigationBar: Container(
                   height: MediaQuery.of(context).size.height / 2,
@@ -269,20 +350,23 @@ class _itemInfoPageState extends State<itemInfoPage> {
                               return () {
                                 print('dispatch');
                                 store.dispatch(addToCartAction(
-                                  name: trading_name,
-                                  price: price.toString(),
-                                  id: medid,
-                                  quantity: total_quantity
-                                ));
+                                    name: trading_name,
+                                    price: price.toString(),
+                                    id: medid,
+                                    quantity: total_quantity));
                               };
                             },
                             builder: (context, callback) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(60),
                                 child: MaterialButton(
-                                  onPressed: () {
+                                  
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  enableFeedback: false,
+                                  onPressed: total_quantity == 0 ? null :() {
                                     print('call');
-                                    callback();
+                                    if (total_quantity != 0) callback();
                                   },
                                   child: LocaleText(
                                     "add",

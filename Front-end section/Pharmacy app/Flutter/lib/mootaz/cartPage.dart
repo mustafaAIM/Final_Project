@@ -17,7 +17,7 @@ class cartPage extends StatefulWidget {
 }
 
 class _cartPageState extends State<cartPage> {
-  void sendrequest(data) async {
+  void sendrequest(store, data) async {
     String? token = await getToken();
     Response response = await post(
         Uri.parse('http://127.0.0.1:8000/api/make-order'),
@@ -26,6 +26,9 @@ class _cartPageState extends State<cartPage> {
           "Authorization": "Bearer ${token}"
         },
         body: jsonEncode(data));
+    if (response.statusCode == 200) {
+      store.dispatch(checkoutAction());
+    }
     print(response.body);
   }
 
@@ -290,39 +293,41 @@ class _cartPageState extends State<cartPage> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: MaterialButton(
-                              onPressed: () {
-                                List medicines;
-                                medicines = state.cart.map((item) {
-                                  return {
-                                    'medicine_id': item['id'],
-                                    'quantity': item['quantity'],
-                                  };
-                                }).toList();
-                                sendrequest({
-                                  "warehouse_id":state.index+1,
-                                  "medicines": medicines
-                                });
-                                print({
-                                  "warehouse_id": state.index+1,
-                                  "medicines": medicines
-                                });
-                              },
-                              
-                              child: Text(
-                                "Checkout",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
-                              ),
-                              color: const Color.fromARGB(255, 3, 58, 103),
-                              textColor: Colors.white,
-                              height: 50,
-                              minWidth: 120,
-                              elevation: 8,
-                            ),
-                          )
+                          StoreConnector<AppState, dynamic>(
+                              converter: (store) => store,
+                              builder: (context, store) {
+                                return
+                                  ClipRRect(
+                                  borderRadius: BorderRadius.circular(60),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      List medicines;
+                                      medicines = state.cart.map((item) {
+                                        return {
+                                          'medicine_id': item['id'],
+                                          'quantity': item['amount'],
+                                        };
+                                      }).toList();
+                                      sendrequest(store, {
+                                        "warehouse_id": state.index + 1,
+                                        "medicines": medicines
+                                      });
+                                    },
+                                    child: Text(
+                                      "Checkout",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    color:
+                                        const Color.fromARGB(255, 3, 58, 103),
+                                    textColor: Colors.white,
+                                    height: 50,
+                                    minWidth: 120,
+                                    elevation: 8,
+                                  ),
+                                );
+                              })
                         ],
                       )
                     ],
