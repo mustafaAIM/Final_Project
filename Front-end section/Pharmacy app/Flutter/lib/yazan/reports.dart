@@ -140,8 +140,8 @@ class _reportsPageState extends State<reportsPage> {
     }
     else{
       setState(() {
-        orders = [];
-        productDetails = [];
+        // orders = [];
+        // productDetails = [];
         loading = false;
       });
     }
@@ -179,7 +179,7 @@ class _reportsPageState extends State<reportsPage> {
                             children: [
                               ElevatedButton(
                                 onPressed: () => _selectFirstDate(context),
-                                child: const Text('First date'),
+                                child:  LocaleText('first'),
                               ),
                               const SizedBox(
                                 height: 20.0,
@@ -195,7 +195,7 @@ class _reportsPageState extends State<reportsPage> {
                             children: [
                               ElevatedButton(
                                 onPressed: () => _selectSecondDate(context),
-                                child: const Text('Second date'),
+                                child: LocaleText('second'),
                               ),
                               const SizedBox(
                                 height: 20.0,
@@ -214,7 +214,7 @@ class _reportsPageState extends State<reportsPage> {
                             });
                           },
                           style: ButtonStyle(),
-                          child: Text('Request report'))
+                          child: LocaleText('request'))
                     ],
                   ),
                 ),
@@ -402,7 +402,7 @@ class _reportsPageState extends State<reportsPage> {
                                 Container(
                                   child: ListView.builder(
                                       shrinkWrap: true,
-                                      itemCount: productDetails[0].length,
+                                      itemCount: productDetails[0]?.length,
                                       itemBuilder: (context, index) {
                                         return Container(
                                           padding:
