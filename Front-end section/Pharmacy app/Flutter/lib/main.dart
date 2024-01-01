@@ -116,7 +116,7 @@ void DataMiddleware(Store store, action, NextDispatcher next) async {
       headers: {"Content-Type": "application/json"},
       body: json.encode(action.body),
     );
-
+    
     
   } else if (action is LoginAction) {
     var response = await post(

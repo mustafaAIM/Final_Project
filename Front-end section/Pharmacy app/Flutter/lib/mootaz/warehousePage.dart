@@ -102,13 +102,10 @@ class _warehousePageState extends State<warehousePage> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15)),
                                     child: Image.asset(
-                                      "images/product2.jpg",
-                                      width: 75,
-                                      height: 75,
+                                      "images/warehouse.jpg",
+                                      width: 100,
+                                      height: 100,
                                     ),
                                   ),
                                   Container(

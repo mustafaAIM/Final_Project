@@ -42,5 +42,9 @@
     "second":"Second date",
     "request":"Request report",
     "next":"Next page",
-    "previous":"Previous page"
+    "previous":"Previous page",
+    "medicine":"No medicine yet",
+    "empty":"This warehouse is empty",
+    "close":"Close",
+    "city":"City"
 }

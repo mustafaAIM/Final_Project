@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter1/main.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
+import 'package:http/http.dart';
 
 class reportsPage extends StatefulWidget {
   const reportsPage({
@@ -97,6 +101,26 @@ class _reportsPageState extends State<reportsPage> {
       });
     }
   }
+   void getData() async {
+    String? token = await getToken();
+    Response response = await get(
+      Uri.parse('http://127.0.0.1:8000/api/report/${firstDate}/${secondDate}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      List data = jsonDecode(response.body);
+      setState(() {
+        loading = false;
+        print(data);
+      });
+      
+    }
+  }
+bool loading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +183,7 @@ class _reportsPageState extends State<reportsPage> {
                           onPressed: () {
                             setState(() {
                               requested = true;
+                              getData();
                             });
                           },
                           style: ButtonStyle(),

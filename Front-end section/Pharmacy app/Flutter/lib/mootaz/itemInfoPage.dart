@@ -20,7 +20,6 @@ class itemInfoPage extends StatefulWidget {
 }
 
 class _itemInfoPageState extends State<itemInfoPage> {
-  
   int selectedIndex = 0;
   String dropdownValue = '2020-1-2. Q: 20';
   bool loading = true;
@@ -33,12 +32,13 @@ class _itemInfoPageState extends State<itemInfoPage> {
   String expirationDate = "";
   List<dynamic> info = [];
   String value = '';
+  bool iconColor = true;
   getData(index, indexPhoto) async {
     String? token = await getToken();
     print(token);
     Response response = await get(
       Uri.parse(
-          'http://127.0.0.1:8000/api/warehouses/${index+1}/${indexPhoto}'),
+          'http://127.0.0.1:8000/api/warehouses/${index + 1}/${indexPhoto}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
@@ -56,6 +56,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
         category = data['medicine']['category'];
         manufacturer_company = data['medicine']['manufacturer_company'];
         price = data['medicine']['price'];
+        iconColor = data['medicine']['favorites'];
         info = data["medicine"]["info"].map((item) {
           return '${item['expiration']}. Q:${item['quantity'].toString()}';
         }).toList();
@@ -63,6 +64,32 @@ class _itemInfoPageState extends State<itemInfoPage> {
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
       });
+    }
+  }
+
+  Future<void> addToFavorites(int id) async {
+    String? token = await getToken();
+    print(id);
+    try {
+      final response = await post(
+        Uri.parse('http://127.0.0.1:8000/api/add-to-favorites'),
+       headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      },
+        body: jsonEncode({"medicine_id":id}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        // The request was successful
+        print('Added to favorites');
+      } else {
+        // The request failed
+        print('Failed to add to favorites');
+      }
+    } catch (e) {
+      // There was an error
+      print(e);
     }
   }
 
@@ -83,14 +110,68 @@ class _itemInfoPageState extends State<itemInfoPage> {
             return Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("images/product2.jpg"),
+                      image: AssetImage("images/itemInfo.jpg"),
                       fit: BoxFit.fill,
                       opacity: 0.8)),
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 appBar: PreferredSize(
                   preferredSize: Size.fromHeight(60),
-                  child: boxApp(),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 6,
+                                  )
+                                ]),
+                            child: Icon(
+                              Icons.arrow_back,
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              iconColor = !iconColor;
+                            });
+                            // Send the POST request
+                            await addToFavorites(id);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 6,
+                                  )
+                                ]),
+                            child: Icon(
+                              Icons.star,
+                              size: 28,
+                              color: iconColor ? Colors.yellow : Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 bottomNavigationBar: Container(
                   height: MediaQuery.of(context).size.height / 2,
@@ -124,7 +205,6 @@ class _itemInfoPageState extends State<itemInfoPage> {
                                   ),
                                 ],
                               ),
-                             
                             ],
                           ),
                           SizedBox(
@@ -182,23 +262,25 @@ class _itemInfoPageState extends State<itemInfoPage> {
                             height: 10,
                           ),
                           Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
                                   LocaleText(
                                     "available",
                                     style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     ": ${total_quantity} ",
                                     style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
-                               Text(
+                              Text(
                                 "${price}\$",
                                 style: TextStyle(
                                     fontSize: 21,
@@ -263,10 +345,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: MaterialButton(
-                              onPressed: () {
-                                
-
-                              },
+                              onPressed: () {},
                               child: LocaleText(
                                 "add",
                                 style: TextStyle(

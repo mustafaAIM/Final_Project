@@ -63,7 +63,7 @@ Route::middleware(['auth:api', 'user.type:Pharmacist'])->group( function () {
     Route::get('profile',[UserProfileController::class,'profile']);
     Route::get('report/{start_date}/{end_date}',[ReportController::class,'report']);
     Route::post('add-picture',[AddPictureController::class,'addPicture']);
-
+    Route::delete('delete-favorite',[AddToFavoritesController::class,'deleteFavorite']);
 });
 Route::post('register-pharmacist',[RegisterationController::class,'register']);
 Route::post('login-pharmacist',[LoginController::class,'login'])->name('login');
@@ -82,7 +82,7 @@ Route::middleware(['auth:api', 'user.type:Warehouse Owner'])->group( function ()
     Route::get('display-medicines',[ReadMedicinesController::class, 'getWarehouseMedicines']);
     Route::get('display-medicine-details/{medicineId}',[MedicinDetailsController::class, 'getMedicine']);
     Route::get('fillter-by/{category_id}',[DisplayByCategoryController::class ,'filter']);
-    Route::get('profile',[ProfileController::class ,'Profile']);
+    Route::get('Wprofile',[ProfileController::class ,'Profile']);
     Route::post('editusername',[ProfileController::class ,'Editusername']);
     Route::post('editwarehousename',[ProfileController::class ,'EditWarehouseName']);
     Route::post('editpicture',[ProfileController::class ,'EditPicture']);

@@ -21,4 +21,10 @@ class AddToFavoritesController extends Controller
             $request -> user() -> favorites()->attach($request->medicine_id);
             return response()->json(["added to favorites"],200);
     }
+
+    public function deleteFavorite(Request $request){
+            $user = $request->user();
+            $user -> favorites()->detach($request ->medicine_id);
+            return response()->json(['deleted successfully'],200);
+    }
 }
