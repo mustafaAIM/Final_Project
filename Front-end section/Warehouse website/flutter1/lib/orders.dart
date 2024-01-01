@@ -195,7 +195,7 @@ class _ordersPageState extends State<ordersPage> {
                             items: <String>[
                               'Delivered',
                               'Received',
-                              'Being prepared'
+                              'pending'
                             ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,

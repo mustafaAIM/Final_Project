@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter1/Mootaz/bottomNav.dart';
 import 'package:flutter1/main.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:http/http.dart';
 
 class cartPage extends StatefulWidget {
   const cartPage({
@@ -14,35 +17,37 @@ class cartPage extends StatefulWidget {
 }
 
 class _cartPageState extends State<cartPage> {
-  List<String> amount = [
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-  ];
-  
+  void sendrequest(data) async {
+    String? token = await getToken();
+    Response response = await post(
+        Uri.parse('http://127.0.0.1:8000/api/make-order'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${token}"
+        },
+        body: jsonEncode(data));
+    print(response.body);
+  }
+
+  num price = 0;
+  List<TextEditingController> controllers = [];
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-        return  Scaffold(
+          if (controllers.isEmpty) {
+            controllers = List.generate(
+                state.cart.length,
+                (index) => TextEditingController(
+                    text: state.cart[index]['amount'].toString()));
+          }
+          price = 0;
+          for (int i = 0; i < state.cart.length; i++) {
+            price +=
+                state.cart[i]['amount'] * int.parse(state.cart[i]["price"]);
+          }
+          return Scaffold(
             body: ListView(
               children: [
                 Container(
@@ -66,14 +71,18 @@ class _cartPageState extends State<cartPage> {
                               IconButton(
                                 icon: Icon(Icons.star,
                                     color: Colors.yellow, size: 35),
-                                onPressed: () => {},
+                                onPressed: () => {
+                                  Navigator.pushNamed(context, '/favoritePage')
+                                },
                               ),
                               IconButton(
                                 icon: Icon(
                                   Icons.account_circle,
                                   size: 35,
                                 ),
-                                onPressed: () => {},
+                                onPressed: () => {
+                                  Navigator.pushNamed(context, "/ProfilePage")
+                                },
                               )
                             ]),
                           )
@@ -90,7 +99,7 @@ class _cartPageState extends State<cartPage> {
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        mainAxisExtent: 210,
+                        mainAxisExtent: 250,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                         childAspectRatio: 2),
@@ -114,11 +123,22 @@ class _cartPageState extends State<cartPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.close),
-                                        color: Colors.redAccent,
-                                      )
+                                      StoreConnector<AppState, VoidCallback>(
+                                          converter: (store) {
+                                        // Returns a callback that dispatches an action
+                                        return () {
+                                          store.dispatch(removefromcartAction(
+                                              index: index));
+                                        };
+                                      }, builder: (context, callback) {
+                                        return IconButton(
+                                          onPressed: () {
+                                            callback();
+                                          },
+                                          icon: Icon(Icons.close),
+                                          color: Colors.redAccent,
+                                        );
+                                      })
                                     ],
                                   ),
                                   SizedBox(
@@ -155,27 +175,67 @@ class _cartPageState extends State<cartPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Expanded(
-                                          child: TextField(
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                hintText: "Amount",
-                                                border: InputBorder.none,
-                                                focusedBorder: InputBorder.none,
-                                                enabledBorder: InputBorder.none,
-                                                errorBorder: InputBorder.none,
-                                                disabledBorder:
-                                                    InputBorder.none,
-                                                contentPadding:
-                                                    EdgeInsets.fromLTRB(
-                                                        6, 6, 10, 10)),
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black
-                                                    .withOpacity(0.4)),
-                                          ),
-                                        )
+                                        StoreConnector<AppState,
+                                                ValueChanged<String>>(
+                                            converter: (store) {
+                                          return (String number) {
+                                            number.isEmpty
+                                                ? store.dispatch(
+                                                    (UpdateAmountAction(
+                                                        index: index,
+                                                        amount: 0)))
+                                                : store.dispatch(
+                                                    (UpdateAmountAction(
+                                                        index: index,
+                                                        amount: int.parse(
+                                                            number))));
+                                          };
+                                          // Returns a callback that dispatches an action
+                                        }, builder: (context, callback) {
+                                          int maxvalue =
+                                              state.cart[index]['quantity'];
+
+                                          // Listen for changes to the TextEditingController
+                                          controllers[index].addListener(() {
+                                            int? number = int.tryParse(
+                                                controllers[index].text);
+                                            if (number == null) {
+                                              controllers[index].text = '0';
+                                            } else if (number > maxvalue) {
+                                              // If the input is invalid, revert the change
+                                              controllers[index].text =
+                                                  maxvalue.toString();
+                                            } else {
+                                              // If the input is valid, update the state
+                                              callback(controllers[index].text);
+                                            }
+                                          });
+                                          return Expanded(
+                                            child: TextFormField(
+                                              controller: controllers[index],
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                  hintText: "Amount",
+                                                  border: InputBorder.none,
+                                                  focusedBorder:
+                                                      InputBorder.none,
+                                                  enabledBorder:
+                                                      InputBorder.none,
+                                                  errorBorder: InputBorder.none,
+                                                  disabledBorder:
+                                                      InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.fromLTRB(
+                                                          6, 6, 10, 10)),
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black
+                                                      .withOpacity(0.4)),
+                                            ),
+                                          );
+                                        })
                                       ],
                                     ),
                                   )
@@ -199,7 +259,7 @@ class _cartPageState extends State<cartPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "48624\$",
+                                  "${state.cart[index]['amount'] * int.parse(state.cart[index]["price"])}",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -226,14 +286,31 @@ class _cartPageState extends State<cartPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Total: 1023467 SP",
+                            "$price",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: MaterialButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                List medicines;
+                                medicines = state.cart.map((item) {
+                                  return {
+                                    'medicine_id': item['id'],
+                                    'quantity': item['quantity'],
+                                  };
+                                }).toList();
+                                sendrequest({
+                                  "warehouse_id":state.index+1,
+                                  "medicines": medicines
+                                });
+                                print({
+                                  "warehouse_id": state.index+1,
+                                  "medicines": medicines
+                                });
+                              },
+                              
                               child: Text(
                                 "Checkout",
                                 style: TextStyle(

@@ -16,7 +16,7 @@ class _orderDetailsPageState extends State<orderDetailsPage> {
     Map<String, Color> colorMap = {
       'Delivered': Colors.purple,
       'Received': Colors.green,
-      'Being prepared': Colors.grey,
+      'pending': Colors.grey,
       // Add more colors as needed
     };
     List productDetails = ModalRoute.of(context)!.settings.arguments as List;
@@ -57,7 +57,7 @@ class _orderDetailsPageState extends State<orderDetailsPage> {
                               size: 30,
                               color: colorMap[productDetails[0]["status"]],
                             )
-                          : productDetails[0]["status"] == "Being prepared"
+                          : productDetails[0]["status"] == "pending"
                               ? Icon(
                                   Icons.medical_information_outlined,
                                   size: 30,
