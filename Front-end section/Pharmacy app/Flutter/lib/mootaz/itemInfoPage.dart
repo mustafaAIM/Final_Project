@@ -20,8 +20,8 @@ class itemInfoPage extends StatefulWidget {
 }
 
 class _itemInfoPageState extends State<itemInfoPage> {
-  
   int selectedIndex = 0;
+  String medid = '';
   String dropdownValue = '2020-1-2. Q: 20';
   bool loading = true;
   String scientific_name = '';
@@ -38,7 +38,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
     print(token);
     Response response = await get(
       Uri.parse(
-          'http://127.0.0.1:8000/api/warehouses/${index+1}/${indexPhoto}'),
+          'http://127.0.0.1:8000/api/warehouses/${index + 1}/${indexPhoto}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}"
@@ -51,6 +51,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
       Map data = jsonDecode(response.body);
       setState(() {
         loading = false;
+        medid = data['medicine']['id'];
         scientific_name = data['medicine']['scientific_name'];
         trading_name = data['medicine']['trading_name'];
         category = data['medicine']['category'];
@@ -72,6 +73,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store.state,
         builder: (context, state) {
+        print("in iteminfo state index: ${state.index}");
           if (loading) {
             getData(state.index, id);
             return Scaffold(
@@ -124,7 +126,6 @@ class _itemInfoPageState extends State<itemInfoPage> {
                                   ),
                                 ],
                               ),
-                             
                             ],
                           ),
                           SizedBox(
@@ -182,23 +183,25 @@ class _itemInfoPageState extends State<itemInfoPage> {
                             height: 10,
                           ),
                           Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
                                   LocaleText(
                                     "available",
                                     style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     ": ${total_quantity} ",
                                     style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
-                               Text(
+                              Text(
                                 "${price}\$",
                                 style: TextStyle(
                                     fontSize: 21,
@@ -260,24 +263,41 @@ class _itemInfoPageState extends State<itemInfoPage> {
                           SizedBox(
                             height: 25,
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: MaterialButton(
-                              onPressed: () {
-                                
-
-                              },
-                              child: LocaleText(
-                                "add",
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              color: const Color.fromARGB(255, 3, 58, 103),
-                              textColor: Colors.white,
-                              height: 60,
-                              minWidth: 300,
-                              elevation: 8,
-                            ),
+                          StoreConnector<AppState, VoidCallback>(
+                            converter: (store) {
+                              // Returns a callback that dispatches an action
+                              return () {
+                                print('dispatch');
+                                store.dispatch(addToCartAction(
+                                  name: trading_name,
+                                  price: price.toString(),
+                                  id: medid,
+                                  quantity: total_quantity
+                                ));
+                              };
+                            },
+                            builder: (context, callback) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(60),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    print('call');
+                                    callback();
+                                  },
+                                  child: LocaleText(
+                                    "add",
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  color: const Color.fromARGB(255, 3, 58, 103),
+                                  textColor: Colors.white,
+                                  height: 60,
+                                  minWidth: 300,
+                                  elevation: 8,
+                                ),
+                              );
+                            },
                           )
                         ],
                       )

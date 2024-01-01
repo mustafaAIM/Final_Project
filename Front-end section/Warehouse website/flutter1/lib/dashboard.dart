@@ -170,7 +170,6 @@ class _dashboardState extends State<dashboard> {
       },
       onInit: (store) async {
         String? token = await getToken();
-
         await store.dispatch(FetchDataAction(
             token: token, url: "http://127.0.0.1:8000/api/report"));
       },

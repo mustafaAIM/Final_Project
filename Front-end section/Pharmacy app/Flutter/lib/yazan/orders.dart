@@ -29,31 +29,31 @@ class _MyWidgetState extends State<OrdersPage> {
     },
     {
       'id': "123",
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': "123",
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': "123",
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': "123",
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': "123",
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
@@ -61,7 +61,7 @@ class _MyWidgetState extends State<OrdersPage> {
   Map<String, Color> colorMap = {
     'Delivered': Colors.purple,
     'Received': Colors.green,
-    'Being prepared': Colors.grey,
+    'pending': Colors.grey,
     // Add more colors as needed
   };
 
@@ -183,7 +183,7 @@ class _MyWidgetState extends State<OrdersPage> {
                                               colorMap[orders[index]["status"]],
                                         )
                                       : orders[index]["status"] ==
-                                              "Being prepared"
+                                              "pending"
                                           ? Icon(
                                               Icons
                                                   .medical_information_outlined,

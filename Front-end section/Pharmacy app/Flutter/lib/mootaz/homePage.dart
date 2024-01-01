@@ -98,6 +98,7 @@ class _homePageState extends State<homePage> {
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store,
         builder: (context, store) {
+        print("in homepage state index: ${store.state.index}");
           if (loading) {
             getData(store.state.index, context, store);
             return Center(
@@ -400,7 +401,7 @@ class CustomSearch extends SearchDelegate {
           return InkWell(
               onTap: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(NavClickAction(indexPhoto: index));
+                    .dispatch(chooseitemAction(index: index));
 
                 Navigator.pushNamed(
                   context,

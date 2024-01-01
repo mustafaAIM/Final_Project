@@ -26,10 +26,12 @@ class _warehousePageState extends State<warehousePage> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+
     return StoreConnector<AppState, dynamic>(
-      converter: (store) => store.state.warehouse,
+      converter: (store) => store.state,
       builder: (context, data) {
-        if (data == const {}) {
+        print("in before warehouse state index: ${data.index}");
+        if (data.warehouse == const {}) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -82,53 +84,91 @@ class _warehousePageState extends State<warehousePage> {
                   padding: EdgeInsets.all(10),
                   height: 2000,
                   child: ListView.builder(
-                    itemCount: data['warehouses'].length!,
+                    itemCount: data.warehouse['warehouses'].length!,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                          onTap: () {
-                            StoreProvider.of<AppState>(context).dispatch(
-                                NavClickAction(currentIndex: 4, index: index));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            height: 100,
-                            child: Card(
-                              elevation: 6,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15)),
-                                    child: Image.asset(
-                                      "images/product2.jpg",
-                                      width: 75,
-                                      height: 75,
+                      return StoreConnector<AppState, AppState>(
+                          converter: (store) => store.state,
+                          builder: (context, state) {
+                            return InkWell(
+                                onTap: () {
+                                  if (state.cart.length != 0 &&
+                                      state.index != index) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: Text(
+                                                "you can't buy from multiple warehouses at the same time if you wish to continue we will discard everythin you have in the cart"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: Text('back'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: Text('Discard'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  StoreProvider.of<AppState>(
+                                                          context)
+                                                      .dispatch(DiscardAction(
+                                                          index: 0));
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  } else
+                                    StoreProvider.of<AppState>(context)
+                                        .dispatch(choosewarehouseAction(
+                                             index: index));
+                                            
+                                  print("in after warehouse state index: ${state.index}");
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 100,
+                                  child: Card(
+                                    elevation: 6,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(9),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
                                       children: [
-                                        Text(
-                                          "${data["warehouses"][index]["name"]}",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15)),
+                                          child: Image.asset(
+                                            "images/product2.jpg",
+                                            width: 75,
+                                            height: 75,
+                                          ),
                                         ),
+                                        Container(
+                                          padding: EdgeInsets.all(9),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "${data.warehouse["warehouses"][index]["name"]}",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ));
+                                  ),
+                                ));
+                          });
                     },
                   ),
                 )
