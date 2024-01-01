@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -22,6 +20,7 @@ class itemInfoPage extends StatefulWidget {
 }
 
 class _itemInfoPageState extends State<itemInfoPage> {
+  bool iconColor = true;
   int selectedIndex = 0;
   String medid = '';
   String dropdownValue = '2020-1-2. Q: 20';
@@ -35,13 +34,11 @@ class _itemInfoPageState extends State<itemInfoPage> {
   String expirationDate = "";
   List<dynamic> info = [];
   String value = '';
-  bool iconColor = true;
   getData(index, indexPhoto) async {
     String? token = await getToken();
     print(token);
     Response response = await get(
       Uri.parse(
-          'http://127.0.0.1:8000/api/warehouses/${index + 1}/${indexPhoto}'),
           'http://127.0.0.1:8000/api/warehouses/${index + 1}/${indexPhoto}'),
       headers: {
         "Content-Type": "application/json",
@@ -61,17 +58,16 @@ class _itemInfoPageState extends State<itemInfoPage> {
         category = data['medicine']['category'];
         manufacturer_company = data['medicine']['manufacturer_company'];
         price = data['medicine']['price'];
-        iconColor = data['medicine']['favorites'];
         info = data["medicine"]["info"].map((item) {
           return '${item['expiration']}. Q:${item['quantity'].toString()}';
         }).toList();
         print("this is infooooooooooooooo${info}");
         value = info[selectedIndex];
         total_quantity = data['medicine']['total_quantity'];
+         iconColor = data['medicine']['favorites'];
       });
     }
   }
-
   Future<void> addToFavorites(int id) async {
     String? token = await getToken();
     print(id);
@@ -104,7 +100,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
     return StoreConnector<AppState, dynamic>(
         converter: (store) => store.state,
         builder: (context, state) {
-        print("in iteminfo state index: ${state.index}");
+          print("in iteminfo state index: ${state.index}");
           if (loading) {
             getData(state.index, id);
             return Scaffold(
@@ -277,20 +273,15 @@ class _itemInfoPageState extends State<itemInfoPage> {
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     ": ${total_quantity} ",
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
-                              Text(
                               Text(
                                 "${price}\$",
                                 style: TextStyle(
@@ -353,32 +344,16 @@ class _itemInfoPageState extends State<itemInfoPage> {
                           SizedBox(
                             height: 25,
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: MaterialButton(
-                              onPressed: () {},
-                              child: LocaleText(
-                                "add",
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              color: const Color.fromARGB(255, 3, 58, 103),
-                              textColor: Colors.white,
-                              height: 60,
-                              minWidth: 300,
-                              elevation: 8,
-                            ),
                           StoreConnector<AppState, VoidCallback>(
                             converter: (store) {
                               // Returns a callback that dispatches an action
                               return () {
                                 print('dispatch');
                                 store.dispatch(addToCartAction(
-                                  name: trading_name,
-                                  price: price.toString(),
-                                  id: medid,
-                                  quantity: total_quantity
-                                ));
+                                    name: trading_name,
+                                    price: price.toString(),
+                                    id: medid,
+                                    quantity: total_quantity));
                               };
                             },
                             builder: (context, callback) {

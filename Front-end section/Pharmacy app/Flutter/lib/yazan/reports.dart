@@ -101,6 +101,7 @@ class _reportsPageState extends State<reportsPage> {
       });
     }
   }
+  List medicines = [{}];
    void getData() async {
     String? token = await getToken();
     Response response = await get(
@@ -115,6 +116,8 @@ class _reportsPageState extends State<reportsPage> {
       List data = jsonDecode(response.body);
       setState(() {
         loading = false;
+        // orders = data['orders'];
+        // medicines = data['medicines'];
         print(data);
       });
       
