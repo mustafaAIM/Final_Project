@@ -14,6 +14,8 @@ class _categoryPageState extends State<categoryPage> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    var arguments = ModalRoute.of(context)!.settings.arguments;
+List<dynamic> category = arguments == null ? [] : arguments as List<dynamic>;
     return Scaffold(
         body: ListView(children: [
       Stack(
@@ -115,12 +117,12 @@ class _categoryPageState extends State<categoryPage> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
+                    crossAxisCount: 2,
                      mainAxisExtent: 130,
                      crossAxisSpacing: 8,
                      mainAxisSpacing: 8
                      ),
-                itemCount: 20,
+                itemCount: category.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {},
@@ -147,13 +149,13 @@ class _categoryPageState extends State<categoryPage> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: Image.asset("images/product2.jpg",
+                            child: Image.asset("images/category.png",
                             width: 75,
                             height: 75,
                             ),
                           ),
                           SizedBox(height: 4,),
-                          Text("hearty",
+                          Text("${category[index]}",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold

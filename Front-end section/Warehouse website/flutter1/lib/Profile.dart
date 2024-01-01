@@ -86,19 +86,10 @@ class _profilePageState extends State<profilePage> {
                                   enabledBorder: InputBorder.none,
                                   errorBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(_isEditing[2]
-                                        ? Icons.check
-                                        : Icons.edit),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isEditing[2] = !_isEditing[2];
-                                      });
-                                    },
+                                  suffixIcon:  Icon(Icons.edit),
                                   ),
                                 ),
                               ),
-                            ),
                           ],
                         )),
                     SizedBox(
@@ -176,16 +167,7 @@ class _profilePageState extends State<profilePage> {
                                   enabledBorder: InputBorder.none,
                                   errorBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(_isEditing[0]
-                                        ? Icons.check
-                                        : Icons.edit),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isEditing[0] = !_isEditing[0];
-                                      });
-                                    },
-                                  ),
+                                  suffixIcon:  Icon(Icons.edit),
                                 ),
                               ),
                             ),
@@ -218,16 +200,7 @@ class _profilePageState extends State<profilePage> {
                                   enabledBorder: InputBorder.none,
                                   errorBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(_isEditing[1]
-                                        ? Icons.check
-                                        : Icons.edit),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isEditing[1] = !_isEditing[1];
-                                      });
-                                    },
-                                  ),
+                                  suffixIcon:  Icon(Icons.edit),
                                 ),
                               ),
                             ),

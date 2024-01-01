@@ -209,6 +209,7 @@ class _homePageState extends State<homePage> {
                           Navigator.pushNamed(
                             context,
                             '/categoryPage',
+                            arguments: category
                           );
                         },
                         child: LocaleText(
