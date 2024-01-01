@@ -50,25 +50,25 @@ class _reportsPageState extends State<reportsPage> {
     },
     {
       'id': 123,
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': 123,
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': 123,
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
     {
       'id': 123,
-      'status': "Being prepared",
+      'status': "pending",
       'Creation date': "Jan 19 2022",
       'delivery date': "Jan 23, 2020"
     },
@@ -76,7 +76,7 @@ class _reportsPageState extends State<reportsPage> {
   Map<String, Color> colorMap = {
     'Delivered': Colors.purple,
     'Received': Colors.green,
-    'Being prepared': Colors.grey,
+    'pending': Colors.grey,
     // Add more colors as needed
   };
   List productDetails = [
@@ -101,8 +101,9 @@ class _reportsPageState extends State<reportsPage> {
       });
     }
   }
+
   List medicines = [{}];
-   void getData() async {
+  void getData() async {
     String? token = await getToken();
     Response response = await get(
       Uri.parse('http://127.0.0.1:8000/api/report/${firstDate}/${secondDate}'),
@@ -113,17 +114,40 @@ class _reportsPageState extends State<reportsPage> {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body);
+      List res = jsonDecode(response.body);
+
+      List data = res[0]['orders'].map((order) {
+        return {
+          'id': order['order_id'],
+          'status': order['status'],
+          'Creation date': order['craeted_at'],
+          'delivery date': order['estimated_date']
+        };
+      }).toList();
+      List meds = res[0]["medicines"].map((order) {
+        return {
+          'name': order['scientific_name'],
+          'price': order['price'],
+          'amount': order['quantity'],
+        };
+      }).toList();
+      List ff = [meds, res[0]["total_price"]];
       setState(() {
+        orders = data;
+        productDetails = ff;
         loading = false;
-        // orders = data['orders'];
-        // medicines = data['medicines'];
-        print(data);
       });
-      
+    }
+    else{
+      setState(() {
+        orders = [];
+        productDetails = [];
+        loading = false;
+      });
     }
   }
-bool loading = true;
+
+  bool loading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +302,7 @@ bool loading = true;
                                                                 ["status"]],
                                                       )
                                                     : orders[index]["status"] ==
-                                                            "Being prepared"
+                                                            "pending"
                                                         ? Icon(
                                                             Icons
                                                                 .medical_information_outlined,

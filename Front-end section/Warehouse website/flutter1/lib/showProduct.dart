@@ -159,16 +159,7 @@ class _showProductPageState extends State<showProductPage> {
                                         enabledBorder: InputBorder.none,
                                         errorBorder: InputBorder.none,
                                         disabledBorder: InputBorder.none,
-                                        suffixIcon: IconButton(
-                                          icon: Icon(_isEditing[0]
-                                              ? Icons.check
-                                              : Icons.edit),
-                                          onPressed: () {
-                                            setState(() {
-                                              _isEditing[0] = !_isEditing[0];
-                                            });
-                                          },
-                                        ),
+                                        
                                       ),
                                     ),
                                   ),
@@ -201,16 +192,7 @@ class _showProductPageState extends State<showProductPage> {
                                         enabledBorder: InputBorder.none,
                                         errorBorder: InputBorder.none,
                                         disabledBorder: InputBorder.none,
-                                        suffixIcon: IconButton(
-                                          icon: Icon(_isEditing[1]
-                                              ? Icons.check
-                                              : Icons.edit),
-                                          onPressed: () {
-                                            setState(() {
-                                              _isEditing[1] = !_isEditing[1];
-                                            });
-                                          },
-                                        ),
+                                        
                                       ),
                                     ),
                                   ),

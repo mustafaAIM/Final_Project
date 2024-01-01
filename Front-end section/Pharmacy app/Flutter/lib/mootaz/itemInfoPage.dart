@@ -94,31 +94,7 @@ class _itemInfoPageState extends State<itemInfoPage> {
     }
   }
 
-  Future<void> addToFavorites(int id) async {
-    String? token = await getToken();
-    print(id);
-    try {
-      final response = await post(
-        Uri.parse('http://127.0.0.1:8000/api/add-to-favorites'),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${token}"
-        },
-        body: jsonEncode({"medicine_id": id}),
-      );
-      print(response.body);
-      if (response.statusCode == 200) {
-        // The request was successful
-        print('Added to favorites');
-      } else {
-        // The request failed
-        print('Failed to add to favorites');
-      }
-    } catch (e) {
-      // There was an error
-      print(e);
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +150,8 @@ class _itemInfoPageState extends State<itemInfoPage> {
                         InkWell(
                           onTap: () async {
                             setState(() {
-                              iconColor = !iconColor;
+                              if(!iconColor)
+                                iconColor = !iconColor;
                             });
                             // Send the POST request
                             await addToFavorites(id);
